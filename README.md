@@ -12,9 +12,11 @@
 1. [Requirements](#requirements)
 1. [Development](#development)
     1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
+    1. [Tasks](#Roadmap)
 1. [Team](#team)
 1. [Contributing](#contributing)
+1. [Style Guide](#style-guide)
+1. [Press Release](#press-release)
 
 
 ## Usage
@@ -49,3 +51,11 @@ View the project roadmap [here](https://trello.com/b/wWSvfUdm)
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+
+## Style Guide
+
+See [STYLE-GUIDE.md](STYLE-GUIDE.md) for style guidelines.
+
+## Press Release
+
+See [PRESS-RELEASE.md](PRESS-RELEASE.md) for style guidelines.
