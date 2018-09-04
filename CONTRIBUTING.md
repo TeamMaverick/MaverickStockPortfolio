@@ -3,7 +3,7 @@
 ## General Workflow
 
 1. Fork the repo
-1. Cut a namespaced feature branch from master
+1. Cut a namespaced feature branch from dev
   - bug/...
   - feat/...
   - test/...
@@ -17,7 +17,7 @@
   - (test) ...
   - (doc) ...
 1. When you've finished with your fix or feature, Rebase upstream changes into your branch. submit a [pull request][]
-   directly to master. Include a description of your changes.
+   directly to dev. Include a description of your changes.
 1. Your pull request will be reviewed by another maintainer. The point of code
    reviews is to help keep the codebase clean and of high quality and, equally
    as important, to help you grow as a programmer. If your code reviewer
@@ -33,7 +33,7 @@
 Use github’s interface to make a fork of the repo, then add that repo as an upstream remote:
 
 ```
-git remote add upstream https://github.com/reactorcore/<NAME_OF_REPO>.git
+git remote add upstream https://github.com/TeamMaverick/MaverickStockPortfolio.git
 ```
 
 ### Cut a namespaced feature branch from master
@@ -83,11 +83,11 @@ changes.
 
 Once you are done making changes, you can begin the process of getting
 your code merged into the main repo. Step 1 is to rebase upstream
-changes to the master branch into yours by running this command
+changes to the dev branch into yours by running this command
 from your branch:
 
 ```bash
-git pull --rebase upstream master
+git pull --rebase upstream dev
 ```
 
 This will start the rebase process. You must commit all of your changes
