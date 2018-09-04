@@ -7,7 +7,7 @@ const config = require('dotenv').config();
 //Helpers
 // const apiHelpers = require('./helpers/apiHelpers.js');
 
-//Middleware
+//Middleware - test
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '/../client/dist')));
