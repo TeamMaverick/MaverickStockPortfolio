@@ -12,10 +12,6 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '/../client/dist')));
 
-app.get('/test', (req, resp) => {
-  resp.send('hi');
-})
-
 const stockRoutes = require('./routes/index.js');
 app.use('/stock', stockRoutes);
 
