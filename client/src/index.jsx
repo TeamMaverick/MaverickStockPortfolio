@@ -21,10 +21,10 @@ class App extends React.Component {
 
   //gets all the stocks for the user stored in the database
   getStocks(){
-    axios.get('/stocks')
+    axios.get('/stocks/stocks')
       .then(({data}) => {
-        console.log(data);
-        setStocks(data);
+        console.log('here',data);
+        this.setStocks(data);
       })
       .catch((err) => {
         console.log(err);
@@ -40,8 +40,9 @@ class App extends React.Component {
   //called when a ticker symbol on the stocks list is clicked
   //requests the data for that ticker symbol and deposits it in the state
   displayStock(stock) {
-    return axios.get('/stockInfo', { params: { stock: stock}})
-    .then((data) => {
+    return axios.get('/stocks/stockInfo', { params: { STOCK : stock}})
+    .then(({data}) => {
+      console.log(data)
       this.setState({currentStock : data})
     })
     .catch((err) => {

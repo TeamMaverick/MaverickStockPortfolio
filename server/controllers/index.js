@@ -1,12 +1,17 @@
-
+const axios = require('axios')
 const model = require('../models/index.js')
 
 //Return requests to the client
 module.exports = {
   postStockTicker: (req, res) => {
     console.log("HITTING CONTROLLER");
-    model.post(req.body.stock, () => {
-      console.log('SAVED');
+    model.post(req.body.stock, (err, data) => {
+      if(err) {
+        console.log(err);
+        res.send(500);
+      } else {
+        res.sendStatus(201);
+      }
     });
   },
 
@@ -29,15 +34,12 @@ module.exports = {
     }
   })
     .then(({data}) => {
-    
       returnData = {
         metaData: data["Meta Data"],
         data: []
       }
-
       //get Time Series (5min)
       let timeSeries = data["Time Series (5min)"];
-      
       for(var key in timeSeries){
         if(timeSeries.hasOwnProperty(key)) {
           var obj = timeSeries[key];
@@ -49,7 +51,6 @@ module.exports = {
           returnData.data.push([Math.floor((new Date(key)) / 1000)].concat(arrVaules));
         }
       }
-
       res.send(returnData)
     })
     .catch((err) => {
