@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import AddStock from './components/AddStock.jsx';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
 import StockChart from './components/StockChart.jsx';
 
 class App extends React.Component {
@@ -42,6 +40,7 @@ class App extends React.Component {
         </header>
         <div className="main">
           <AddStock getStocks={this.getStocks} />
+          <StockChart />
         </div>
       </div>
     );
