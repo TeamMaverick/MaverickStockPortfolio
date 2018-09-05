@@ -12,7 +12,7 @@ class AddStock extends React.Component {
   }
   handleClick(){
     console.log(this.state.stock);
-    axios.post('/stocks', {
+    axios.post('/stocks/stocks', {
       stock : this.state.stock
     })
     .then(({data}) => {
