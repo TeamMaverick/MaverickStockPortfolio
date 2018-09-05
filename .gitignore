@@ -17,6 +17,8 @@ coverage
 
 # Compiled Dirs (http://nodejs.org/api/addons.html)
 client/dist/bundle.js
+*/*.DS_Store
+
 
 # Dependency directorys
 # Deployed apps should consider commenting these lines out:
