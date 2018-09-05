@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const controller = require('../controllers');
+const stockController = require('../controllers/index.js');
 
 //Route different requests to different endpoints
-// router.get('/search', movieController.getSearch)
+router.get('/stockInfo', stockController.getStockInfo)
 // router.get('/genres', movieController.getGenres)
 // router.post('/save', movieController.saveMovie)
 // router.delete('/delete', movieController.deleteMovie)
