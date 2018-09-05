@@ -9,7 +9,7 @@ class App extends React.Component {
   	super(props)
   	this.state = {
       stocks : [],
-      currentStock : {},
+      currentStock : {}
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
