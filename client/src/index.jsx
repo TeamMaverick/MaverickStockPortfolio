@@ -1,49 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-<<<<<<< HEAD
 import AddStock from './components/AddStock.jsx';
+import ListOfStocks from './components/ListOfStocks.jsx';
 import StockChart from './components/StockChart.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      stocks: []
-=======
-import AddStock from './components/AddStock.jsx'
-import ListOfStocks from './components/ListOfStocks.jsx'
-
-class App extends React.Component {
-  constructor(props) {
-  	super(props)
-  	this.state = {
-      stocks : [],
-      currentStock : {}
->>>>>>> dev
+      stocks: [],
+      currentStock: {}
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
     this.displayStock = this.displayStock.bind(this);
   }
-<<<<<<< HEAD
   componentDidMount() {
     this.getStocks();
+    // remove this later
+    this.displayStock('MSFT');
   }
   getStocks() {
     axios
       .get('stocks')
       .then(({ data }) => {
-=======
-  componentDidMount(){
-    this.getStocks();
-  }
-
-  //gets all the stocks for the user stored in the database
-  getStocks(){
-    axios.get('/stocks')
-      .then(({data}) => {
->>>>>>> dev
         console.log(data);
         setStocks(data);
       })
@@ -51,49 +32,40 @@ class App extends React.Component {
         console.log(err);
       });
   }
-<<<<<<< HEAD
   setStocks(stocks) {
-=======
-  
-  setStocks (stocks) {
->>>>>>> dev
     this.setState({
       stocks: stocks
     });
   }
-<<<<<<< HEAD
-  render() {
-    return (
-=======
-  
+
   //called when a ticker symbol on the stocks list is clicked
   //requests the data for that ticker symbol and deposits it in the state
   displayStock(stock) {
-    return axios.get('/stockInfo', { params: { stock: stock}})
-    .then((data) => {
-      this.setState({currentStock : data})
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+    return axios
+      .get('/stock/stockInfo', { params: { STOCK: stock } })
+      .then(({ data }) => {
+        console.log(data);
+        this.setState({ currentStock: data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
-  
+
   render() {
-  	return (
->>>>>>> dev
+    return (
       <div className="app">
         <header className="navbar">
           <h1>Stock Portfolio</h1>
         </header>
         <div className="main">
+          {/* <div>remove displayStock later</div> */}
           <AddStock getStocks={this.getStocks} />
-<<<<<<< HEAD
-          <StockChart />
-=======
-          <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock}/>
->>>>>>> dev
+          <StockChart currentStock={this.state.currentStock} />
+          <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} />
         </div>
-      </div>);
+      </div>
+    );
   }
 }
 
