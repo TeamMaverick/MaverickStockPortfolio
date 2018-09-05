@@ -1,11 +1,20 @@
 const router = require('express').Router();
-const movieController = require('../controllers');
+const stockController = require('../controllers/index.js');
 
 //Route different requests to different endpoints
-// router.get('/search', movieController.getSearch)
+router.get('/stockInfo', stockController.getStockInfo)
 // router.get('/genres', movieController.getGenres)
 // router.post('/save', movieController.saveMovie)
 // router.delete('/delete', movieController.deleteMovie)
 // router.get('/favorites', movieController.getMovies)
 
+router.post('/stock', stockController.postStockTicker);
+router.get('/stocks', stockController.getStockTicker);
+
+// router.get('/stocks', function(req, res) {
+//   controller.get((stockData) => {
+//     res.send(stockData);
+//     res.end();
+//   });
+// })
 module.exports = router;
