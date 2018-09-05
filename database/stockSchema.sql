@@ -4,15 +4,15 @@ CREATE DATABASE usersStocks
 USE usersStocks
 
 CREATE TABLE stock {
-  id INT AUTO_INCREMENT,
-  stockTicker VARCHAR(20),
+  id INT AUTO_INCREMENT NOT NULL,
+  stockTicker VARCHAR(20) NOT NULL,
   PRIMARY KEY (id)
 }
 
 CREATE TABLE user {
   id INT AUTO_INCREMENT,
-  username VARCHAR(200),
-  stock_id INT (200),
+  username VARCHAR(200) NOT NULL,
+  stock_id INT NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (stock_id) REFERENCES (stock.id)
 }
