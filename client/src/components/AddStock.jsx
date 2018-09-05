@@ -16,10 +16,8 @@ class AddStock extends React.Component {
       stock : this.state.stock
     })
     .then(({data}) => {
-      console.log(data);
       this.props.getStocks();
     })
-
     .catch((err) => {
       console.log(err);
     })
