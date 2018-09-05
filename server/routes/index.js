@@ -8,7 +8,7 @@ router.get('/stockInfo', stockController.getStockInfo)
 // router.delete('/delete', movieController.deleteMovie)
 // router.get('/favorites', movieController.getMovies)
 
-router.post('/stocks', controller.post);
+router.post('/stocks', stockController.post);
 
 router.get('/stocks', function(req, res) {
   controller.get((stockData) => {
