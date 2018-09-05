@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios'
 
 class AddStock extends React.Component {
   constructor(props){
@@ -9,17 +10,24 @@ class AddStock extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
-
-  handleClick(evt){
+  handleClick(){
     console.log(this.state.stock);
+    axios.post('/stocks', {
+      stock : this.state.stock
+    })
+    .then(({data}) => {
+      console.log(data);
+      this.props.getStocks();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
-
   handleInputChange(evt){
     this.setState({
       stock : evt.target.value
     })
   }
-
   render(){
     return (
       <div className="addStock">
