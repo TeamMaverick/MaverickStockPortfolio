@@ -17,7 +17,3 @@ CREATE TABLE user {
   FOREIGN KEY (stock_id) REFERENCES (stock.id)
 
 }
-
-SELECT user.username, stock.stockTicker,
-FROM user
-INNER JOIN stock ON user.stock_id = stock.id;
