@@ -8,4 +8,13 @@ router.get('/stockInfo', stockController.getStockInfo)
 // router.delete('/delete', movieController.deleteMovie)
 // router.get('/favorites', movieController.getMovies)
 
+router.post('/stock', stockController.postStockTicker);
+router.get('/stocks', stockController.getStockTicker);
+
+// router.get('/stocks', function(req, res) {
+//   controller.get((stockData) => {
+//     res.send(stockData);
+//     res.end();
+//   });
+// })
 module.exports = router;
