@@ -21,15 +21,13 @@
 
 ## Usage
 
-> Some usage instructions
+> React app that add stocks to portfolio. Shows list of stocks saved to sql db. Calls Alpha Vantage API to get stock info. Data visualization is done with stockCharts
 
 ## Requirements
 
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- Node 8.11.x
+- mySQL 2.16
+- React 16
 
 ## Development
 
@@ -37,10 +35,9 @@
 
 From within the root directory:
 
-```sh
-sudo npm install -g bower
 npm install
-bower install
+npm run react-dev 
+npm run server-dev
 ```
 
 ### Roadmap
