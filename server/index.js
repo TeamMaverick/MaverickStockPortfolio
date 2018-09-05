@@ -11,8 +11,11 @@ const stockRoutes = require('./routes/index.js');
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '/../client/dist')));
-
+//posting stock list
 app.use('/stock', stockRoutes);
+
+//Geting stock list
+app.use('/stocks', stockRoutes);
 
 app.listen(process.env.PORT, function() {
   console.log(`listening on port ${process.env.PORT}!`);

@@ -2,16 +2,16 @@
 //For SQL
 // const sqlDb = require('../../db/sql').connection;
 const mysql = require('mysql');
-const db = require('../../database/index.js').connection;
+const db = require('../../config.js');
 
 
 module.exports = {
   // adds stock ticker to database
-  post: function(stock, callback) {
-    console.log('SAVING DATA');
-    db.query(`INSERT INTO stock (stock_ticker) VALUES (${stock})`);
+  post: function(stock) {
+    console.log("SAVING STOCK: ", stock);
+    var params = stock;
+    db.query(`INSERT INTO stock (stock_ticker) VALUES (?)`, params);
 
-    callback();
   },
 
   get: function(callback) {
@@ -19,8 +19,10 @@ module.exports = {
       if (err) {
         console.log(err);
       }
-
-      callback(stockData);
+      var stockTicker = [];
+      stockData.forEach((stock) => {stockTicker.push(stock.stock_ticker)});
+      
+      callback(stockTicker);
     })
   }
   

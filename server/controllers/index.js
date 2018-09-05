@@ -3,17 +3,23 @@ const model = require('../models/index.js')
 
 //Return requests to the client
 module.exports = {
-  post: (req, res) => {
+  postStockTicker: (req, res) => {
+    console.log("HITTING CONTROLLER");
     model.post(req.body.stock, () => {
       console.log('SAVED');
     });
   },
 
-  get: function (callback) {
-    model.get(callback);
+  getStockTicker: function (req, res) {
+    model.get((data) => {
+      console.log(data);
+      res.send(data);
+      res.end();
+
+    });
   },
     
-getStockInfo : (req, res) => {
+  getStockInfo : (req, res) => {
   axios.get(process.env.API, {
     params: {
       function : 'TIME_SERIES_INTRADAY',
