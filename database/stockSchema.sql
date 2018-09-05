@@ -15,5 +15,4 @@ CREATE TABLE user {
   stock_id INT (200),
   PRIMARY KEY (id),
   FOREIGN KEY (stock_id) REFERENCES (stock.id)
-
 }
