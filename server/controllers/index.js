@@ -4,6 +4,8 @@ const alpha = require('../alphaVantage/index.js');
 
 //Return requests to the client
 module.exports = {
+
+  // Calls function in model to post stock ticker to database
   postStockTicker: (req, res) => {
     console.log('HITTING CONTROLLER');
     model.post(req.body.stock, (err, data) => {
@@ -15,7 +17,7 @@ module.exports = {
       }
     });
   },
-
+  // Calls function in model to get stock tickers from database
   getStockTicker: function(req, res) {
     model.get((data) => {
       console.log(data);
