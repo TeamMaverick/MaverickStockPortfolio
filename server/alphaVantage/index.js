@@ -12,4 +12,12 @@ const getData = (ticker) => {
   });
 };
 
+const getCurrentPrice = (ticker) => {
+  console.log('inside alphavantage', ticker);
+  var url = `https://api.iextrading.com/1.0/stock/${ticker}/price`;
+  console.log(url);
+  return axios.get(url)
+}
+
 module.exports.getData = getData;
+module.exports.getCurrentPrice = getCurrentPrice;
