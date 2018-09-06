@@ -53,15 +53,24 @@ module.exports = {
         console.log(err);
       });
   },
-  // updates stock quanity to 0
+  // deletes
   resetStockQuantity: (req, res) => {
     const stocks = req.body.stocks;
+    if (stocks === undefined) {
+      res.sendStatus(500);
+    }
+    
+    model.put(stocks, (err, result) => {
+      if (err) {
+        res.send(err);
+        console.log(err);
+      } else {
+        res.send(result);
+      } 
+    })
 
-    // promise.all
-    stocks.forEach((stockTicker) => {
-      console.log('STOCK TICKER: ', stockTicker);
-      model.put(stockTicker);
-    });
+
+
   },
   //gets current price from IEX
   getCurrentPrice: (req, res) => {

@@ -13,6 +13,6 @@ router.post('/stock', stockController.postStockTicker);
 // get stock(s)
 router.get('/stock', stockController.getStockTicker);
 
-// updates stock quantity
-router.put('/resetQuantity', (data) => {stockController.resetStockQuantity(data)});
+// deletes stock
+router.put('/resetQuantity', stockController.resetStockQuantity);
 module.exports = router;
