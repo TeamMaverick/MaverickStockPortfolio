@@ -1,13 +1,13 @@
 const router = require('express').Router();
 const stockController = require('../controllers/index.js');
 
-//Route different requests to different endpoints
+// Get stock info from aplhaVantage
 router.get('/stockInfo', stockController.getStockInfo)
 
-// Routes user input Post request to controller
+// post stock
 router.post('/stock', stockController.postStockTicker);
 
-// Routes get request for stock tickers to controller
-router.get('/stocks', stockController.getStockTicker);
+// get stock(s)
+router.get('/stock', stockController.getStockTicker);
 
 module.exports = router;

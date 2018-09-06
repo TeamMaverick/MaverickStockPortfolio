@@ -3,7 +3,6 @@ const { db } = require('../../database/index.js');
 module.exports = {
   // Adds stock ticker to database
   post: function(stock, callback) {
-    console.log('SAVING STOCK: ', stock);
     var params = stock;
     db.query(`INSERT INTO stock (stock_ticker) VALUES (?)`, params, (err, data) => {
       if (err) {
