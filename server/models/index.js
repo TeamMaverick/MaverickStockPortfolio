@@ -1,7 +1,7 @@
 const { db } = require('../../database/index.js');
 
 module.exports = {
-  // adds stock ticker to database
+  // Adds stock ticker to database
   post: function(stock, callback) {
     console.log('SAVING STOCK: ', stock);
     var params = stock;
@@ -13,7 +13,7 @@ module.exports = {
       }
     });
   },
-
+  // Gets stock tickers from database
   get: function(callback) {
     db.query(`SELECT * FROM stock`, (err, stockData) => {
       if (err) {
