@@ -30,11 +30,11 @@ class App extends React.Component {
       .get('/api/stock')
       .then(({ data }) => {
         const stocksList = [];
-         data.forEach((stock) => {
+        data.forEach((stock) => {
           if (stock.quantity > 0) {
             stocksList.push(stock);
           }
-        })
+        });
         this.setStocks(stocksList);
       })
       .catch((err) => {
@@ -61,7 +61,7 @@ class App extends React.Component {
   }
 
   removeCheckedBoxes(evt) {
-    evt.preventDefault()
+    evt.preventDefault();
     const updateQuantity = [];
     const checkedStocks = document.getElementsByClassName('checkedStock');
     for (var i = 0; i < checkedStocks.length; i++) {
@@ -75,11 +75,9 @@ class App extends React.Component {
 
     console.log('THESE ARE CHECKED BOXES: ', updateQuantity);
 
-    axios.put('/api/resetQuantity', {stocks:updateQuantity})
-    .then(()=>{
+    axios.put('/api/resetQuantity', { stocks: updateQuantity }).then(() => {
       console.log('getting new list');
-    })
-    
+    });
   }
 
   render() {
@@ -96,7 +94,11 @@ class App extends React.Component {
           {this.state.currentStock.metaData === undefined ? null : (
             <StockChart currentStock={this.state.currentStock} />
           )}
-          <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
+          <ListOfStocks
+            stocksArray={this.state.stocks}
+            displayStock={this.displayStock}
+            removeCheckedBoxes={this.removeCheckedBoxes}
+          />
         </div>
       </div>
     );
