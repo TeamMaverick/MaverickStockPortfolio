@@ -15,6 +15,7 @@ class App extends React.Component {
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
     this.displayStock = this.displayStock.bind(this);
+    this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
   }
   componentDidMount() {
     // get all stocks for this user
@@ -53,6 +54,16 @@ class App extends React.Component {
       });
   }
 
+  removeCheckedBoxes(evt) {
+    evt.preventDefault()
+
+    const checkedStocks = document.getElementById('checkedStock').value;
+    console.log('THESE ARE CHECKED BOXES: ', checkedStocks);
+
+    axios.put('/restQuantity', checkedStocks);
+    
+  }
+
   render() {
     // to prevent refError upon initial render
     if (this.state.currentStock.metaData === undefined) {
@@ -68,7 +79,7 @@ class App extends React.Component {
             {/* <div>remove displayStock later</div> */}
             <AddStock getStocks={this.getStocks} />
             <StockChart currentStock={this.state.currentStock} />
-            <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} />
+            <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
           </div>
         </div>
       );
