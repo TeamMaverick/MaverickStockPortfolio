@@ -43,9 +43,27 @@ module.exports = {
     }
     db.query(`DELETE FROM stock WHERE stock_ticker IN (${delNum.slice(0, delNum.length - 2)})`, stockTicker, (err, result) => {
       if (err) {
-        console.log(err);
+        callback(err);
       } else {
-        callback(null, result);
+        db.query(
+          `SELECT stock_ticker, quantity, price FROM stock ORDER BY stock_ticker`,
+          (err, stockData) => {
+            if (err) {
+              callback(err);
+            }
+            //console.log(stockData);
+            var stockTicker = [];
+            stockData.forEach((stock) => {
+              stockTicker.push({
+                ticker: stock.stock_ticker,
+                quantity: stock.quantity,
+                price: stock.price
+              });
+            });
+            
+            callback(null, stockTicker);
+          }
+        );
       }
     });
     

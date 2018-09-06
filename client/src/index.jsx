@@ -83,19 +83,24 @@ class App extends React.Component {
     evt.preventDefault();
     const updateQuantity = [];
     const checkedStocks = document.getElementsByClassName('checkedStock');
+    
     for (var i = 0; i < checkedStocks.length; i++) {
       var stock = checkedStocks[i];
 
       if (stock.checked) {
-        console.log('THIS STOCK WILL BE UPDATED', stock.value);
+        
         updateQuantity.push(stock.value);
       }
     }
 
-    console.log('THESE ARE CHECKED BOXES: ', updateQuantity);
-
     axios.put('/api/resetQuantity', {stocks:updateQuantity})
-    .then(() => {console.log('GOT THE RESPONSE')})
+    .then((data) => {
+      const stocks = data.data;
+
+      this.setState({
+        stocks: stocks
+      })
+    });
     
   }
 

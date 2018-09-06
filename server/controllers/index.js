@@ -56,20 +56,20 @@ module.exports = {
   // deletes
   resetStockQuantity: (req, res) => {
     const stocks = req.body.stocks;
-
+    if (stocks === undefined) {
+      res.sendStatus(500);
+    }
     
     model.put(stocks, (err, result) => {
       if (err) {
+        res.send(err);
         console.log(err);
       } else {
-        res.send();
-        res.end();
+        res.send(result);
       } 
     })
-    // .then(() => {
-    //   res.send(201);
-    //   res.end();
-    // })
+
+
 
   },
   //gets current price from IEX
