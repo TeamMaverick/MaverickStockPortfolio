@@ -6,10 +6,10 @@ const alpha = require('../alphaVantage/index.js');
 module.exports = {
   // Calls function in model to post stock ticker to database
   postStockTicker: (req, res) => {
-    model.post(req.body.stock, (err, data) => {
+    model.post(req.body.stock, req.body.quantity, req.body.price, (err, data) => {
       if (err) {
         console.log(err);
-        res.send(500);
+        res.sendStatus(500);
       } else {
         res.sendStatus(201);
       }
@@ -34,7 +34,7 @@ module.exports = {
           data: []
         };
         //get Time Series (5min)
-        // flatten object stucture into array for data vis 
+        // flatten object stucture into array for data vis
         let timeSeries = data['Time Series (5min)'];
         for (var key in timeSeries) {
           if (timeSeries.hasOwnProperty(key)) {
@@ -57,21 +57,21 @@ module.exports = {
   resetStockQuantity: (req, res) => {
     const stocks = req.body.stocks;
 
+    // promise.all
     stocks.forEach((stockTicker) => {
-      console.log('STOCK TICKER: ',stockTicker);
+      console.log('STOCK TICKER: ', stockTicker);
       model.put(stockTicker);
-    })
+    });
   },
   //gets current price from IEX
   getCurrentPrice: (req, res) => {
     alpha
-    .getCurrentPrice(req.query.STOCK)
-    .then(({data}) => {
-      res.send(JSON.stringify(data))
-    })
-    .catch((err) =>{
-      console.log(err);
-    })
+      .getCurrentPrice(req.query.STOCK)
+      .then(({ data }) => {
+        res.send(JSON.stringify(data));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
-
 };

@@ -2,9 +2,10 @@ const { db } = require('../../database/index.js');
 
 module.exports = {
   // Adds stock ticker to database
-  post: function(stock, callback) {
-    var params = stock;
-    db.query(`INSERT INTO stock (stock_ticker, quantity) VALUES (?, 1)`, params, (err, data) => {
+  post: function(stock, quantity = 1, price = 1, callback) {
+    var params = [stock, quantity, price];
+    var queryString = `INSERT INTO stock (stock_ticker, quantity, price) VALUES (?, ?, ?)`;
+    db.query(queryString, params, (err, data) => {
       if (err) {
         console.log(err);
       } else {
@@ -14,18 +15,25 @@ module.exports = {
   },
   // Gets stock tickers from database
   get: function(callback) {
-    db.query(`SELECT stock_ticker, quantity FROM stock ORDER BY stock_ticker`, (err, stockData) => {
-      if (err) {
-        console.log(err);
-      }
-      //console.log(stockData);
-      var stockTicker = [];
-      stockData.forEach((stock) => {
-        stockTicker.push({ ticker: stock.stock_ticker, quantity: stock.quantity });
-      });
+    db.query(
+      `SELECT stock_ticker, quantity, price FROM stock ORDER BY stock_ticker`,
+      (err, stockData) => {
+        if (err) {
+          console.log(err);
+        }
+        //console.log(stockData);
+        var stockTicker = [];
+        stockData.forEach((stock) => {
+          stockTicker.push({
+            ticker: stock.stock_ticker,
+            quantity: stock.quantity,
+            price: stock.price
+          });
+        });
 
-      callback(stockTicker);
-    });
+        callback(stockTicker);
+      }
+    );
   },
   // Changes quantity to 0
   put: function(stockTicker) {
@@ -33,6 +41,6 @@ module.exports = {
       if (err) {
         console.log(err);
       }
-    })
+    });
   }
 };
