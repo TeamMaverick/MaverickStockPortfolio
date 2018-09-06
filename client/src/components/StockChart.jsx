@@ -17,16 +17,16 @@ var StockChart = ({ currentStock }) => {
     },
     rangeSelector: {
       buttons: [
-        // {
-        //   type: 'hour',
-        //   count: 1,
-        //   text: '1h'
-        // },
-        // {
-        //   type: 'day',
-        //   count: 1,
-        //   text: '1D'
-        // },
+        {
+          type: 'hour',
+          count: 1,
+          text: '1h'
+        },
+        {
+          type: 'day',
+          count: 1,
+          text: '1D'
+        },
         {
           type: 'all',
           count: 1,

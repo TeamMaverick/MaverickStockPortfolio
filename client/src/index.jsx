@@ -21,6 +21,7 @@ class App extends React.Component {
     this.displayStock = this.displayStock.bind(this);
     this.handleTabClick = this.handleTabClick.bind(this);
     this.setTab = this.setTab.bind(this);
+    this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
   }
   componentDidMount() {
     // get all stocks for this user
@@ -34,6 +35,13 @@ class App extends React.Component {
     axios
       .get('/api/stock')
       .then(({ data }) => {
+        // const stocksList = [];
+        //  data.forEach((stock) => {
+        //   if (stock.quantity > 0) {
+        //     stocksList.push(stock);
+        //   }
+        // })
+        // this.setStocks(stocksList);
         this.setStocks(data);
       })
       .catch((err) => {
@@ -71,37 +79,56 @@ class App extends React.Component {
     });
   }
 
-  render() {
-    // to prevent refError upon initial render
-    if (this.state.currentStock.metaData === undefined) {
-      return null;
-    } else {
-      // proceed as usual after initial componentDidMount
-      return (
-        <div className="container">
-          <header className="navbar">
-            <h1>Stock Portfolio</h1>
-          </header>
-          <div className="tabs">
-              <ul onClick={this.handleTabClick}>
-                <li className={this.state.homeTab ? "is-active" : "" }><a name="homeTab">Home</a></li>
-                <li className={this.state.healthCheckTab ? "is-active" : "" }><a name="healthCheckTab">Health Check</a></li>
-              </ul>
-            </div>
-          <div className="main">
-            { this.state.homeTab ? 
-              <React.Fragment>
-              <AddStock getStocks={this.getStocks} />
-              <StockChart currentStock={this.state.currentStock} />
-              <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} />
-              </React.Fragment>
-              :
-              <HealthCheck stocks={this.state.stocks}></HealthCheck>
-            }
-          </div>
-        </div>
-      );
+  removeCheckedBoxes(evt) {
+    evt.preventDefault()
+    const updateQuantity = [];
+    const checkedStocks = document.getElementsByClassName('checkedStock');
+    for (var i = 0; i < checkedStocks.length; i++) {
+      var stock = checkedStocks[i];
+
+      if (stock.checked) {
+        console.log('THIS STOCK WILL BE UPDATED', stock.value);
+        updateQuantity.push(stock.value);
+      }
     }
+
+    console.log('THESE ARE CHECKED BOXES: ', updateQuantity);
+
+    axios.put('/api/resetQuantity', {stocks:updateQuantity})
+    .then(()=>{
+      console.log('getting new list');
+    })
+    
+  }
+
+  render() {
+    // proceed as usual after initial componentDidMount
+    return (
+      <div className="container">
+        <header className="navbar">
+          <h1>Stock Portfolio</h1>
+        </header>
+        <div className="tabs">
+          <ul onClick={this.handleTabClick}>
+            <li className={this.state.homeTab ? "is-active" : "" }><a name="homeTab">Home</a></li>
+            <li className={this.state.healthCheckTab ? "is-active" : "" }><a name="healthCheckTab">Health Check</a></li>
+          </ul>
+        </div>
+        <div className="main">
+        { this.state.homeTab ? 
+          <React.Fragment>
+          <AddStock getStocks={this.getStocks} />
+          {this.state.currentStock.metaData === undefined ? null : (
+                    <StockChart currentStock={this.state.currentStock} />
+                  )}
+          <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
+          </React.Fragment>
+          :
+          <HealthCheck stocks={this.state.stocks}></HealthCheck>
+        }
+        </div>
+      </div>
+    );
   }
 }
 
