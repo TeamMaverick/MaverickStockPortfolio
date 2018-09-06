@@ -14,14 +14,14 @@ module.exports = {
   },
   // Gets stock tickers from database
   get: function(callback) {
-    db.query(`SELECT * FROM stock`, (err, stockData) => {
+    db.query(`SELECT stock_ticker, quantity FROM stock ORDER BY stock_ticker`, (err, stockData) => {
       if (err) {
         console.log(err);
       }
       //console.log(stockData);
       var stockTicker = [];
       stockData.forEach((stock) => {
-        stockTicker.push({ ticker : stock.stock_ticker, quantity : stock.quantity});
+        stockTicker.push({ ticker: stock.stock_ticker, quantity: stock.quantity });
       });
 
       callback(stockTicker);
