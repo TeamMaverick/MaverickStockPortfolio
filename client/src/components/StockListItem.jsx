@@ -1,6 +1,6 @@
 import React from 'react';
 
-//individual item in the list of saved stocks
+//individual  item in the list of saved stocks
 var StockListItem = function(props) {
     
     //displayStock here is the clickhandler function defined in the app that makes a get request
@@ -8,7 +8,9 @@ var StockListItem = function(props) {
     return (
         <div className="StockListItem" onClick={()=>(props.displayStock(props.stock))}>
         {props.stock}
+        <input type="checkbox"></input>
         </div>
+
     )
 }
 
