@@ -1,4 +1,4 @@
-const axios = require('axios')
+const axios = require('axios');
 
 const getData = (ticker) => {
   // return axios.get(process.env.API,  {
@@ -10,7 +10,14 @@ const getData = (ticker) => {
   //   .catch((err) => {
   //     console.log(err);
   //   })
-
-}
+  return axios.get(process.env.API, {
+    params: {
+      function: 'TIME_SERIES_INTRADAY',
+      interval: '5min',
+      apikey: process.env.API_KEY,
+      symbol: ticker
+    }
+  });
+};
 
 module.exports.getData = getData;

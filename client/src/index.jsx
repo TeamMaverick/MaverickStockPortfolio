@@ -18,7 +18,7 @@ class App extends React.Component {
   }
   componentDidMount() {
     this.getStocks();
-    // remove this later
+    // update this to display first stock in database?
     this.displayStock('MSFT');
   }
 
@@ -27,7 +27,6 @@ class App extends React.Component {
     axios
       .get('/stocks/stocks')
       .then(({ data }) => {
-        console.log('here', data);
         this.setStocks(data);
       })
       .catch((err) => {
@@ -46,7 +45,6 @@ class App extends React.Component {
     return axios
       .get('/stocks/stockInfo', { params: { STOCK: stock } })
       .then(({ data }) => {
-        console.log(data);
         this.setState({ currentStock: data });
       })
       .catch((err) => {
@@ -55,19 +53,25 @@ class App extends React.Component {
   }
 
   render() {
-    return (
-      <div className="app">
-        <header className="navbar">
-          <h1>Stock Portfolio</h1>
-        </header>
-        <div className="main">
-          {/* <div>remove displayStock later</div> */}
-          <AddStock getStocks={this.getStocks} />
-          <StockChart currentStock={this.state.currentStock} />
-          <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} />
+    // to prevent refError upon initial render
+    if (this.state.currentStock.metaData === undefined) {
+      return null;
+    } else {
+      // proceed as usual after initial componentDidMount
+      return (
+        <div className="app">
+          <header className="navbar">
+            <h1>Stock Portfolio</h1>
+          </header>
+          <div className="main">
+            {/* <div>remove displayStock later</div> */}
+            <AddStock getStocks={this.getStocks} />
+            <StockChart currentStock={this.state.currentStock} />
+            <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} />
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 

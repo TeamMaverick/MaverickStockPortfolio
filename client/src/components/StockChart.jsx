@@ -3,10 +3,11 @@ import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 
 var StockChart = ({ currentStock }) => {
+  var ticker = currentStock.metaData['2. Symbol'];
   var options = {
     // use data from currentStock
     title: {
-      text: 'MSFT intraday stock price'
+      text: `${ticker} intraday stock price`
     },
     subtitle: {
       text: 'Using ordinal X axis'
@@ -37,7 +38,7 @@ var StockChart = ({ currentStock }) => {
     },
     series: [
       {
-        name: 'MSFT',
+        name: `${ticker}`,
         type: 'area',
         // this will be what Milton passes in
         data: currentStock.data,

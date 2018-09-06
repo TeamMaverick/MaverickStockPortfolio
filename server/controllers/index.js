@@ -1,5 +1,6 @@
 const axios = require('axios');
 const model = require('../models/index.js');
+const alpha = require('../alphaVantage/index.js');
 
 //Return requests to the client
 module.exports = {
@@ -24,15 +25,8 @@ module.exports = {
   },
 
   getStockInfo: (req, res) => {
-    axios
-      .get(process.env.API, {
-        params: {
-          function: 'TIME_SERIES_INTRADAY',
-          interval: '5min',
-          apikey: process.env.API_KEY,
-          symbol: req.query.STOCK
-        }
-      })
+    alpha
+      .getData(req.query.STOCK)
       .then(({ data }) => {
         returnData = {
           metaData: data['Meta Data'],
@@ -45,7 +39,6 @@ module.exports = {
             var obj = timeSeries[key];
             let arrVaules = [];
             for (var prop in obj) {
-              console.log(prop + ' = ' + obj[prop]);
               arrVaules.push(parseFloat(obj[prop]));
             }
             returnData.data.push([new Date(key).getTime()].concat(arrVaules));
