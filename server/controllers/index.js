@@ -7,7 +7,6 @@ module.exports = {
 
   // Calls function in model to post stock ticker to database
   postStockTicker: (req, res) => {
-    console.log('HITTING CONTROLLER');
     model.post(req.body.stock, (err, data) => {
       if (err) {
         console.log(err);
@@ -17,15 +16,16 @@ module.exports = {
       }
     });
   },
-  // Calls function in model to get stock tickers from database
+  // Calls function in model to get stock tickers and quantity of stock from database
   getStockTicker: function(req, res) {
     model.get((data) => {
-      console.log(data);
       res.send(data);
       res.end();
     });
   },
 
+  // get stock info from alphaVantage
+  // input : STOCK = ticker symbol
   getStockInfo: (req, res) => {
     alpha
       .getData(req.query.STOCK)
@@ -35,6 +35,7 @@ module.exports = {
           data: []
         };
         //get Time Series (5min)
+        // flatten object stucture into array for data vis 
         let timeSeries = data['Time Series (5min)'];
         for (var key in timeSeries) {
           if (timeSeries.hasOwnProperty(key)) {
