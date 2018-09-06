@@ -54,24 +54,22 @@ class App extends React.Component {
 
   render() {
     // to prevent refError upon initial render
-    if (this.state.currentStock.metaData === undefined) {
-      return null;
-    } else {
-      // proceed as usual after initial componentDidMount
-      return (
-        <div className="app">
-          <header className="navbar">
-            <h1>Stock Portfolio</h1>
-          </header>
-          <div className="main">
-            {/* <div>remove displayStock later</div> */}
-            <AddStock getStocks={this.getStocks} />
+    // proceed as usual after initial componentDidMount
+    return (
+      <div className="app">
+        <header className="navbar">
+          <h1>Stock Portfolio</h1>
+        </header>
+        <div className="main">
+          <AddStock getStocks={this.getStocks} />
+          {/* Bypassing initial undefined error */}
+          {this.state.currentStock.metaData === undefined ? null : (
             <StockChart currentStock={this.state.currentStock} />
-            <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} />
-          </div>
+          )}
+          <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} />
         </div>
-      );
-    }
+      </div>
+    );
   }
 }
 
