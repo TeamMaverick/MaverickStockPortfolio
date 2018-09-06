@@ -19,10 +19,9 @@ html, body, #app {
 .navbar {
   width: 100%;
   text-align: center;
-
   box-sizing: border-box;
   background-color: #34495e;
-  color: #fff;
+  color:#000;
   box-shadow: 0 10px 28px -7px rgba(0,0,0,0.5);
   z-index:2;
   padding: 20px;
