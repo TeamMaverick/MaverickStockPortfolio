@@ -76,9 +76,7 @@ class App extends React.Component {
     console.log('THESE ARE CHECKED BOXES: ', updateQuantity);
 
     axios.put('/api/resetQuantity', {stocks:updateQuantity})
-    .then(()=>{
-      console.log('getting new list');
-    })
+    // .then(() => {console.log('GOT THE RESPONSE')})
     
   }
 

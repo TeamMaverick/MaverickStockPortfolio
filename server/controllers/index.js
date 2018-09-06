@@ -61,6 +61,11 @@ module.exports = {
       console.log('STOCK TICKER: ',stockTicker);
       model.put(stockTicker);
     })
+    // .then(() =>{
+    //   res.send(201);
+    //   res.end();
+    // }
+    // )
   },
   //gets current price from IEX
   getCurrentPrice: (req, res) => {
