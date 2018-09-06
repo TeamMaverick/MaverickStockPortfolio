@@ -2,7 +2,10 @@ const router = require('express').Router();
 const stockController = require('../controllers/index.js');
 
 // Get stock info from aplhaVantage
-router.get('/stockInfo', stockController.getStockInfo)
+router.get('/stockInfo', stockController.getStockInfo);
+
+//get current stock price from IEX
+router.get('/currentStockPrice', stockController.getCurrentPrice);
 
 // post stock
 router.post('/stock', stockController.postStockTicker);

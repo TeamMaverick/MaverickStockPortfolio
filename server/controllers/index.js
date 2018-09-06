@@ -60,6 +60,18 @@ module.exports = {
     stocks.forEach((stockTicker) => {
       console.log('STOCK TICKER: ',stockTicker);
       model.put(stockTicker);
-    });
+    })
+  },
+  //gets current price from IEX
+  getCurrentPrice: (req, res) => {
+    alpha
+    .getCurrentPrice(req.query.STOCK)
+    .then(({data}) => {
+      res.send(JSON.stringify(data))
+    })
+    .catch((err) =>{
+      console.log(err);
+    })
   }
+
 };
