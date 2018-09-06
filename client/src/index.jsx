@@ -4,17 +4,23 @@ import axios from 'axios';
 import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
 import StockChart from './components/StockChart.jsx';
+import HealthCheck from './components/HealthCheck.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       stocks: [],
-      currentStock: {}
+      currentStock: {},
+      tab : 'Home',
+      homeTab : true,
+      healthCheckTab : false
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
     this.displayStock = this.displayStock.bind(this);
+    this.handleTabClick = this.handleTabClick.bind(this);
+    this.setTab = this.setTab.bind(this);
   }
   componentDidMount() {
     // get all stocks for this user
@@ -52,6 +58,18 @@ class App extends React.Component {
         console.log(err);
       });
   }
+  handleTabClick(e) {
+    this.setTab(e.target.name)
+  }
+  setTab(tabName){
+    this.setState({
+      homeTab : false,
+      healthCheckTab : false,
+    });
+    this.setState({
+      [tabName] : true
+    });
+  }
 
   render() {
     // to prevent refError upon initial render
@@ -60,15 +78,26 @@ class App extends React.Component {
     } else {
       // proceed as usual after initial componentDidMount
       return (
-        <div className="app">
+        <div className="container">
           <header className="navbar">
             <h1>Stock Portfolio</h1>
           </header>
+          <div className="tabs">
+              <ul onClick={this.handleTabClick}>
+                <li className={this.state.homeTab ? "is-active" : "" }><a name="homeTab">Home</a></li>
+                <li className={this.state.healthCheckTab ? "is-active" : "" }><a name="healthCheckTab">Health Check</a></li>
+              </ul>
+            </div>
           <div className="main">
-            {/* <div>remove displayStock later</div> */}
-            <AddStock getStocks={this.getStocks} />
-            <StockChart currentStock={this.state.currentStock} />
-            <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} />
+            { this.state.homeTab ? 
+              <React.Fragment>
+              <AddStock getStocks={this.getStocks} />
+              <StockChart currentStock={this.state.currentStock} />
+              <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} />
+              </React.Fragment>
+              :
+              <HealthCheck stocks={this.state.stocks}></HealthCheck>
+            }
           </div>
         </div>
       );
