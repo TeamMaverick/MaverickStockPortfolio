@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const path = require('path');
+// sets process.env variables
 const config = require('dotenv').config();
 const stockRoutes = require('./routes/index.js');
 //Helpers
@@ -10,12 +11,11 @@ const stockRoutes = require('./routes/index.js');
 //Middleware
 app.use(bodyParser.json());
 
+// server client side
 app.use(express.static(path.join(__dirname, '/../client/dist')));
-//posting stock list
-app.use('/stock', stockRoutes);
 
-//Geting stock list
-app.use('/stocks', stockRoutes);
+// Set stock api prefix
+app.use('/api', stockRoutes);
 
 app.listen(process.env.PORT, function() {
   console.log(`listening on port ${process.env.PORT}!`);
