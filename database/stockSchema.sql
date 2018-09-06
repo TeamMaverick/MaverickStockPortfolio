@@ -10,9 +10,9 @@ CREATE TABLE stock (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE user (
-  id INT NOT NULL AUTO_INCREMENT,
-  username VARCHAR(200) NOT NULL,
-  stock_id INT NOT NULL,
-  PRIMARY KEY (id)
-);
+-- CREATE TABLE user (
+--   id INT NOT NULL AUTO_INCREMENT,
+--   username VARCHAR(200) NOT NULL,
+--   stock_id INT NOT NULL,
+--   PRIMARY KEY (id)
+-- );
