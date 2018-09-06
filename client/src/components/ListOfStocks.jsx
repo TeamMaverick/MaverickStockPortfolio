@@ -6,7 +6,7 @@ var ListOfStocks = function(props) {
   return (
     <div>
       {props.stocksArray.map((stock) => {
-        return <StockListItem stock={stock} key={stock} displayStock={props.displayStock} />;
+        return <StockListItem stock={stock} key={stock.ticker} displayStock={props.displayStock} />;
       })}
     </div>
   );

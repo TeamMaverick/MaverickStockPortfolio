@@ -4,7 +4,7 @@ module.exports = {
   // Adds stock ticker to database
   post: function(stock, callback) {
     var params = stock;
-    db.query(`INSERT INTO stock (stock_ticker) VALUES (?)`, params, (err, data) => {
+    db.query(`INSERT INTO stock (stock_ticker, quantity) VALUES (?, 1)`, params, (err, data) => {
       if (err) {
         console.log(err);
       } else {
@@ -18,9 +18,10 @@ module.exports = {
       if (err) {
         console.log(err);
       }
+      //console.log(stockData);
       var stockTicker = [];
       stockData.forEach((stock) => {
-        stockTicker.push(stock.stock_ticker);
+        stockTicker.push({ ticker : stock.stock_ticker, quantity : stock.quantity});
       });
 
       callback(stockTicker);

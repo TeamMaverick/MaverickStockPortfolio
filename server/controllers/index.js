@@ -16,7 +16,7 @@ module.exports = {
       }
     });
   },
-  // Calls function in model to get stock tickers from database
+  // Calls function in model to get stock tickers and quantity of stock from database
   getStockTicker: function(req, res) {
     model.get((data) => {
       res.send(data);
