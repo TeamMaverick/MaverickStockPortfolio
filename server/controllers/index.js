@@ -53,7 +53,16 @@ module.exports = {
         console.log(err);
       });
   },
+  // updates stock quanity to 0
+  resetStockQuantity: (req, res) => {
+    const stocks = req.body.stocks;
 
+    // promise.all
+    stocks.forEach((stockTicker) => {
+      console.log('STOCK TICKER: ', stockTicker);
+      model.put(stockTicker);
+    });
+  },
   //gets current price from IEX
   getCurrentPrice: (req, res) => {
     alpha

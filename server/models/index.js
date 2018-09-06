@@ -34,5 +34,13 @@ module.exports = {
         callback(stockTicker);
       }
     );
+  },
+  // Changes quantity to 0
+  put: function(stockTicker) {
+    db.query(`UPDATE stock SET quantity = 0 WHERE stock_ticker = ?`, stockTicker, (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+    });
   }
 };
