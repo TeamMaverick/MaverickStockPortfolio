@@ -14,10 +14,13 @@ class AddStock extends React.Component {
   handleClick() {
     // call this within call to get stock api
     axios
-      .post('/api/stock', {
-        stock: this.state.stock,
-        quantity: 1,
-        price: 1
+      .get('/api/currentStockPrice', { params: { STOCK: this.state.stock } })
+      .then(({ data }) => {
+        return axios.post('/api/stock', {
+          stock: this.state.stock,
+          quantity: 1,
+          price: data
+        });
       })
       .then(() => {
         //on success - refresh stock list

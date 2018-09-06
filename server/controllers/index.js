@@ -57,13 +57,12 @@ module.exports = {
   //gets current price from IEX
   getCurrentPrice: (req, res) => {
     alpha
-    .getCurrentPrice(req.query.STOCK)
-    .then(({data}) => {
-      res.send(JSON.stringify(data))
-    })
-    .catch((err) =>{
-      console.log(err);
-    })
+      .getCurrentPrice(req.query.STOCK)
+      .then(({ data }) => {
+        res.send(JSON.stringify(data));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
-
 };
