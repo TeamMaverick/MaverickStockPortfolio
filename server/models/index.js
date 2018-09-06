@@ -36,11 +36,19 @@ module.exports = {
     );
   },
   // Changes quantity to 0
-  put: function(stockTicker) {
-    db.query(`UPDATE stock SET quantity = 0 WHERE stock_ticker = ?`, stockTicker, (err, result) => {
+  put: function(stockTicker, callback) {
+    var delNum = '';
+    for (var i = 0; i < stockTicker.length; i++) {
+      delNum += '?, ';
+    }
+    db.query(`DELETE FROM stock WHERE stock_ticker IN (${delNum.slice(0, delNum.length - 2)})`, stockTicker, (err, result) => {
       if (err) {
         console.log(err);
+      } else {
+        callback(null, result);
       }
     });
+    
+
   }
 };

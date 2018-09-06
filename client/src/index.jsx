@@ -60,6 +60,7 @@ class App extends React.Component {
       });
   }
 
+  // Called when remove Checked stocks button is clicked
   removeCheckedBoxes(evt) {
     evt.preventDefault();
     const updateQuantity = [];
@@ -76,7 +77,7 @@ class App extends React.Component {
     console.log('THESE ARE CHECKED BOXES: ', updateQuantity);
 
     axios.put('/api/resetQuantity', {stocks:updateQuantity})
-    // .then(() => {console.log('GOT THE RESPONSE')})
+    .then(() => {console.log('GOT THE RESPONSE')})
     
   }
 
