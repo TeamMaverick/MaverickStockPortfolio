@@ -2,9 +2,10 @@ const { db } = require('../../database/index.js');
 
 module.exports = {
   // Adds stock ticker to database
-  post: function(stock, callback) {
-    var params = stock;
-    db.query(`INSERT INTO stock (stock_ticker, quantity) VALUES (?, 1)`, params, (err, data) => {
+  post: function(stock, quantity, price, callback) {
+    var params = [stock, quantity || 1, price || 1];
+    var queryString = `INSERT INTO stock (stock_ticker, quantity, price) VALUES (?, ?, ?)`;
+    db.query(queryString, params, (err, data) => {
       if (err) {
         console.log(err);
       } else {

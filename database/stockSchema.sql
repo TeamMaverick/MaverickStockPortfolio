@@ -8,6 +8,7 @@ CREATE TABLE stock (
   id INT NOT NULL AUTO_INCREMENT,
   stock_ticker VARCHAR(20) NOT NULL,
   quantity INT NOT NULL,
+  price INT NOT NULL,
   UNIQUE (stock_ticker),
   PRIMARY KEY (id)
 );
