@@ -10,18 +10,20 @@ class AddStock extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
+  // handle Add button click event
   handleClick(){
-    console.log(this.state.stock);
-    axios.post('/stock/stock', {
+    axios.post('/api/stock', {
       stock : this.state.stock
     })
-    .then(({data}) => {
+    .then(() => {
+      //on success - refresh stock list
       this.props.getStocks();
     })
     .catch((err) => {
       console.log(err);
     })
   }
+  // handle input onchange event (update stock state)
   handleInputChange(evt){
     this.setState({
       stock : evt.target.value

@@ -17,6 +17,7 @@ class App extends React.Component {
     this.displayStock = this.displayStock.bind(this);
   }
   componentDidMount() {
+    // get all stocks for this user
     this.getStocks();
     // update this to display first stock in database?
     this.displayStock('MSFT');
@@ -25,7 +26,7 @@ class App extends React.Component {
   //gets all the stocks for the user stored in the database
   getStocks() {
     axios
-      .get('/stocks/stocks')
+      .get('/api/stock')
       .then(({ data }) => {
         this.setStocks(data);
       })
@@ -43,7 +44,7 @@ class App extends React.Component {
   //requests the data for that ticker symbol and deposits it in the state
   displayStock(stock) {
     return axios
-      .get('/stocks/stockInfo', { params: { STOCK: stock } })
+      .get('/api/stockInfo', { params: { STOCK: stock } })
       .then(({ data }) => {
         this.setState({ currentStock: data });
       })

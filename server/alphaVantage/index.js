@@ -1,15 +1,7 @@
 const axios = require('axios');
 
+// call alphavantage API and return promise
 const getData = (ticker) => {
-  // return axios.get(process.env.API,  {
-  //   API_Key : proces.env.API_KEY
-  // })
-  //   .then(({data}) => {
-  //     console.log(data)
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   })
   return axios.get(process.env.API, {
     params: {
       function: 'TIME_SERIES_INTRADAY',
