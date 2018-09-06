@@ -29,7 +29,13 @@ class App extends React.Component {
     axios
       .get('/api/stock')
       .then(({ data }) => {
-        this.setStocks(data);
+        const stocksList = [];
+         data.forEach((stock) => {
+          if (stock.quantity > 0) {
+            stocksList.push(stock);
+          }
+        })
+        this.setStocks(stocksList);
       })
       .catch((err) => {
         console.log(err);
@@ -56,34 +62,44 @@ class App extends React.Component {
 
   removeCheckedBoxes(evt) {
     evt.preventDefault()
+    const updateQuantity = [];
+    const checkedStocks = document.getElementsByClassName('checkedStock');
+    for (var i = 0; i < checkedStocks.length; i++) {
+      var stock = checkedStocks[i];
 
-    const checkedStocks = document.getElementById('checkedStock').value;
-    console.log('THESE ARE CHECKED BOXES: ', checkedStocks);
+      if (stock.checked) {
+        console.log('THIS STOCK WILL BE UPDATED', stock.value);
+        updateQuantity.push(stock.value);
+      }
+    }
 
-    axios.put('/restQuantity', checkedStocks);
+    console.log('THESE ARE CHECKED BOXES: ', updateQuantity);
+
+    axios.put('/api/resetQuantity', {stocks:updateQuantity})
+    .then(()=>{
+      console.log('getting new list');
+    })
     
   }
 
   render() {
     // to prevent refError upon initial render
-    if (this.state.currentStock.metaData === undefined) {
-      return null;
-    } else {
-      // proceed as usual after initial componentDidMount
-      return (
-        <div className="app">
-          <header className="navbar">
-            <h1>Stock Portfolio</h1>
-          </header>
-          <div className="main">
-            {/* <div>remove displayStock later</div> */}
-            <AddStock getStocks={this.getStocks} />
+    // proceed as usual after initial componentDidMount
+    return (
+      <div className="app">
+        <header className="navbar">
+          <h1>Stock Portfolio</h1>
+        </header>
+        <div className="main">
+          <AddStock getStocks={this.getStocks} />
+          {/* Bypassing initial undefined error */}
+          {this.state.currentStock.metaData === undefined ? null : (
             <StockChart currentStock={this.state.currentStock} />
-            <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
-          </div>
+          )}
+          <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
         </div>
-      );
-    }
+      </div>
+    );
   }
 }
 

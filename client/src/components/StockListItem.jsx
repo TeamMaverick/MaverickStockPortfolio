@@ -10,7 +10,7 @@ var StockListItem = function(props) {
             <div onClick={()=>(props.displayStock(props.stock.ticker))}>
                 {props.stock.ticker}{props.stock.quantity}
             </div>
-            <input id="checkedStock" value={props.stock.ticker} type="checkbox"></input>
+            <input className="checkedStock" value={props.stock.ticker} type="checkbox"></input>
         </div>
 
     )
