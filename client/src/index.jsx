@@ -109,7 +109,7 @@ class App extends React.Component {
     return (
       <div className="container">
         <header className="navbar">
-          <h1>Stock Portfolio</h1>
+          <h1 className="logo">Maverick</h1>
         </header>
         <div className="tabs">
           <ul onClick={this.handleTabClick}>
@@ -117,14 +117,20 @@ class App extends React.Component {
             <li className={this.state.healthCheckTab ? "is-active" : "" }><a name="healthCheckTab">Health Check</a></li>
           </ul>
         </div>
-        <div className="main">
+        <div className="container">
         { this.state.homeTab ? 
           <React.Fragment>
-          <AddStock getStocks={this.getStocks} />
-          {this.state.currentStock.metaData === undefined ? null : (
-                    <StockChart currentStock={this.state.currentStock} />
-                  )}
-          <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
+            <div className="columns">
+              <div className="column">
+                <AddStock getStocks={this.getStocks} />
+                <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
+              </div>
+              <div className="column is-two-thirds">
+                {this.state.currentStock.metaData === undefined ? null : (
+                  <StockChart currentStock={this.state.currentStock} />
+                )}
+              </div>
+            </div>          
           </React.Fragment>
           :
           <HealthCheck stocks={this.state.stocks}></HealthCheck>
