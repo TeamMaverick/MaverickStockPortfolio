@@ -36,11 +36,37 @@ module.exports = {
     );
   },
   // Changes quantity to 0
-  put: function(stockTicker) {
-    db.query(`UPDATE stock SET quantity = 0 WHERE stock_ticker = ?`, stockTicker, (err, result) => {
+  put: function(stockTicker, callback) {
+    var delNum = '';
+    for (var i = 0; i < stockTicker.length; i++) {
+      delNum += '?, ';
+    }
+    db.query(`DELETE FROM stock WHERE stock_ticker IN (${delNum.slice(0, delNum.length - 2)})`, stockTicker, (err, result) => {
       if (err) {
-        console.log(err);
+        callback(err);
+      } else {
+        db.query(
+          `SELECT stock_ticker, quantity, price FROM stock ORDER BY stock_ticker`,
+          (err, stockData) => {
+            if (err) {
+              callback(err);
+            }
+            //console.log(stockData);
+            var stockTicker = [];
+            stockData.forEach((stock) => {
+              stockTicker.push({
+                ticker: stock.stock_ticker,
+                quantity: stock.quantity,
+                price: stock.price
+              });
+            });
+            
+            callback(null, stockTicker);
+          }
+        );
       }
     });
+    
+
   }
 };
