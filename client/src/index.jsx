@@ -30,6 +30,7 @@ class App extends React.Component {
     // update this to display first stock in database?
     this.displayStock('MSFT');
     
+    //will update the stock prices every 10 seconds
     setInterval(this.updateAllStockPrices, 10000);
 
   }
@@ -82,41 +83,36 @@ class App extends React.Component {
     });
   }
 
-  // Called when remove Checked stocks button is clicked
   removeCheckedBoxes(evt) {
     evt.preventDefault();
     const updateQuantity = [];
     const checkedStocks = document.getElementsByClassName('checkedStock');
-    
     for (var i = 0; i < checkedStocks.length; i++) {
       var stock = checkedStocks[i];
 
       if (stock.checked) {
-        
+        console.log('THIS STOCK WILL BE UPDATED', stock.value);
         updateQuantity.push(stock.value);
       }
     }
 
-    axios.put('/api/resetQuantity', {stocks:updateQuantity})
-    .then((data) => {
-      const stocks = data.data;
+    console.log('THESE ARE CHECKED BOXES: ', updateQuantity);
 
-      this.setState({
-        stocks: stocks
-      })
+    axios.put('/api/resetQuantity', { stocks: updateQuantity }).then(() => {
+      console.log('getting new list');
     });
-    
   }
 
+  //queries the server to get most recent stock prices and then updates the database with the recent stock prices
+  //once database is updated, grabs all of the prices and stock tickers and rerenders the screen
   updateAllStockPrices() {
     Promise.all(this.state.stocks.map(({ ticker, quantity }) => {
       return axios
       .get('/api/currentStockPrice', { params: { STOCK: ticker } })
       .then(({ data }) => {
         console.log('called a promise');
-        return axios.post('/api/stock', {
-          stock: ticker,
-          quantity: quantity,
+        return axios.post('/api/currentStockPrice', {
+          ticker: ticker,
           price: data
         });
       })
@@ -133,7 +129,7 @@ class App extends React.Component {
     return (
       <div className="container">
         <header className="navbar">
-          <h1 className="logo">Maverick</h1>
+          <h1>Stock Portfolio</h1>
         </header>
         <div className="tabs">
           <ul onClick={this.handleTabClick}>
@@ -141,20 +137,14 @@ class App extends React.Component {
             <li className={this.state.healthCheckTab ? "is-active" : "" }><a name="healthCheckTab">Health Check</a></li>
           </ul>
         </div>
-        <div className="container">
+        <div className="main">
         { this.state.homeTab ? 
           <React.Fragment>
-            <div className="columns">
-              <div className="column">
-                <AddStock getStocks={this.getStocks} />
-                <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
-              </div>
-              <div className="column is-two-thirds">
-                {this.state.currentStock.metaData === undefined ? null : (
-                  <StockChart currentStock={this.state.currentStock} />
-                )}
-              </div>
-            </div>          
+          <AddStock getStocks={this.getStocks} />
+          {this.state.currentStock.metaData === undefined ? null : (
+                    <StockChart currentStock={this.state.currentStock} />
+                  )}
+          <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
           </React.Fragment>
           :
           <HealthCheck stocks={this.state.stocks}></HealthCheck>
