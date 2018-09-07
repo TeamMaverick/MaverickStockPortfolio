@@ -7,7 +7,7 @@ var ListOfStocks = function(props) {
       <div className="listOfStocks">
         <span className="head">List of stocks in portfolio:</span>
         <div className="level">
-        <div class="level-left">
+        <div className="level-left">
           <div className="level-item">
               <p className="heading"></p>
           </div>
@@ -16,7 +16,7 @@ var ListOfStocks = function(props) {
           </div>
           </div>
           
-          <div class="level-right">
+          <div className="level-right">
           <div className="level-item">
               <p className="heading">Quantity</p>
             </div>

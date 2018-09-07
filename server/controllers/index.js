@@ -69,8 +69,6 @@ module.exports = {
       } 
     })
 
-
-
   },
   //gets current price from IEX
   getCurrentPrice: (req, res) => {
@@ -82,5 +80,21 @@ module.exports = {
       .catch((err) => {
         console.log(err);
       });
+  },
+
+  // update stock quantity
+  updateStockQuantity: (req, res) => {
+    let newQuantity = req.body.param.quantity;
+    let stock = req.body.param.stock;
+    if(newQuantity && stock){
+      model.updateQuantity(stock, newQuantity, (err, data) => {
+        if(err){
+          res.sendStatus(500);
+        }
+        res.sendStatus(201);
+      })
+    } else {
+      res.send('Invalid - requested params missing');
+    } 
   }
 };
