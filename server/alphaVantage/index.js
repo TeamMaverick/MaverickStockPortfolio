@@ -12,6 +12,7 @@ const getData = (ticker) => {
   });
 };
 
+//get the most up-to-date price from IEX API
 const getCurrentPrice = (ticker) => {
   console.log('inside alphavantage', ticker);
   var url = `https://api.iextrading.com/1.0/stock/${ticker}/price`;

@@ -4,7 +4,7 @@ module.exports = {
   // Adds stock ticker to database
   post: function(stock, quantity = 1, price = 1, callback) {
     var params = [stock, quantity, price];
-    var queryString = `INSERT INTO stock (stock_ticker, quantity, price) VALUES (?, ?, ?)`;
+    var queryString = `INSERT INTO stock (stock_ticker, quantity, price) VALUES (?, ?, ?) on duplicate key update quantity = values(quantity), price = values(price)`;
     db.query(queryString, params, (err, data) => {
       if (err) {
         console.log(err);
