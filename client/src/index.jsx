@@ -22,12 +22,16 @@ class App extends React.Component {
     this.handleTabClick = this.handleTabClick.bind(this);
     this.setTab = this.setTab.bind(this);
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
+    this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
   }
   componentDidMount() {
     // get all stocks for this user
     this.getStocks();
     // update this to display first stock in database?
     this.displayStock('MSFT');
+    
+    setInterval(this.updateAllStockPrices, 10000);
+
   }
 
   //gets all the stocks for the user stored in the database
@@ -96,6 +100,26 @@ class App extends React.Component {
     axios.put('/api/resetQuantity', { stocks: updateQuantity }).then(() => {
       console.log('getting new list');
     });
+  }
+
+  updateAllStockPrices() {
+    Promise.all(this.state.stocks.map(({ ticker, quantity }) => {
+      return axios
+      .get('/api/currentStockPrice', { params: { STOCK: ticker } })
+      .then(({ data }) => {
+        console.log('called a promise');
+        return axios.post('/api/stock', {
+          stock: ticker,
+          quantity: quantity,
+          price: data
+        });
+      })
+    }))
+    .then(() =>{
+      console.log('rerendering');
+      this.getStocks();
+    })
+    .catch((err) => console.log(err))
   }
 
   render() {
