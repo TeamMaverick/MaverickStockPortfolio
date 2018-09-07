@@ -7,10 +7,11 @@ var StockListItem = function({ stock, displayStock }) {
   return (
     <div className="StockListItem">
       <div onClick={() => displayStock(stock.ticker)}>
+      <input className="checkedStock checkbox" value={stock.ticker} type="checkbox" />
         {`${stock.ticker} : ${stock.quantity} : 
         ${stock.price} : ${stock.price * stock.quantity}`}
       </div>
-      <input className="checkedStock" value={stock.ticker} type="checkbox" />
+      
     </div>
   );
 };
