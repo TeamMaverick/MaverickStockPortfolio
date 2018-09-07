@@ -30,3 +30,11 @@
 .logo::before {
   content: url(img/maverick.png);
 }
+
+.red {
+  color: red;
+}
+
+.green {
+ color: green;
+}

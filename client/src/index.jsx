@@ -12,7 +12,7 @@ class App extends React.Component {
     this.state = {
       stocks: [],
       currentStock: {},
-      tab : 'Home',
+      // tab states:
       homeTab : true,
       healthCheckTab : false
     };
@@ -69,9 +69,11 @@ class App extends React.Component {
         console.log(err);
       });
   }
+  //handle tab click to set tab state
   handleTabClick(e) {
     this.setTab(e.target.name)
   }
+  // set tab either home or healthcheck
   setTab(tabName){
     this.setState({
       homeTab : false,
@@ -142,7 +144,8 @@ class App extends React.Component {
           </ul>
         </div>
         <div className="container">
-        { this.state.homeTab ? 
+        { this.state.homeTab ?
+          // show home tab 
           <React.Fragment>
             <div className="columns">
               <div className="column">
@@ -154,9 +157,10 @@ class App extends React.Component {
                   <StockChart currentStock={this.state.currentStock} />
                 )}
               </div>
-            </div>          
+            </div>         
           </React.Fragment>
           :
+          // show health check tab
           <HealthCheck stocks={this.state.stocks}></HealthCheck>
         }
         </div>
