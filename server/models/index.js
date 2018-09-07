@@ -4,7 +4,7 @@ module.exports = {
   // Adds stock ticker to database
   post: function(stock, quantity = 1, price = 1, callback) {
     var params = [stock, quantity, price];
-    var queryString = `INSERT INTO stock (stock_ticker, quantity, price) VALUES (?, ?, ?) on duplicate key update quantity = values(quantity), price = values(price)`;
+    var queryString = `INSERT INTO stock (stock_ticker, quantity, price) VALUES (?, ?, ?)`;
     db.query(queryString, params, (err, data) => {
       if (err) {
         console.log(err);
@@ -66,10 +66,9 @@ module.exports = {
         );
       }
     });
-    
-
   },
 
+  //get stock
   getStock: function(stockTicker, callback) {
     db.query('select * from stock where stock_ticker = ?', [stockTicker], (err, data) => {
       if(err){
@@ -80,6 +79,7 @@ module.exports = {
     })
   },
 
+  // update stock quantity
   updateQuantity: function (stock, quantity, callback) {
     //check if we have stock
     this.getStock(stock, (err, data) => {
@@ -96,5 +96,19 @@ module.exports = {
       })
     })
     
+  },
+
+  //updates stock price field in database to reflect latest price
+  updateStockPrice: function(ticker, price, callback) {
+    var params = [price, ticker];
+    console.log('ticker is', ticker);
+    var queryString = `UPDATE stock SET price = ? WHERE stock_ticker = ?`;
+    db.query(queryString, params, (err, data) => {
+      if (err) {
+        console.log(err);
+      } else {
+        callback(null, data);
+      }
+    });
   }
 };

@@ -96,5 +96,18 @@ module.exports = {
     } else {
       res.send('Invalid - requested params missing');
     } 
+  },
+
+  updatePrice: (req, res) => {
+    console.log('req is', req);
+    model.updateStockPrice(req.body.ticker, req.body.price, (err, data) => {
+      if (err) {
+        console.log(err);
+        res.send(err);
+      } else {
+        res.sendStatus(201);
+      }
+    })
   }
+
 };

@@ -7,6 +7,9 @@ router.get('/stockInfo', stockController.getStockInfo);
 //get current stock price from IEX
 router.get('/currentStockPrice', stockController.getCurrentPrice);
 
+//updates current stock price from IEX to the database
+router.post('/currentStockPrice', stockController.updatePrice);
+
 // post stock
 router.post('/stock', stockController.postStockTicker);
 
