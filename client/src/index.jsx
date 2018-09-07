@@ -12,7 +12,7 @@ class App extends React.Component {
     this.state = {
       stocks: [],
       currentStock: {},
-      tab : 'Home',
+      // tab states:
       homeTab : true,
       healthCheckTab : false
     };
@@ -70,9 +70,11 @@ class App extends React.Component {
         console.log(err);
       });
   }
+  //handle tab click to set tab state
   handleTabClick(e) {
     this.setTab(e.target.name)
   }
+  // set tab either home or healthcheck
   setTab(tabName){
     this.setState({
       homeTab : false,
@@ -137,16 +139,24 @@ class App extends React.Component {
             <li className={this.state.healthCheckTab ? "is-active" : "" }><a name="healthCheckTab">Health Check</a></li>
           </ul>
         </div>
-        <div className="main">
-        { this.state.homeTab ? 
+        <div className="container">
+        { this.state.homeTab ?
+          // show home tab 
           <React.Fragment>
-          <AddStock getStocks={this.getStocks} />
-          {this.state.currentStock.metaData === undefined ? null : (
-                    <StockChart currentStock={this.state.currentStock} />
-                  )}
-          <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
+            <div className="columns">
+              <div className="column">
+                <AddStock getStocks={this.getStocks} />
+                <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
+              </div>
+              <div className="column is-two-thirds">
+                {this.state.currentStock.metaData === undefined ? null : (
+                  <StockChart currentStock={this.state.currentStock} />
+                )}
+              </div>
+            </div>         
           </React.Fragment>
           :
+          // show health check tab
           <HealthCheck stocks={this.state.stocks}></HealthCheck>
         }
         </div>
