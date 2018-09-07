@@ -2,7 +2,7 @@ import React from 'react';
 
 const HealthCheckItem = (props) => {
   return (
-    <nav className="level">
+    <div className="level">
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Symbol</p>
@@ -26,7 +26,7 @@ const HealthCheckItem = (props) => {
            {(props.stockInfo.quote.ytdChange * 100).toFixed(2)}</p>
         </div>
       </div>
-    </nav>
+    </div>
   )
 }
 

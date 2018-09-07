@@ -149,8 +149,10 @@ class App extends React.Component {
           <React.Fragment>
             <div className="columns">
               <div className="column">
-                <AddStock getStocks={this.getStocks} />
-                <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
+                <div className="section">
+                  <AddStock getStocks={this.getStocks} />
+                  <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
+                </div>
               </div>
               <div className="column is-two-thirds">
                 {this.state.currentStock.metaData === undefined ? null : (
