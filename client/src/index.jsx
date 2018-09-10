@@ -18,6 +18,7 @@ class App extends React.Component {
       healthCheckTab: false,
       // apply this to all get list of stock tickers from database
       sortBy: 'Alphabetical'
+      // tab states:
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -33,6 +34,9 @@ class App extends React.Component {
     this.getStocks();
     // update this to display first stock in database?
     this.displayStock('MSFT');
+
+    //will update the stock prices every 10 seconds
+    setInterval(this.updateAllStockPrices, 10000);
 
     // setInterval(this.updateAllStockPrices, 10000);
   }
@@ -72,9 +76,11 @@ class App extends React.Component {
         console.log(err);
       });
   }
+  //handle tab click to set tab state
   handleTabClick(e) {
     this.setTab(e.target.name);
   }
+  // set tab either home or healthcheck
   setTab(tabName) {
     this.setState({
       homeTab: false,
@@ -85,29 +91,28 @@ class App extends React.Component {
     });
   }
 
-  // Called when remove Checked stocks button is clicked
   removeCheckedBoxes(evt) {
     evt.preventDefault();
     const updateQuantity = [];
     const checkedStocks = document.getElementsByClassName('checkedStock');
-
     for (var i = 0; i < checkedStocks.length; i++) {
       var stock = checkedStocks[i];
 
       if (stock.checked) {
+        console.log('THIS STOCK WILL BE UPDATED', stock.value);
         updateQuantity.push(stock.value);
       }
     }
 
-    axios.put('/api/resetQuantity', { stocks: updateQuantity }).then((data) => {
-      const stocks = data.data;
+    console.log('THESE ARE CHECKED BOXES: ', updateQuantity);
 
-      this.setState({
-        stocks: stocks
-      });
+    axios.put('/api/resetQuantity', { stocks: updateQuantity }).then(() => {
+      console.log('getting new list');
     });
   }
 
+  //queries the server to get most recent stock prices and then updates the database with the recent stock prices
+  //once database is updated, grabs all of the prices and stock tickers and rerenders the screen
   updateAllStockPrices() {
     Promise.all(
       this.state.stocks.map(({ ticker, quantity }) => {
@@ -115,19 +120,14 @@ class App extends React.Component {
           .get('/api/currentStockPrice', { params: { STOCK: ticker } })
           .then(({ data }) => {
             console.log('called a promise');
-            return axios.post('/api/stock', {
-              stock: ticker,
-              quantity: quantity,
+            return axios.post('/api/currentStockPrice', {
+              ticker: ticker,
               price: data
             });
-          });
+          })
+          .catch((err) => console.log(err));
       })
-    )
-      .then(() => {
-        console.log('rerendering');
-        this.getStocks();
-      })
-      .catch((err) => console.log(err));
+    );
   }
 
   updateSort(criteria) {
@@ -141,7 +141,7 @@ class App extends React.Component {
     return (
       <div className="container">
         <header className="navbar">
-          <h1 className="logo">Maverick</h1>
+          <h1>Stock Portfolio</h1>
         </header>
         <div className="tabs">
           <ul onClick={this.handleTabClick}>
