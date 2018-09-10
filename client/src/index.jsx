@@ -127,6 +127,7 @@ class App extends React.Component {
     .catch((err) => console.log(err))
   }
 
+  //calculates grand total value for list of stocks
   calculateTotal(stocksArray) {
     return stocksArray.map((stock) => {
     return stock.quantity * stock.price
