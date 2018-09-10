@@ -5,6 +5,7 @@ import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
 import StockChart from './components/StockChart.jsx';
 import HealthCheck from './components/HealthCheck.jsx';
+import SortBy from './components/SortBy.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -12,9 +13,11 @@ class App extends React.Component {
     this.state = {
       stocks: [],
       currentStock: {},
-      tab : 'Home',
-      homeTab : true,
-      healthCheckTab : false
+      tab: 'Home',
+      homeTab: true,
+      healthCheckTab: false,
+      // apply this to all get list of stock tickers from database
+      sortBy: 'Alphabetical'
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -23,15 +26,15 @@ class App extends React.Component {
     this.setTab = this.setTab.bind(this);
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
+    this.updateSort = this.updateSort.bind(this);
   }
   componentDidMount() {
     // get all stocks for this user
     this.getStocks();
     // update this to display first stock in database?
     this.displayStock('MSFT');
-    
-    setInterval(this.updateAllStockPrices, 10000);
 
+    // setInterval(this.updateAllStockPrices, 10000);
   }
 
   //gets all the stocks for the user stored in the database
@@ -70,15 +73,15 @@ class App extends React.Component {
       });
   }
   handleTabClick(e) {
-    this.setTab(e.target.name)
+    this.setTab(e.target.name);
   }
-  setTab(tabName){
+  setTab(tabName) {
     this.setState({
-      homeTab : false,
-      healthCheckTab : false,
+      homeTab: false,
+      healthCheckTab: false
     });
     this.setState({
-      [tabName] : true
+      [tabName]: true
     });
   }
 
@@ -87,45 +90,50 @@ class App extends React.Component {
     evt.preventDefault();
     const updateQuantity = [];
     const checkedStocks = document.getElementsByClassName('checkedStock');
-    
+
     for (var i = 0; i < checkedStocks.length; i++) {
       var stock = checkedStocks[i];
 
       if (stock.checked) {
-        
         updateQuantity.push(stock.value);
       }
     }
 
-    axios.put('/api/resetQuantity', {stocks:updateQuantity})
-    .then((data) => {
+    axios.put('/api/resetQuantity', { stocks: updateQuantity }).then((data) => {
       const stocks = data.data;
 
       this.setState({
         stocks: stocks
-      })
+      });
     });
-    
   }
 
   updateAllStockPrices() {
-    Promise.all(this.state.stocks.map(({ ticker, quantity }) => {
-      return axios
-      .get('/api/currentStockPrice', { params: { STOCK: ticker } })
-      .then(({ data }) => {
-        console.log('called a promise');
-        return axios.post('/api/stock', {
-          stock: ticker,
-          quantity: quantity,
-          price: data
-        });
+    Promise.all(
+      this.state.stocks.map(({ ticker, quantity }) => {
+        return axios
+          .get('/api/currentStockPrice', { params: { STOCK: ticker } })
+          .then(({ data }) => {
+            console.log('called a promise');
+            return axios.post('/api/stock', {
+              stock: ticker,
+              quantity: quantity,
+              price: data
+            });
+          });
       })
-    }))
-    .then(() =>{
-      console.log('rerendering');
-      this.getStocks();
-    })
-    .catch((err) => console.log(err))
+    )
+      .then(() => {
+        console.log('rerendering');
+        this.getStocks();
+      })
+      .catch((err) => console.log(err));
+  }
+
+  updateSort(criteria) {
+    this.setState({
+      sortBy: criteria
+    });
   }
 
   render() {
@@ -137,28 +145,37 @@ class App extends React.Component {
         </header>
         <div className="tabs">
           <ul onClick={this.handleTabClick}>
-            <li className={this.state.homeTab ? "is-active" : "" }><a name="homeTab">Home</a></li>
-            <li className={this.state.healthCheckTab ? "is-active" : "" }><a name="healthCheckTab">Health Check</a></li>
+            <li className={this.state.homeTab ? 'is-active' : ''}>
+              <a name="homeTab">Home</a>
+            </li>
+            <li className={this.state.healthCheckTab ? 'is-active' : ''}>
+              <a name="healthCheckTab">Health Check</a>
+            </li>
           </ul>
         </div>
         <div className="container">
-        { this.state.homeTab ? 
-          <React.Fragment>
-            <div className="columns">
-              <div className="column">
-                <AddStock getStocks={this.getStocks} />
-                <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
+          {this.state.homeTab ? (
+            <React.Fragment>
+              <div className="columns">
+                <div className="column">
+                  <AddStock getStocks={this.getStocks} />
+                  <SortBy updateSort={this.updateSort} />
+                  <ListOfStocks
+                    stocksArray={this.state.stocks}
+                    displayStock={this.displayStock}
+                    removeCheckedBoxes={this.removeCheckedBoxes}
+                  />
+                </div>
+                <div className="column is-two-thirds">
+                  {this.state.currentStock.metaData === undefined ? null : (
+                    <StockChart currentStock={this.state.currentStock} />
+                  )}
+                </div>
               </div>
-              <div className="column is-two-thirds">
-                {this.state.currentStock.metaData === undefined ? null : (
-                  <StockChart currentStock={this.state.currentStock} />
-                )}
-              </div>
-            </div>          
-          </React.Fragment>
-          :
-          <HealthCheck stocks={this.state.stocks}></HealthCheck>
-        }
+            </React.Fragment>
+          ) : (
+            <HealthCheck stocks={this.state.stocks} />
+          )}
         </div>
       </div>
     );
