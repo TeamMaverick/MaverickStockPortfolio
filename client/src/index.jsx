@@ -23,6 +23,7 @@ class App extends React.Component {
     this.setTab = this.setTab.bind(this);
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
+    this.calculateTotal = this.calculateTotal.bind(this);
   }
   componentDidMount() {
     // get all stocks for this user
@@ -126,6 +127,16 @@ class App extends React.Component {
     .catch((err) => console.log(err))
   }
 
+  //calculates grand total value for list of stocks
+  calculateTotal(stocksArray) {
+    return stocksArray.map((stock) => {
+    return stock.quantity * stock.price
+    })
+    .reduce((total, subtotal) => {
+      return total + subtotal;
+    }, 0)
+  }
+
   render() {
     // proceed as usual after initial componentDidMount
     return (
@@ -146,7 +157,7 @@ class App extends React.Component {
             <div className="columns">
               <div className="column">
                 <AddStock getStocks={this.getStocks} />
-                <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
+                <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes} calculateTotal={this.calculateTotal}/>
               </div>
               <div className="column is-two-thirds">
                 {this.state.currentStock.metaData === undefined ? null : (
