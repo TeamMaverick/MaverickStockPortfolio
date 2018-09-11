@@ -16,7 +16,7 @@ class SortBy extends React.Component {
       <div className="sort">
         <select value={this.state.option} onChange={this.handleChange}>
           {this.state.orders.map((item, i) => (
-            <option value={i} key={i}>
+            <option value={item} key={i}>
               {item}
             </option>
           ))}

@@ -17,7 +17,8 @@ module.exports = {
   },
   // Calls function in model to get stock tickers and quantity of stock from database
   getStockTicker: function(req, res) {
-    model.get((data) => {
+    console.log(req.query.sort);
+    model.get(req.query.sort, (data) => {
       res.send(data);
       res.end();
     });
@@ -56,21 +57,19 @@ module.exports = {
   // deletes
   resetStockQuantity: (req, res) => {
     const stocks = req.body.stocks;
+    const sort = req.body.sort;
     if (stocks === undefined) {
       res.sendStatus(500);
     }
-    
-    model.put(stocks, (err, result) => {
+
+    model.put(stocks, sort, (err, result) => {
       if (err) {
         res.send(err);
         console.log(err);
       } else {
         res.send(result);
-      } 
-    })
-
-
-
+      }
+    });
   },
   //gets current price from IEX
   getCurrentPrice: (req, res) => {
@@ -93,8 +92,6 @@ module.exports = {
       } else {
         res.sendStatus(201);
       }
-    })
+    });
   }
-
-
 };

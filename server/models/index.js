@@ -14,28 +14,34 @@ module.exports = {
     });
   },
   // Gets stock tickers from database
-  get: function(callback) {
-    db.query(
-      `SELECT stock_ticker, quantity, price FROM stock ORDER BY stock_ticker`,
-      (err, stockData) => {
-        if (err) {
-          console.log(err);
-        } else {
-          var stockTicker = [];
-          stockData.forEach((stock) => {
-            stockTicker.push({
-              ticker: stock.stock_ticker,
-              quantity: stock.quantity,
-              price: stock.price
-            });
+  get: function(sort, callback) {
+    if (sort === 'Alphabetical') {
+      sort = 'stock_ticker';
+    } else if (sort === 'Total Price') {
+      sort = 'price * quantity DESC';
+    } else {
+      sort = 'quantity DESC';
+    }
+    var queryString = `SELECT stock_ticker, quantity, price FROM stock ORDER BY ${sort}`;
+    console.log(queryString);
+    db.query(queryString, (err, stockData) => {
+      if (err) {
+        console.log(err);
+      } else {
+        var stockTicker = [];
+        stockData.forEach((stock) => {
+          stockTicker.push({
+            ticker: stock.stock_ticker,
+            quantity: stock.quantity,
+            price: stock.price
           });
-          callback(stockTicker);
-        }
+        });
+        callback(stockTicker);
       }
-    );
+    });
   },
   // Changes quantity to 0
-  put: function(stockTicker, callback) {
+  put: function(stockTicker, sort, callback) {
     var delNum = '';
     for (var i = 0; i < stockTicker.length; i++) {
       delNum += '?, ';
@@ -47,24 +53,25 @@ module.exports = {
         if (err) {
           callback(err);
         } else {
-          db.query(
-            `SELECT stock_ticker, quantity, price FROM stock ORDER BY stock_ticker`,
-            (err, stockData) => {
-              if (err) {
-                callback(err);
-              }
-              //console.log(stockData);
-              var stockTicker = [];
-              stockData.forEach((stock) => {
-                stockTicker.push({
-                  ticker: stock.stock_ticker,
-                  quantity: stock.quantity,
-                  price: stock.price
-                });
-              });
-              callback(null, stockTicker);
-            }
-          );
+          this.get(sort, callback);
+          // db.query(
+          //   `SELECT stock_ticker, quantity, price FROM stock ORDER BY stock_ticker`,
+          //   (err, stockData) => {
+          //     if (err) {
+          //       callback(err);
+          //     }
+          //     //console.log(stockData);
+          //     var stockTicker = [];
+          //     stockData.forEach((stock) => {
+          //       stockTicker.push({
+          //         ticker: stock.stock_ticker,
+          //         quantity: stock.quantity,
+          //         price: stock.price
+          //       });
+          //     });
+          //     callback(null, stockTicker);
+          //   }
+          // );
         }
       }
     );

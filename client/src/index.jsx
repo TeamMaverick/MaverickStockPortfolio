@@ -31,20 +31,19 @@ class App extends React.Component {
   }
   componentDidMount() {
     // get all stocks for this user
-    this.getStocks();
+    this.getStocks(this.state.sortBy);
     // update this to display first stock in database?
     this.displayStock('MSFT');
 
     //will update the stock prices every 10 seconds
-    setInterval(this.updateAllStockPrices, 10000);
-
     // setInterval(this.updateAllStockPrices, 10000);
   }
 
   //gets all the stocks for the user stored in the database
-  getStocks() {
+  getStocks(sort) {
+    sort = sort || this.state.sortBy;
     axios
-      .get('/api/stock')
+      .get('/api/stock', { params: { sort: sort } })
       .then(({ data }) => {
         const stocksList = [];
         data.forEach((stock) => {
@@ -106,9 +105,11 @@ class App extends React.Component {
 
     console.log('THESE ARE CHECKED BOXES: ', updateQuantity);
 
-    axios.put('/api/resetQuantity', { stocks: updateQuantity }).then(() => {
-      console.log('getting new list');
-    });
+    axios
+      .put('/api/resetQuantity', { stocks: updateQuantity, sort: this.state.sortBy })
+      .then(() => {
+        console.log('getting new list');
+      });
   }
 
   //queries the server to get most recent stock prices and then updates the database with the recent stock prices
@@ -134,6 +135,7 @@ class App extends React.Component {
     this.setState({
       sortBy: criteria
     });
+    this.getStocks(criteria);
   }
 
   render() {
