@@ -81,4 +81,17 @@ module.exports = {
       }
     });
   },
+
+  //posts entire list of tickers and company names to the database
+  postTickersAndNames: function(data) {
+    data.forEach((stock) => {
+      const params=[stock.symbol, stock.name]
+      const queryString = `INSERT INTO tickersAndNames (stock_ticker, company_name) VALUES (?, ?)`
+      db.query(queryString, params, (err) => {
+        if(err) {
+          console.log(err);
+        }
+      })
+    });
+  }
 };

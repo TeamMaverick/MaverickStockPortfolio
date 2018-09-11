@@ -84,8 +84,8 @@ module.exports = {
       });
   },
 
+  //updates all stock prices in the database
   updatePrice: (req, res) => {
-    console.log('req is', req);
     model.updateStockPrice(req.body.ticker, req.body.price, (err, data) => {
       if (err) {
         console.log(err);
@@ -94,7 +94,19 @@ module.exports = {
         res.sendStatus(201);
       }
     })
-  }
+  },
 
+
+  //gets complete list of tickers and names and stores them in the database
+  postTickersAndNames: (req, res) => {
+    console.log('inside controller')
+    alpha
+    .getTickersAndNames()
+    .then(({data}) => {
+      console.log(data);
+      model.postTickersAndNames(data);
+    })
+    .then(() => res.sendStatus(201));
+  }
 
 };
