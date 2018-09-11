@@ -23,7 +23,6 @@ module.exports = {
       sort = 'quantity DESC';
     }
     var queryString = `SELECT stock_ticker, quantity, price FROM stock ORDER BY ${sort}`;
-    console.log(queryString);
     db.query(queryString, (err, stockData) => {
       if (err) {
         console.log(err);

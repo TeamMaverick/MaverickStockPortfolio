@@ -8,9 +8,11 @@ class SortBy extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
   }
+
   handleChange(evt) {
     this.props.updateSort(evt.target.value);
   }
+
   render() {
     return (
       <div className="sort">
