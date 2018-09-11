@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS tickersAndNames;
 CREATE TABLE stock (
   id INT NOT NULL AUTO_INCREMENT,
   stock_ticker VARCHAR(20) NOT NULL,
+  company_name VARCHAR(1000) NOT NULL,
   quantity INT NOT NULL,
   price FLOAT(7, 2) NOT NULL,
   UNIQUE (stock_ticker),

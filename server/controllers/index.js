@@ -69,8 +69,6 @@ module.exports = {
       } 
     })
 
-
-
   },
   //gets current price from IEX
   getCurrentPrice: (req, res) => {

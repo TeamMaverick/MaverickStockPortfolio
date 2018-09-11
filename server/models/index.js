@@ -3,20 +3,28 @@ const { db } = require('../../database/index.js');
 module.exports = {
   // Adds stock ticker to database
   post: function(stock, quantity = 1, price = 1, callback) {
-    var params = [stock, quantity, price];
-    var queryString = `INSERT INTO stock (stock_ticker, quantity, price) VALUES (?, ?, ?)`;
-    db.query(queryString, params, (err, data) => {
+    var companyNameQuery = 'SELECT company_name FROM tickersAndNames WHERE stock_ticker = ?'
+    db.query(companyNameQuery, stock, (err, data) => {
       if (err) {
         console.log(err);
       } else {
-        callback(null, data);
+        console.log(data);
+        var insertQuery = `INSERT INTO stock (stock_ticker, company_name, quantity, price) VALUES (?, ?, ?, ?)`;
+        var insertParams = [stock, data[0].company_name, quantity, price];
+        db.query(insertQuery, insertParams, (err, insertData) => {
+          if (err) {
+            console.log(err);
+          } else {
+            callback(null, insertData);
+          }
+        })
       }
-    });
+    })
   },
   // Gets stock tickers from database
   get: function(callback) {
     db.query(
-      `SELECT stock_ticker, quantity, price FROM stock ORDER BY stock_ticker`,
+      `SELECT stock_ticker, quantity, company_name, price FROM stock ORDER BY stock_ticker`,
       (err, stockData) => {
         if (err) {
           console.log(err);
@@ -27,6 +35,7 @@ module.exports = {
           stockTicker.push({
             ticker: stock.stock_ticker,
             quantity: stock.quantity,
+            companyName: stock.company_name,
             price: stock.price
           });
         });
@@ -81,17 +90,4 @@ module.exports = {
       }
     });
   },
-
-  //posts entire list of tickers and company names to the database
-  postTickersAndNames: function(data) {
-    data.forEach((stock) => {
-      const params=[stock.symbol, stock.name]
-      const queryString = `INSERT INTO tickersAndNames (stock_ticker, company_name) VALUES (?, ?)`
-      db.query(queryString, params, (err) => {
-        if(err) {
-          console.log(err);
-        }
-      })
-    });
-  }
 };
