@@ -17,6 +17,6 @@ CREATE TABLE stock (
 CREATE TABLE tickersAndNames (
   id INT NOT NULL AUTO_INCREMENT,
   stock_ticker VARCHAR(20) NOT NULL,
-  company_name VARCHAR(200) NOT NULL,
+  company_name VARCHAR(1000) NOT NULL,
   PRIMARY KEY (id)
 );
