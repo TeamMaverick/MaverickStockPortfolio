@@ -28,6 +28,7 @@ class App extends React.Component {
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
     this.updateSort = this.updateSort.bind(this);
+    this.calculateTotal = this.calculateTotal.bind(this);
   }
   componentDidMount() {
     // get all stocks for this user
@@ -138,6 +139,17 @@ class App extends React.Component {
     this.getStocks(criteria);
   }
 
+  //calculates grand total value for list of stocks
+  calculateTotal(stocksArray) {
+    return stocksArray
+      .map((stock) => {
+        return stock.quantity * stock.price;
+      })
+      .reduce((total, subtotal) => {
+        return total + subtotal;
+      }, 0);
+  }
+
   render() {
     // proceed as usual after initial componentDidMount
     return (
@@ -166,6 +178,7 @@ class App extends React.Component {
                     stocksArray={this.state.stocks}
                     displayStock={this.displayStock}
                     removeCheckedBoxes={this.removeCheckedBoxes}
+                    calculateTotal={this.calculateTotal}
                   />
                 </div>
                 <div className="column is-two-thirds">
