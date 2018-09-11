@@ -82,6 +82,7 @@ module.exports = {
     });
   },
 
+  //posts entire list of tickers and company names to the database
   postTickersAndNames: function(data) {
     data.forEach((stock) => {
       const params=[stock.symbol, stock.name]
