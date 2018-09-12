@@ -18,7 +18,6 @@ module.exports = {
 
   // Calls function in model to get stock tickers and quantity of stock from database
   getStockTicker: function(req, res) {
-    console.log(req.query.sort);
     model.get(req.query.sort, (data) => {
       res.send(data);
       res.end();
@@ -115,14 +114,15 @@ module.exports = {
   },
 
   postTickersAndNames: (req, res) => {
-    alpha.getTickersAndNames()
-    .then(({data}) => {
-      model.postTickersAndNames(data)
-      res.sendStatus(201)
-    })
-    .catch((err) => {
-      res.send(err)
-      console.log(err)
-    });
+    alpha
+      .getTickersAndNames()
+      .then(({ data }) => {
+        model.postTickersAndNames(data);
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        res.send(err);
+        console.log(err);
+      });
   }
 };

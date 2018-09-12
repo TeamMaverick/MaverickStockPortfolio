@@ -6,6 +6,7 @@ import ListOfStocks from './components/ListOfStocks.jsx';
 import StockChart from './components/StockChart.jsx';
 import HealthCheck from './components/HealthCheck.jsx';
 import SortBy from './components/SortBy.jsx';
+import PortfolioPChart from './components/PortfolioPChart.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,7 +18,6 @@ class App extends React.Component {
       tab: 'Home',
       homeTab: true,
       healthCheckTab: false,
-      // apply this to all get list of stock tickers from database
       sortBy: 'Alphabetical'
       // tab states:
     };
@@ -194,6 +194,7 @@ class App extends React.Component {
                   {this.state.currentStock.metaData === undefined ? null : (
                     <StockChart currentStock={this.state.currentStock} />
                   )}
+                  <PortfolioPChart stocks={this.state.stocks} />
                 </div>
               </div>
             </React.Fragment>
