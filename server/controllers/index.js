@@ -96,5 +96,17 @@ module.exports = {
         res.sendStatus(201);
       }
     });
+  },
+
+  postTickersAndNames: (req, res) => {
+    alpha.getTickersAndNames()
+    .then(({data}) => {
+      model.postTickersAndNames(data)
+      res.sendStatus(201)
+    })
+    .catch((err) => {
+      res.send(err)
+      console.log(err)
+    });
   }
 };

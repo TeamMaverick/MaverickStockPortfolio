@@ -96,6 +96,7 @@ module.exports = {
         callback(null, data);
       }
     });
+
   },
 
   //inserts tickers and their company names into the tickersAndNames table in the database
