@@ -109,7 +109,6 @@ class App extends React.Component {
       }
     }
 
-    console.log('THESE ARE CHECKED BOXES: ', updateQuantity);
 
     axios
       .put('/api/resetQuantity', { stocks: updateQuantity, sort: this.state.sortBy })
