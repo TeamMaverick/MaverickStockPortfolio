@@ -38,10 +38,17 @@ class AddStock extends React.Component {
   }
   render() {
     return (
-      <div className="addStock">
-        <input className="input" type="text" onChange={this.handleInputChange} value={this.state.stock} />
-        <button className="button" onClick={this.handleClick}>Add Stock</button>
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <input className="input" type="text" onChange={this.handleInputChange} value={this.state.stock} />
+        </div>
+        <div class="control">
+          <a class="button is-info" onClick={this.handleClick}>
+            Add Stock
+          </a>
+        </div>
       </div>
+
     );
   }
 }

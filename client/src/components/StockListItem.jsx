@@ -70,7 +70,7 @@ class StockListItem extends React.Component {
             </div>
             <div className="level-item has-text-centered">
               <p>
-                <a onClick={() => this.props.displayStock(this.props.stock.ticker)}>
+                <a>
                   {this.props.stock.ticker} {this.props.stock.companyName}{' '}
                 </a>
               </p>
@@ -98,14 +98,14 @@ class StockListItem extends React.Component {
         <div className="level">
           <div className="level-left">
             <div className="level-item">
-              <p>{`Price : $ ${Number.parseFloat(this.props.stock.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</p>
+              <p>{`Price : $ ${this.props.stock.price}`}</p>
             </div>
           </div>
           <div className="level-right">
             <p>
               {`Total : $ ${Number.parseFloat(
                 this.props.stock.price * this.props.stock.quantity
-              ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
+              ).toFixed(2)}`}{' '}
             </p>
           </div>
         </div>
