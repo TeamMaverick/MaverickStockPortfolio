@@ -2,13 +2,7 @@ import React from 'react';
 import StockListItem from './StockListItem.jsx';
 
 //List component that displays all the stocks the user has saved
-var ListOfStocks = function({
-  stocksArray,
-  removeCheckedBoxes,
-  displayStock,
-  portfolioTotal,
-  getStocks
-}) {
+var ListOfStocks = function({ stocksArray, removeCheckedBoxes, portfolioTotal, getStocks }) {
   return (
     <div className="listOfStocks">
       <span className="head">List of stocks in portfolio:</span>
@@ -27,18 +21,6 @@ var ListOfStocks = function({
             <p className="heading">Quantity</p>
           </div>
         </div>
-        {stocksArray.map((stock) => {
-          return <StockListItem stock={stock} key={stock.ticker} getStocks={getStocks} />;
-        })}
-        <div className="totalprice">
-          Portfolio Total : ${' '}
-          {Number.parseFloat(portfolioTotal)
-            .toFixed(2)
-            .replace(/\d(?=(\d{3})+\.)/g, '$&,')}
-        </div>
-        <button className="button" onClick={(evt) => removeCheckedBoxes(evt)}>
-          Remove Checked Stocks
-        </button>
       </div>
       {stocksArray.map((stock) => {
         return <StockListItem stock={stock} key={stock.ticker} getStocks={getStocks} />;
