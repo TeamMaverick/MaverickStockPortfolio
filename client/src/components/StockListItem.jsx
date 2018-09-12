@@ -36,6 +36,7 @@ class StockListItem extends React.Component {
       this.setState({
         quantity : newQuantity
       })
+      this.props.getStocks();
     })
     .catch((err) => {
       console.log(err);
@@ -68,7 +69,7 @@ class StockListItem extends React.Component {
         </div>
         <div className="level-right">
         <div className="level-item has-text-centered">
-            <p><input onChange={this.handleInputChange} value={this.state.quantity} />
+            <p><input className="stockInput" onChange={this.handleInputChange} value={this.state.quantity} />
             <a onClick={this.handleAddQuantity}><i className="fas fa-plus"></i></a>&nbsp;
             <a onClick={this.handleDeleteQuantity}><i className="fas fa-minus"></i></a>
             </p>
@@ -82,7 +83,7 @@ class StockListItem extends React.Component {
         </div>
         </div>
         <div className="level-right">
-          <p>{`Total : $ ${this.props.stock.price * this.props.stock.quantity}`} </p>
+          <p>{`Total : $ ${Number.parseFloat(this.props.stock.price * this.props.stock.quantity).toFixed(2)}`} </p>
         </div>
       </div>
       </React.Fragment>

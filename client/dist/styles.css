@@ -48,3 +48,7 @@
   font-weight: bold;
   text-decoration: underline;
 }
+
+.stockInput {
+  width:60px;
+}
