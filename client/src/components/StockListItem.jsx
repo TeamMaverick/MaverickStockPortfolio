@@ -52,6 +52,7 @@ class StockListItem extends React.Component {
 
   render(){
     return (
+      <React.Fragment>
       <div className="level">
       <div className="level-left">
         <div className="level-item">
@@ -70,6 +71,17 @@ class StockListItem extends React.Component {
         </div>
         </div>
       </div>
+      <div className="level">
+      <div className="level-left">
+        <div className="level-item">
+            <p>{`Price : $ ${this.props.stock.price}`}</p>
+        </div>
+        </div>
+        <div className="level-right">
+          <p>{`Total : $ ${this.props.stock.price * this.props.stock.quantity}`} </p>
+        </div>
+      </div>
+      </React.Fragment>
     );
   }
 }
