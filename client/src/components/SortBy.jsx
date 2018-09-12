@@ -16,13 +16,15 @@ class SortBy extends React.Component {
   render() {
     return (
       <div className="sort">
-        <select value={this.state.option} onChange={this.handleChange}>
-          {this.state.orders.map((item, i) => (
-            <option value={item} key={i}>
-              {item}
-            </option>
-          ))}
-        </select>
+        <div className="select is-rounded">
+          <select value={this.state.option} onChange={this.handleChange}>
+            {this.state.orders.map((item, i) => (
+              <option value={item} key={i}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     );
   }

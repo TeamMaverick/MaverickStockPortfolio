@@ -52,3 +52,11 @@
 .stockInput {
   width:60px;
 }
+
+.sort {
+  text-align: right;
+}
+
+.totalprice {
+  text-align: right;
+}

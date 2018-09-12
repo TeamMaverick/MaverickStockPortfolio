@@ -27,6 +27,18 @@ var ListOfStocks = function({
             <p className="heading">Quantity</p>
           </div>
         </div>
+        {stocksArray.map((stock) => {
+          return <StockListItem stock={stock} key={stock.ticker} getStocks={getStocks} />;
+        })}
+        <div className="totalprice">
+          Portfolio Total : ${' '}
+          {Number.parseFloat(portfolioTotal)
+            .toFixed(2)
+            .replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+        </div>
+        <button className="button" onClick={(evt) => removeCheckedBoxes(evt)}>
+          Remove Checked Stocks
+        </button>
       </div>
       {stocksArray.map((stock) => {
         return <StockListItem stock={stock} key={stock.ticker} getStocks={getStocks} />;
