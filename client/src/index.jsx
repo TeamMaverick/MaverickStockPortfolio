@@ -161,7 +161,7 @@ class App extends React.Component {
     // proceed as usual after initial componentDidMount
     return (
       <div className="container">
-        <header className="navbar">
+        <header className="navbar logo">
           <h1>Stock Portfolio</h1>
         </header>
         <div className="tabs">
