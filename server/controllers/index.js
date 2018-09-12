@@ -86,6 +86,22 @@ module.exports = {
       });
   },
 
+  // update stock quantity
+  updateStockQuantity: (req, res) => {
+    let newQuantity = req.body.param.quantity;
+    let stock = req.body.param.stock;
+    if(newQuantity && stock){
+      model.updateQuantity(stock, newQuantity, (err, data) => {
+        if(err){
+          res.sendStatus(500);
+        }
+        res.sendStatus(201);
+      })
+    } else {
+      res.send('Invalid - requested params missing');
+    } 
+  },
+
   //updates all stock prices in the database
   updatePrice: (req, res) => {
     model.updateStockPrice(req.body.ticker, req.body.price, (err, data) => {

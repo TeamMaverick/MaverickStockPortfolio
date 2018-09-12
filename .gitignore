@@ -28,5 +28,6 @@ node_modules/
 # private information
 config.js
 config.azure.js
+config.local.js
 
 package-lock.json

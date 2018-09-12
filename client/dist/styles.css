@@ -38,3 +38,17 @@
 .green {
  color: green;
 }
+
+.listOfStocks {
+  padding-top: 20px;
+}
+
+.listOfStocks .head {
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.stockInput {
+  width:60px;
+}
