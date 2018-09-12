@@ -25,7 +25,7 @@ var ListOfStocks = function({ stocksArray, removeCheckedBoxes, displayStock, por
         {stocksArray.map((stock) => {
           return <StockListItem stock={stock} key={stock.ticker} displayStock={displayStock} getStocks={getStocks} />;
         })}
-        <div className="total price">Portfolio Total : {portfolioTotal}</div>
+        <div className="totalprice">Portfolio Total : {portfolioTotal}</div>
         <button className="button" onClick={(evt) => removeCheckedBoxes(evt)}>Remove Checked Stocks</button>
       </div>
   );
