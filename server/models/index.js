@@ -30,11 +30,11 @@ module.exports = {
     } else {
       sort = 'quantity DESC';
     }
-    var queryString = `SELECT stock_ticker, quantity, price FROM stock ORDER BY ${sort}`;
+    var queryString = `SELECT stock_ticker, quantity, price, company_name FROM stock ORDER BY ${sort}`;
     db.query(queryString, (err, stockData) => {
       if (err) {
         console.log(err);
-      } else {
+      } else { 
         var stockTicker = [];
         stockData.forEach((stock) => {
           stockTicker.push({
