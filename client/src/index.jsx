@@ -115,6 +115,7 @@ class App extends React.Component {
       .put('/api/resetQuantity', { stocks: updateQuantity, sort: this.state.sortBy })
       .then(() => {
         console.log('getting new list');
+        this.getStocks();
       });
   }
 
