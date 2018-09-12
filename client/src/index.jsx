@@ -104,11 +104,9 @@ class App extends React.Component {
       var stock = checkedStocks[i];
 
       if (stock.checked) {
-        console.log('THIS STOCK WILL BE UPDATED', stock.value);
         updateQuantity.push(stock.value);
       }
     }
-
 
     axios
       .put('/api/resetQuantity', { stocks: updateQuantity, sort: this.state.sortBy })
