@@ -97,15 +97,16 @@ module.exports = {
     });
   },
 
-  //gets complete list of tickers and names and stores them in the database
   postTickersAndNames: (req, res) => {
-    console.log('inside controller');
     alpha
       .getTickersAndNames()
       .then(({ data }) => {
-        console.log(data);
         model.postTickersAndNames(data);
+        res.sendStatus(201);
       })
-      .then(() => res.sendStatus(201));
+      .catch((err) => {
+        res.send(err);
+        console.log(err);
+      });
   }
 };

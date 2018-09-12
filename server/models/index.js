@@ -30,11 +30,11 @@ module.exports = {
     } else {
       sort = 'quantity DESC';
     }
-    var queryString = `SELECT stock_ticker, quantity, price FROM stock ORDER BY ${sort}`;
+    var queryString = `SELECT stock_ticker, quantity, price, company_name FROM stock ORDER BY ${sort}`;
     db.query(queryString, (err, stockData) => {
       if (err) {
         console.log(err);
-      } else {
+      } else { 
         var stockTicker = [];
         stockData.forEach((stock) => {
           stockTicker.push({
@@ -96,5 +96,19 @@ module.exports = {
         callback(null, data);
       }
     });
+
+  },
+
+  //inserts tickers and their company names into the tickersAndNames table in the database
+  postTickersAndNames: function(stockArray) {
+    stockArray.forEach((stock) => {
+      const params = [stock.symbol, stock.name];
+      const insertQuery = `INSERT INTO tickersAndNames (stock_ticker, company_name) VALUES (?, ?)`;
+      db.query(insertQuery, params, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      })
+    })
   }
 };
