@@ -90,4 +90,17 @@ module.exports = {
       }
     });
   },
+
+  //inserts tickers and their company names into the tickersAndNames table in the database
+  postTickersAndNames: function(stockArray) {
+    stockArray.forEach((stock) => {
+      const params = [stock.symbol, stock.name];
+      const insertQuery = `INSERT INTO tickersAndNames (stock_ticker, company_name) VALUES (?, ?)`;
+      db.query(insertQuery, params, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      })
+    })
+  }
 };
