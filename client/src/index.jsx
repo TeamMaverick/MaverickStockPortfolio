@@ -187,6 +187,7 @@ class App extends React.Component {
                     removeCheckedBoxes={this.removeCheckedBoxes}
                     calculateTotal={this.calculateTotal}
                     portfolioTotal={this.state.portfolioTotal}
+                    getStocks = {this.getStocks}
                   />
                 </div>
                 <div className="column is-two-thirds">

@@ -85,6 +85,37 @@ module.exports = {
     );
   },
 
+  //get stock
+  getStock: function(stockTicker, callback) {
+    db.query('select * from stock where stock_ticker = ?', [stockTicker], (err, data) => {
+      if(err){
+        console.log(err);
+        callback(err);
+      }
+      callback(null, data);
+    })
+  },
+
+  // update stock quantity
+  updateQuantity: function (stock, quantity, callback) {
+    //check if we have stock
+    this.getStock(stock, (err, data) => {
+      if(err) {
+        console.log(err);
+        callback(err);
+      }
+      db.query('update stock set quantity = ? where stock_ticker = ?', [quantity, stock], (err, results) => {
+        if(err) {
+          console.log(err);
+          callback(err);
+        }
+        callback(null, results);
+      })
+    })
+    
+  },
+
+  //updates stock price field in database to reflect latest price
   updateStockPrice: function(ticker, price, callback) {
     var params = [price, ticker];
     console.log('ticker is', ticker);
