@@ -68,17 +68,6 @@ var StockChart = ({ currentStock }) => {
     ]
   };
 
-  // const options = {
-  //   title: {
-  //     text: 'My stock chart'
-  //   },
-  //   series: [
-  //     {
-  //       data: currentStock.data
-  //     }
-  //   ]
-  // };
-
   return (
     <HighchartsReact highcharts={Highcharts} constructorType={'stockChart'} options={options} />
   );
