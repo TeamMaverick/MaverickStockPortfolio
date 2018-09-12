@@ -12,6 +12,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       stocks: [],
+      portfolioTotal: 0,
       currentStock: {},
       tab: 'Home',
       homeTab: true,
@@ -54,10 +55,14 @@ class App extends React.Component {
         });
         this.setStocks(stocksList);
       })
+      .then(() => {
+        this.calculateTotal();
+      })
       .catch((err) => {
         console.log(err);
       });
   }
+
   setStocks(stocks) {
     this.setState({
       stocks: stocks
@@ -140,14 +145,16 @@ class App extends React.Component {
   }
 
   //calculates grand total value for list of stocks
-  calculateTotal(stocksArray) {
-    return stocksArray
+  calculateTotal() {
+    console.log(this.state.stocks);
+    const total = this.state.stocks
       .map((stock) => {
         return stock.quantity * stock.price;
       })
       .reduce((total, subtotal) => {
         return total + subtotal;
       }, 0);
+    this.setState({ portfolioTotal: total });
   }
 
   render() {
@@ -179,6 +186,7 @@ class App extends React.Component {
                     displayStock={this.displayStock}
                     removeCheckedBoxes={this.removeCheckedBoxes}
                     calculateTotal={this.calculateTotal}
+                    portfolioTotal={this.state.portfolioTotal}
                   />
                 </div>
                 <div className="column is-two-thirds">

@@ -3,13 +3,21 @@ const { db } = require('../../database/index.js');
 module.exports = {
   // Adds stock ticker to database
   post: function(stock, quantity = 1, price = 1, callback) {
-    var params = [stock, quantity, price];
-    var queryString = `INSERT INTO stock (stock_ticker, quantity, price) VALUES (?, ?, ?)`;
-    db.query(queryString, params, (err, data) => {
+    var companyNameQuery = 'SELECT company_name FROM tickersAndNames WHERE stock_ticker = ?';
+    db.query(companyNameQuery, stock, (err, data) => {
       if (err) {
         console.log(err);
       } else {
-        callback(null, data);
+        console.log(data);
+        var insertQuery = `INSERT INTO stock (stock_ticker, company_name, quantity, price) VALUES (?, ?, ?, ?)`;
+        var insertParams = [stock, data[0].company_name, quantity, price];
+        db.query(insertQuery, insertParams, (err, insertData) => {
+          if (err) {
+            console.log(err);
+          } else {
+            callback(null, insertData);
+          }
+        });
       }
     });
   },
@@ -32,6 +40,7 @@ module.exports = {
           stockTicker.push({
             ticker: stock.stock_ticker,
             quantity: stock.quantity,
+            companyName: stock.company_name,
             price: stock.price
           });
         });

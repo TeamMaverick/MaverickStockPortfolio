@@ -86,8 +86,8 @@ module.exports = {
       });
   },
 
+  //updates all stock prices in the database
   updatePrice: (req, res) => {
-    console.log('req is', req);
     model.updateStockPrice(req.body.ticker, req.body.price, (err, data) => {
       if (err) {
         console.log(err);
