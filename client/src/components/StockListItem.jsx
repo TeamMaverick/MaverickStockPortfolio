@@ -63,7 +63,7 @@ class StockListItem extends React.Component {
             <p><input className="checkedStock checkbox" value={this.props.stock.ticker} type="checkbox" /></p>
         </div>
         <div className="level-item has-text-centered">
-            <p><a onClick={() => displayStock(this.props.stock.ticker)}>{this.props.stock.ticker} {this.props.stock.companyName} </a></p>
+            <p><a onClick={() => this.props.displayStock(this.props.stock.ticker)}>{this.props.stock.ticker} {this.props.stock.companyName} </a></p>
         </div>
         </div>
         <div className="level-right">
