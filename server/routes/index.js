@@ -22,6 +22,7 @@ router.put('/resetQuantity', stockController.resetStockQuantity);
 //posts tickers and their respective names to the database
 //only to be called once through postman to populate the database in the first place
 //never called by client
-// router.post('/tickersAndNames', stockController.postTickersAndNames);
+
+router.post('/tickersAndNames', stockController.postTickersAndNames);
 
 module.exports = router;
