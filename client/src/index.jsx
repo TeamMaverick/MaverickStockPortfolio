@@ -11,6 +11,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       stocks: [],
+      portfolioTotal: 0,
       currentStock: {},
       // tab states:
       homeTab : true,
@@ -23,6 +24,7 @@ class App extends React.Component {
     this.setTab = this.setTab.bind(this);
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
+    this.calculateTotal = this.calculateTotal.bind(this);
   }
   componentDidMount() {
     // get all stocks for this user
@@ -48,10 +50,14 @@ class App extends React.Component {
         });
         this.setStocks(stocksList);
       })
+      .then(() => {
+        this.calculateTotal();
+      })
       .catch((err) => {
         console.log(err);
       });
   }
+
   setStocks(stocks) {
     this.setState({
       stocks: stocks
@@ -126,6 +132,18 @@ class App extends React.Component {
     .catch((err) => console.log(err))
   }
 
+  //calculates grand total value for list of stocks
+  calculateTotal() {
+    console.log(this.state.stocks);
+    const total = this.state.stocks.map((stock) => {
+    return stock.quantity * stock.price
+    })
+    .reduce((total, subtotal) => {
+      return total + subtotal;
+    }, 0)
+    this.setState({ portfolioTotal : total });
+  }
+
   render() {
     // proceed as usual after initial componentDidMount
     return (
@@ -147,7 +165,7 @@ class App extends React.Component {
               <div className="column">
                 <div className="section">
                   <AddStock getStocks={this.getStocks} />
-                  <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes}/>
+                  <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes} portfolioTotal={this.state.portfolioTotal}/>/>
                 </div>
               </div>
               <div className="column is-two-thirds">
