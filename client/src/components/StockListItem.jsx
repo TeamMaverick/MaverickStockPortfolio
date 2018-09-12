@@ -18,13 +18,11 @@ class StockListItem extends React.Component {
     })
   }
   handleInputChange(evt){
-    this.setState({
-      quantity : Number(evt.target.value)
-    })
+    const newQuantity = Number(evt.target.value)
+    this.callUpdateQuantity(newQuantity)
   }
-  handleAddQuantity(evt){
-    evt.preventDefault();
-    const newQuantity = ++this.state.quantity
+
+  callUpdateQuantity(newQuantity){
     //save to db
     Axios.post('/api/updateQuantity', {
       param: {
@@ -32,22 +30,28 @@ class StockListItem extends React.Component {
         stock : this.props.stock.ticker
       }
     })
-      .then((response) => {
-        //update state
-        console.log(response);
-        this.setState({
-          quantity : newQuantity
-        })
+    .then((response) => {
+      //update state
+      console.log(response);
+      this.setState({
+        quantity : newQuantity
       })
-      .catch((err) => {
-        console.log(err);
-      })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
+  handleAddQuantity(evt){
+    evt.preventDefault();
+    const newQuantity = ++this.state.quantity
+    this.callUpdateQuantity(newQuantity)
+    
   }
   handleDeleteQuantity(evt){
     evt.preventDefault();
-    this.setState({
-      quantity : this.state.quantity > 0 ? --this.state.quantity : 0
-    })
+    const newQuantity = this.state.quantity > 0 ? --this.state.quantity : 0
+    this.callUpdateQuantity(newQuantity)
   }
 
   render(){

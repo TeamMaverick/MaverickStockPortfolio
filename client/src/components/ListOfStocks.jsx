@@ -17,16 +17,16 @@ var ListOfStocks = function({ stocksArray, removeCheckedBoxes, displayStock, por
           </div>
           
           <div className="level-right">
-          <div className="level-item">
+          <div className="level-item has-text-centered">
               <p className="heading">Quantity</p>
             </div>
             </div>
         </div>
-        {props.stocksArray.map((stock) => {
-          return <StockListItem stock={stock} key={stock.ticker} displayStock={props.displayStock} />;
+        {stocksArray.map((stock) => {
+          return <StockListItem stock={stock} key={stock.ticker} displayStock={displayStock} />;
         })}
         <div className="total price">Portfolio Total : {portfolioTotal}</div>
-        <button className="button" onClick={(evt) => props.removeCheckedBoxes(evt)}>Remove Checked Stocks</button>
+        <button className="button" onClick={(evt) => removeCheckedBoxes(evt)}>Remove Checked Stocks</button>
       </div>
   );
 };
