@@ -70,7 +70,7 @@ class StockListItem extends React.Component {
             </div>
             <div className="level-item has-text-centered">
               <p>
-                <a onClick={() => this.props.displayStock(this.props.stock.ticker)}>
+                <a>
                   {this.props.stock.ticker} {this.props.stock.companyName}{' '}
                 </a>
               </p>
