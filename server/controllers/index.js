@@ -18,7 +18,6 @@ module.exports = {
 
   // Calls function in model to get stock tickers and quantity of stock from database
   getStockTicker: function(req, res) {
-    console.log(req.query.sort);
     model.get(req.query.sort, (data) => {
       res.send(data);
       res.end();
@@ -96,5 +95,17 @@ module.exports = {
         res.sendStatus(201);
       }
     });
+  },
+
+  //gets complete list of tickers and names and stores them in the database
+  postTickersAndNames: (req, res) => {
+    console.log('inside controller');
+    alpha
+      .getTickersAndNames()
+      .then(({ data }) => {
+        console.log(data);
+        model.postTickersAndNames(data);
+      })
+      .then(() => res.sendStatus(201));
   }
 };
