@@ -1,5 +1,5 @@
 {
-  "name": "MaverickStockPortfolio",
+  "name": "maverickstockportfolio",
   "version": "1.0.0",
   "description": "Maverick Stock Portfolio",
   "main": "index.js",
@@ -22,11 +22,15 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "bcrypt": "^3.0.0",
     "body-parser": "^1.17.2",
+    "bulma": "^0.7.1",
     "dotenv": "^6.0.0",
     "express": "^4.15.0",
+    "highcharts": "^6.1.2",
+    "highcharts-react-official": "^1.4.0",
     "moment": "^2.22.2",
-    "mysql": "^2.15.0",
+    "mysql": "^2.16.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2"
   }

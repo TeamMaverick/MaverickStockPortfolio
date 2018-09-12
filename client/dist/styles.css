@@ -1,0 +1,54 @@
+.navbar {
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: #34495e;
+  color:#000;
+  box-shadow: 0 10px 28px -7px rgba(0,0,0,0.5);
+  z-index:2;
+  padding: 20px;
+}
+
+.navbar > h1 {
+  margin: 0;
+  font-weight: 400;
+}
+
+.main {
+  flex-grow: 1;
+  display: flex;
+}
+
+.addStock {
+  background-color: white;
+}
+
+.logo {
+  font-size: 30px;
+}
+
+.logo::before {
+  content: url(img/maverick.png);
+}
+
+.red {
+  color: red;
+}
+
+.green {
+ color: green;
+}
+
+.listOfStocks {
+  padding-top: 20px;
+}
+
+.listOfStocks .head {
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.stockInput {
+  width:60px;
+}
