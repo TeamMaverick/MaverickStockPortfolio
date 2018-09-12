@@ -5,6 +5,7 @@ import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
 import StockChart from './components/StockChart.jsx';
 import HealthCheck from './components/HealthCheck.jsx';
+import SortBy from './components/SortBy.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -13,9 +14,12 @@ class App extends React.Component {
       stocks: [],
       portfolioTotal: 0,
       currentStock: {},
+      tab: 'Home',
+      homeTab: true,
+      healthCheckTab: false,
+      // apply this to all get list of stock tickers from database
+      sortBy: 'Alphabetical'
       // tab states:
-      homeTab : true,
-      healthCheckTab : false
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -24,23 +28,24 @@ class App extends React.Component {
     this.setTab = this.setTab.bind(this);
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
+    this.updateSort = this.updateSort.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
   }
   componentDidMount() {
     // get all stocks for this user
-    this.getStocks();
+    this.getStocks(this.state.sortBy);
     // update this to display first stock in database?
     this.displayStock('MSFT');
-    
-    //will update the stock prices every 10 seconds
-    setInterval(this.updateAllStockPrices, 10000);
 
+    //will update the stock prices every 10 seconds
+    // setInterval(this.updateAllStockPrices, 10000);
   }
 
   //gets all the stocks for the user stored in the database
-  getStocks() {
+  getStocks(sort) {
+    sort = sort || this.state.sortBy;
     axios
-      .get('/api/stock')
+      .get('/api/stock', { params: { sort: sort } })
       .then(({ data }) => {
         const stocksList = [];
         data.forEach((stock) => {
@@ -78,16 +83,16 @@ class App extends React.Component {
   }
   //handle tab click to set tab state
   handleTabClick(e) {
-    this.setTab(e.target.name)
+    this.setTab(e.target.name);
   }
   // set tab either home or healthcheck
-  setTab(tabName){
+  setTab(tabName) {
     this.setState({
-      homeTab : false,
-      healthCheckTab : false,
+      homeTab: false,
+      healthCheckTab: false
     });
     this.setState({
-      [tabName] : true
+      [tabName]: true
     });
   }
 
@@ -106,42 +111,50 @@ class App extends React.Component {
 
     console.log('THESE ARE CHECKED BOXES: ', updateQuantity);
 
-    axios.put('/api/resetQuantity', { stocks: updateQuantity }).then(() => {
-      console.log('getting new list');
-    });
+    axios
+      .put('/api/resetQuantity', { stocks: updateQuantity, sort: this.state.sortBy })
+      .then(() => {
+        console.log('getting new list');
+      });
   }
 
   //queries the server to get most recent stock prices and then updates the database with the recent stock prices
   //once database is updated, grabs all of the prices and stock tickers and rerenders the screen
   updateAllStockPrices() {
-    Promise.all(this.state.stocks.map(({ ticker, quantity }) => {
-      return axios
-      .get('/api/currentStockPrice', { params: { STOCK: ticker } })
-      .then(({ data }) => {
-        console.log('called a promise');
-        return axios.post('/api/currentStockPrice', {
-          ticker: ticker,
-          price: data
-        });
+    Promise.all(
+      this.state.stocks.map(({ ticker, quantity }) => {
+        return axios
+          .get('/api/currentStockPrice', { params: { STOCK: ticker } })
+          .then(({ data }) => {
+            console.log('called a promise');
+            return axios.post('/api/currentStockPrice', {
+              ticker: ticker,
+              price: data
+            });
+          })
+          .catch((err) => console.log(err));
       })
-    }))
-    .then(() =>{
-      console.log('rerendering');
-      this.getStocks();
-    })
-    .catch((err) => console.log(err))
+    );
+  }
+
+  updateSort(criteria) {
+    this.setState({
+      sortBy: criteria
+    });
+    this.getStocks(criteria);
   }
 
   //calculates grand total value for list of stocks
   calculateTotal() {
     console.log(this.state.stocks);
-    const total = this.state.stocks.map((stock) => {
-    return stock.quantity * stock.price
-    })
-    .reduce((total, subtotal) => {
-      return total + subtotal;
-    }, 0)
-    this.setState({ portfolioTotal : total });
+    const total = this.state.stocks
+      .map((stock) => {
+        return stock.quantity * stock.price;
+      })
+      .reduce((total, subtotal) => {
+        return total + subtotal;
+      }, 0);
+    this.setState({ portfolioTotal: total });
   }
 
   render() {
@@ -153,30 +166,39 @@ class App extends React.Component {
         </header>
         <div className="tabs">
           <ul onClick={this.handleTabClick}>
-            <li className={this.state.homeTab ? "is-active" : "" }><a name="homeTab">Home</a></li>
-            <li className={this.state.healthCheckTab ? "is-active" : "" }><a name="healthCheckTab">Health Check</a></li>
+            <li className={this.state.homeTab ? 'is-active' : ''}>
+              <a name="homeTab">Home</a>
+            </li>
+            <li className={this.state.healthCheckTab ? 'is-active' : ''}>
+              <a name="healthCheckTab">Health Check</a>
+            </li>
           </ul>
         </div>
         <div className="container">
-        { this.state.homeTab ?
-          // show home tab 
-          <React.Fragment>
-            <div className="columns">
-              <div className="column">
-                <AddStock getStocks={this.getStocks} />
-                <ListOfStocks stocksArray={this.state.stocks} displayStock={this.displayStock} removeCheckedBoxes={this.removeCheckedBoxes} portfolioTotal={this.state.portfolioTotal}/>
+          {this.state.homeTab ? (
+            <React.Fragment>
+              <div className="columns">
+                <div className="column">
+                  <AddStock getStocks={this.getStocks} />
+                  <SortBy updateSort={this.updateSort} />
+                  <ListOfStocks
+                    stocksArray={this.state.stocks}
+                    displayStock={this.displayStock}
+                    removeCheckedBoxes={this.removeCheckedBoxes}
+                    calculateTotal={this.calculateTotal}
+                    portfolioTotal={this.state.portfolioTotal}
+                  />
+                </div>
+                <div className="column is-two-thirds">
+                  {this.state.currentStock.metaData === undefined ? null : (
+                    <StockChart currentStock={this.state.currentStock} />
+                  )}
+                </div>
               </div>
-              <div className="column is-two-thirds">
-                {this.state.currentStock.metaData === undefined ? null : (
-                  <StockChart currentStock={this.state.currentStock} />
-                )}
-              </div>
-            </div>         
-          </React.Fragment>
-          :
-          // show health check tab
-          <HealthCheck stocks={this.state.stocks}></HealthCheck>
-        }
+            </React.Fragment>
+          ) : (
+            <HealthCheck stocks={this.state.stocks} />
+          )}
         </div>
       </div>
     );
