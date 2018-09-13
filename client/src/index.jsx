@@ -45,13 +45,14 @@ class App extends React.Component {
     axios
       .get('/api/stock', { params: { sort: sort } })
       .then(({ data }) => {
-        const stocksList = [];
-        data.forEach((stock) => {
-          if (stock.quantity > 0) {
-            stocksList.push(stock);
-          }
-        });
-        this.setStocks(stocksList);
+        // const stocksList = [];
+        // data.forEach((stock) => {
+        //   if (stock.quantity > 0) {
+        //     stocksList.push(stock);
+        //   }
+        // });
+        console.log(data);
+        this.setStocks(data);
       })
       .then(() => {
         this.calculateTotal();
@@ -129,7 +130,7 @@ class App extends React.Component {
 
   //calculates grand total value for list of stocks
   calculateTotal() {
-    console.log(this.state.stocks);
+    // console.log(this.state.stocks);
     const total = this.state.stocks
       .map((stock) => {
         return stock.quantity * stock.price;
