@@ -70,9 +70,7 @@ class StockListItem extends React.Component {
             </div>
             <div className="level-item">
               <p>
-                <a>
                   {this.props.stock.stock_ticker} <br/>{this.props.stock.company_name}{' '}
-                </a>
               </p>
             </div>
           </div>
@@ -98,14 +96,14 @@ class StockListItem extends React.Component {
         <div className="level">
           <div className="level-left">
             <div className="level-item">
-              <p>{`Price : $ ${this.props.stock.price}`}</p>
+              <p>{`Price : $${Number.parseFloat(this.props.stock.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</p>
             </div>
           </div>
           <div className="level-right">
             <p>
-              {`Total : $ ${Number.parseFloat(
+              {`Total : $${Number.parseFloat(
                 this.props.stock.price * this.props.stock.quantity
-              ).toFixed(2)}`}{' '}
+              ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
             </p>
           </div>
         </div>

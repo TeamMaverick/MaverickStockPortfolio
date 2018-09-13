@@ -39,6 +39,8 @@ npm install
 npm run db:setup (seed DB)
 npm run react-dev
 npm run server-dev
+
+rename env.sample.config to .env. Set API_KEY, host, dbuser, and dbpassword
 ```
 
 ### Roadmap
