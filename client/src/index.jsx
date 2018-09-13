@@ -161,20 +161,28 @@ class App extends React.Component {
                     removeCheckedBoxes={this.removeCheckedBoxes}
                     calculateTotal={this.calculateTotal}
                     portfolioTotal={this.state.portfolioTotal}
-                    getStocks = {this.getStocks}
+                    getStocks={this.getStocks}
                   />
                 </div>
                 <div className="column is-two-thirds">
-                  {this.state.currentStock.metaData === undefined ? null : (
-                    <StockChart currentStock={this.state.currentStock} />
-                  )}
                   <PortfolioPChart stocks={this.state.stocks} />
                 </div>
               </div>
             </React.Fragment>
       )
     } else if (view === 'healthcheck') {
-      return <HealthCheck stocks={this.state.stocks} />
+      return (
+      <div className="columns">
+        <div className="column">
+          <HealthCheck stocks={this.state.stocks} displayStock={this.displayStock} />
+        </div>
+        <div className="column is-two-thirds">
+          {this.state.currentStock.metaData === undefined ? null : (
+            <StockChart currentStock={this.state.currentStock} />
+          )}
+        </div>
+      </div>
+    )
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} />
     }
