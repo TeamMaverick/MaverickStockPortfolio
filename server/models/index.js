@@ -1,8 +1,23 @@
-const { db } = require('../../database/index.js');
+const Sequelize = require('sequelize');
+const db = require('../../database/index.js');
+const Stock = require('./Stock.js');
+const TickerNames = require('./TickerNames');
+
 
 module.exports = {
   // Adds stock ticker to database
-  post: function(stock, quantity = 1, price = 1, callback) {
+  saveStock: function(stock, quantity = 1, price = 1, callback) {
+
+    TickerNames.findOne({
+      where: {
+        stock_ticker: stock
+      }
+    })
+    .then((data) => {
+      Stock.create({stock_ticker : stock, company_name: data.company_name, quantity : quantity, price : price})
+       .then()
+    })
+
     var companyNameQuery = 'SELECT company_name FROM tickersAndNames WHERE stock_ticker = ?';
     db.query(companyNameQuery, stock, (err, data) => {
       if (err) {
@@ -22,7 +37,7 @@ module.exports = {
     });
   },
   // Gets stock tickers from database
-  get: function(sort, callback) {
+  getStocks: function(sort, callback) {
     if (sort === 'Alphabetical') {
       sort = 'stock_ticker';
     } else if (sort === 'Total Price') {
@@ -49,7 +64,7 @@ module.exports = {
     });
   },
   // Changes quantity to 0
-  put: function(stockTicker, sort, callback) {
+  deleteStock: function(stockTicker, sort, callback) {
     var delNum = '';
     for (var i = 0; i < stockTicker.length; i++) {
       delNum += '?, ';
@@ -62,24 +77,6 @@ module.exports = {
           callback(err);
         } else {
           this.get(sort, callback);
-          // db.query(
-          //   `SELECT stock_ticker, quantity, price FROM stock ORDER BY stock_ticker`,
-          //   (err, stockData) => {
-          //     if (err) {
-          //       callback(err);
-          //     }
-          //     //console.log(stockData);
-          //     var stockTicker = [];
-          //     stockData.forEach((stock) => {
-          //       stockTicker.push({
-          //         ticker: stock.stock_ticker,
-          //         quantity: stock.quantity,
-          //         price: stock.price
-          //       });
-          //     });
-          //     callback(null, stockTicker);
-          //   }
-          // );
         }
       }
     );
@@ -97,7 +94,7 @@ module.exports = {
   },
 
   // update stock quantity
-  updateQuantity: function (stock, quantity, callback) {
+  updateStockQuantity: function (stock, quantity, callback) {
     //check if we have stock
     this.getStock(stock, (err, data) => {
       if(err) {
@@ -132,14 +129,22 @@ module.exports = {
 
   //inserts tickers and their company names into the tickersAndNames table in the database
   postTickersAndNames: function(stockArray) {
-    stockArray.forEach((stock) => {
-      const params = [stock.symbol, stock.name];
-      const insertQuery = `INSERT INTO tickersAndNames (stock_ticker, company_name) VALUES (?, ?)`;
-      db.query(insertQuery, params, (err) => {
-        if (err) {
-          console.log(err);
-        }
-      })
-    })
+
+    TickerNames.bulkCreate(stockArray)
+     .then(() => {
+       console.log('Created');
+     })
+     .catch((err) => {
+       console.log(err);
+     })
+    // stockArray.forEach((stock) => {
+    //   const params = [stock.symbol, stock.name];
+    //   const insertQuery = `INSERT INTO tickersAndNames (stock_ticker, company_name) VALUES (?, ?)`;
+    //   db.query(insertQuery, params, (err) => {
+    //     if (err) {
+    //       console.log(err);
+    //     }
+    //   })
+    // })
   }
 };
