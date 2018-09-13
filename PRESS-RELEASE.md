@@ -18,27 +18,43 @@ Once the project moves into development, the press release can be used as a touc
  
 ## Heading ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
+  Welcome to Maverick! A portofolio monitoring tool that will help you keep track of your portfolio and individual stock value. 
 
 ## Sub-Heading ##
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  This product is designed for users who want to quickly see the breakdown of their portfolio. As well as the daily charts of specific stocks.
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
 
+  As a user all you need to do to start tracking your portfolio is to create an account with us. Once you have an account, you'll be redirected to the dashboard. Once there, search for the ticker symbols and update the quantity to get an accurate representation of your portfolio.
+
 ## Problem ##
   > Describe the problem your product solves.
+
+  We noticed as a team that there was no particualr interface that displayed our portfolio data and allowed us to find data about particular stocks we own at the same time.
 
 ## Solution ##
   > Describe how your product elegantly solves the problem.
 
+  Maverick solves our problem by clearly displaying the percentage of stocks that make up your portfolio while also displaying the value of your shares based on quantity. Maverick also displays the total value of your portfolio and gives you the option to see the change in price of each stock.
+  
 ## Quote from You ##
   > A quote from a spokesperson in your company.
+
+  "Maverick makes understanding your portfolio super easy for someone who is new to finance."
 
 ## How to Get Started ##
   > Describe how easy it is to get started.
 
+  All users have to do is create an account and enter their portfolio data to see a visual representation of their personal portfolio displayed on the screen.
+
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  
+"My older brother manages my portfolio and lets me know what he bought and sold on a weekly basis. Maverick allows me to visually see the changes he makes. Its great!"
 
 ## Closing and Call to Action ##
   > Wrap it up and give pointers where the reader should go next.
+
+  The app is super easy to use. We encourage you to create an account adn try out the features so that you to can see how easy it is to track your portfolio!
