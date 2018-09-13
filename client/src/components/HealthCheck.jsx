@@ -20,7 +20,7 @@ class HealthCheck extends React.Component {
   getStockInfo() {
     //create stock array to pass to api
     let stockArr = this.props.stocks.map((stock) => {
-      return stock.ticker;
+      return stock.stock_ticker;
     });
     Axios.get(
       `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stockArr}&types=quote&range=1m&last=5`
@@ -47,7 +47,7 @@ class HealthCheck extends React.Component {
                 return (
                   <HealthCheckItem
                     key={i}
-                    stockInfo={this.state.stocksData[stock.ticker]}
+                    stockInfo={this.state.stocksData[stock.stock_ticker]}
                     displayStock={this.props.displayStock}
                   />
                 );

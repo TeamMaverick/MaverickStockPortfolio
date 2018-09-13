@@ -6,7 +6,8 @@
   "scripts": {
     "react-dev": "webpack -d --watch",
     "server-dev": "nodemon --inspect server/index.js",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "db:setup": "node database/seed.js"
   },
   "author": "Team Maverick",
   "license": "MIT",
@@ -31,7 +32,9 @@
     "highcharts-react-official": "^1.4.0",
     "moment": "^2.22.2",
     "mysql": "^2.16.0",
+    "mysql2": "^1.6.1",
     "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "react-dom": "^16.4.2",
+    "sequelize": "^4.38.1"
   }
 }

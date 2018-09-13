@@ -1,4 +1,3 @@
-const axios = require('axios');
 const model = require('../models/index.js');
 const alpha = require('../alphaVantage/index.js');
 
@@ -6,22 +5,25 @@ const alpha = require('../alphaVantage/index.js');
 module.exports = {
   // Calls function in model to post stock ticker to database
   postStockTicker: (req, res) => {
-    model.post(req.body.stock, req.body.quantity, req.body.price, (err, data) => {
-      if (err) {
-        console.log(err);
-        res.sendStatus(500);
-      } else {
-        res.sendStatus(201);
-      }
-    });
+    model.saveStock(req.body.stock, req.body.quantity, req.body.price)
+     .then((data) => {
+        res.sendStatus(201);       
+     })
+     .catch((err) => {
+       console.log(err)
+        res.sendStatus(500);       
+     })
   },
 
   // Calls function in model to get stock tickers and quantity of stock from database
   getStockTicker: function(req, res) {
-    model.get(req.query.sort, (data) => {
-      res.send(data);
-      res.end();
-    });
+    model.getStocks(req.query.sort)
+      .then((data) => {
+        res.send(data);
+      })
+      .catch((err) => {
+        res.send(err);
+      })
   },
 
   // get stock info from alphaVantage
@@ -56,21 +58,20 @@ module.exports = {
   },
 
   // deletes
-  resetStockQuantity: (req, res) => {
+  deleteStock: (req, res) => {
     const stocks = req.body.stocks;
-    const sort = req.body.sort;
     if (stocks === undefined) {
       res.sendStatus(500);
+    } else
+    {
+    model.deleteStock(stocks)
+     .then(() => {
+        res.sendStatus(201);
+     })
+     .catch((err) => {
+       res.send(err);
+     })
     }
-
-    model.put(stocks, sort, (err, result) => {
-      if (err) {
-        res.send(err);
-        console.log(err);
-      } else {
-        res.send(result);
-      }
-    });
   },
 
   //gets current price from IEX
@@ -82,6 +83,7 @@ module.exports = {
       })
       .catch((err) => {
         console.log(err);
+        res.sendStatus(404);
       });
   },
 
@@ -89,13 +91,16 @@ module.exports = {
   updateStockQuantity: (req, res) => {
     let newQuantity = req.body.param.quantity;
     let stock = req.body.param.stock;
+    console.log(newQuantity)
+    console.log(stock)
     if(newQuantity && stock){
-      model.updateQuantity(stock, newQuantity, (err, data) => {
-        if(err){
+      model.updateStockQuantity(stock, newQuantity)
+        .then((data) => {
+          res.sendStatus(201);
+        })
+        .catch((err) => {
           res.sendStatus(500);
-        }
-        res.sendStatus(201);
-      })
+        })
     } else {
       res.send('Invalid - requested params missing');
     } 
@@ -103,14 +108,13 @@ module.exports = {
 
   //updates all stock prices in the database
   updatePrice: (req, res) => {
-    model.updateStockPrice(req.body.ticker, req.body.price, (err, data) => {
-      if (err) {
-        console.log(err);
-        res.send(err);
-      } else {
+    model.updateStockPrice(req.body.ticker, req.body.price)
+      .then(()=> {
         res.sendStatus(201);
-      }
-    });
+      })
+      .catch(()=> {
+        res.sendStatus(500);
+      })
   },
 
   postTickersAndNames: (req, res) => {
