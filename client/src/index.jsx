@@ -82,22 +82,24 @@ class App extends React.Component {
 
   removeCheckedBoxes(evt) {
     evt.preventDefault();
-    const updateQuantity = [];
+    const stockList = [];
     const checkedStocks = document.getElementsByClassName('checkedStock');
     for (var i = 0; i < checkedStocks.length; i++) {
       var stock = checkedStocks[i];
 
       if (stock.checked) {
-        updateQuantity.push(stock.value);
+        stockList.push(stock.value);
       }
     }
 
     axios
-      .put('/api/resetQuantity', { stocks: updateQuantity, sort: this.state.sortBy })
+      .delete('/api/deleteStock', { data: {stocks: stockList }})
       .then(() => {
-        console.log('getting new list');
         this.getStocks();
-      });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   //queries the server to get most recent stock prices and then updates the database with the recent stock prices
@@ -108,7 +110,6 @@ class App extends React.Component {
         return axios
           .get('/api/currentStockPrice', { params: { STOCK: ticker } })
           .then(({ data }) => {
-            console.log('called a promise');
             return axios.post('/api/currentStockPrice', {
               ticker: ticker,
               price: data
