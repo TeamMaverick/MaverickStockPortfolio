@@ -39,7 +39,7 @@ class HealthCheck extends React.Component {
   render() {
     return (
       <div>
-        <h1>Health Check</h1>
+        <h1 className="healthCheckHeader">Health Check</h1>
         <div>
           {/* <p>Let's do a quick health check on your {this.props.stocks.length} Stocks</p> */}
           {this.state.stocksData
