@@ -7,29 +7,27 @@ import StockChart from './components/StockChart.jsx';
 import HealthCheck from './components/HealthCheck.jsx';
 import SortBy from './components/SortBy.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
+import SignIn from './components/SignIn.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      view : 'signin',
       stocks: [],
       portfolioTotal: 0,
       currentStock: {},
-      tab: 'Home',
-      homeTab: true,
-      healthCheckTab: false,
       sortBy: 'Alphabetical'
-      // tab states:
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
     this.displayStock = this.displayStock.bind(this);
-    this.handleTabClick = this.handleTabClick.bind(this);
-    this.setTab = this.setTab.bind(this);
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
     this.updateSort = this.updateSort.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
+    this.changeView = this.changeView.bind(this);
+    this.renderView = this.renderView.bind(this);
   }
   componentDidMount() {
     // get all stocks for this user
@@ -80,20 +78,6 @@ class App extends React.Component {
       .catch((err) => {
         console.log(err);
       });
-  }
-  //handle tab click to set tab state
-  handleTabClick(e) {
-    this.setTab(e.target.name);
-  }
-  // set tab either home or healthcheck
-  setTab(tabName) {
-    this.setState({
-      homeTab: false,
-      healthCheckTab: false
-    });
-    this.setState({
-      [tabName]: true
-    });
   }
 
   removeCheckedBoxes(evt) {
@@ -155,26 +139,18 @@ class App extends React.Component {
     this.setState({ portfolioTotal: total });
   }
 
-  render() {
-    // proceed as usual after initial componentDidMount
-    return (
-      <div className="container">
-        <header className="navbar logo">
-          <h1>Stock Portfolio</h1>
-        </header>
-        <div className="tabs">
-          <ul onClick={this.handleTabClick}>
-            <li className={this.state.homeTab ? 'is-active' : ''}>
-              <a name="homeTab">Home</a>
-            </li>
-            <li className={this.state.healthCheckTab ? 'is-active' : ''}>
-              <a name="healthCheckTab">Health Check</a>
-            </li>
-          </ul>
-        </div>
-        <div className="container">
-          {this.state.homeTab ? (
-            <React.Fragment>
+  changeView(option) {
+    this.setState({
+      view: option
+    });
+  }
+
+  renderView (){
+    const {view} = this.state;
+
+    if(view === 'home') {
+      return ( 
+        <React.Fragment>
               <div className="columns">
                 <div className="column">
                   <AddStock getStocks={this.getStocks} />
@@ -193,18 +169,50 @@ class App extends React.Component {
                 </div>
               </div>
             </React.Fragment>
-          ) : (
-            <div className="columns">
-              <div className="column">
-                <HealthCheck stocks={this.state.stocks} displayStock={this.displayStock} />
-              </div>
-              <div className="column is-two-thirds">
-                {this.state.currentStock.metaData === undefined ? null : (
-                  <StockChart currentStock={this.state.currentStock} />
-                )}
-              </div>
-            </div>
+      )
+    } else if (view === 'healthcheck') {
+      return (
+      <div className="columns">
+        <div className="column">
+          <HealthCheck stocks={this.state.stocks} displayStock={this.displayStock} />
+        </div>
+        <div className="column is-two-thirds">
+          {this.state.currentStock.metaData === undefined ? null : (
+            <StockChart currentStock={this.state.currentStock} />
           )}
+        </div>
+      </div>
+    )
+    } else if (view === 'signin'){
+      return <SignIn changeView={this.changeView} />
+    }
+
+  }
+
+  render() {
+    // proceed as usual after initial componentDidMount
+    return (
+      <div className="container">
+        <header className="navbar logo">
+          <h1>Stock Portfolio</h1>
+        </header>
+        {this.state.view !== 'signin' &&
+            <div className="tabs">
+              <ul>
+                <li className={this.state.view === 'home' ? 'is-active' : ''}>
+                  <a onClick={() => this.changeView('home')}>Home</a>
+                </li>
+                <li className={this.state.view === 'healthcheck' ? 'is-active' : ''}>
+                  <a onClick={() => this.changeView('healthcheck')}>Health Check</a>
+                </li>
+                <li>
+                  <a onClick={() => this.changeView('signin')}>Sign Out</a>
+                </li>
+              </ul>
+            </div>
+        }
+        <div className="container">
+          {this.renderView()}
         </div>
       </div>
     );
