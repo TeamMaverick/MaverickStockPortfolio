@@ -1,4 +1,3 @@
-const axios = require('axios');
 const model = require('../models/index.js');
 const alpha = require('../alphaVantage/index.js');
 
@@ -14,16 +13,6 @@ module.exports = {
        console.log(err)
         res.sendStatus(500);       
      })
-    
-    
-    // , (err, data) => {
-    //   if (err) {
-    //     console.log(err);
-    //     res.sendStatus(500);
-    //   } else {
-    //     res.sendStatus(201);
-    //   }
-    // });
   },
 
   // Calls function in model to get stock tickers and quantity of stock from database
@@ -71,27 +60,18 @@ module.exports = {
   // deletes
   deleteStock: (req, res) => {
     const stocks = req.body.stocks;
-    const sort = req.body.sort;
     if (stocks === undefined) {
       res.sendStatus(500);
-    }
-
-    model.deleteStock(stocks, sort)
+    } else
+    {
+    model.deleteStock(stocks)
      .then(() => {
         res.sendStatus(201);
      })
      .catch((err) => {
        res.send(err);
      })
-    
-    // (err, result) => {
-    //   if (err) {
-    //     res.send(err);
-    //     console.log(err);
-    //   } else {
-    //     res.send(result);
-    //   }
-    // });
+    }
   },
 
   //gets current price from IEX
@@ -121,12 +101,6 @@ module.exports = {
         .catch((err) => {
           res.sendStatus(500);
         })
-      // , (err, data) => {
-      //   if(err){
-      //     res.sendStatus(500);
-      //   }
-      //   res.sendStatus(201);
-      // }
     } else {
       res.send('Invalid - requested params missing');
     } 
@@ -141,15 +115,6 @@ module.exports = {
       .catch(()=> {
         res.sendStatus(500);
       })
-
-    // , (err, data) => {
-    //   if (err) {
-    //     console.log(err);
-    //     res.send(err);
-    //   } else {
-    //     res.sendStatus(201);
-    //   }
-    // });
   },
 
   postTickersAndNames: (req, res) => {

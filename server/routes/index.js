@@ -17,7 +17,7 @@ router.post('/stock', stockController.postStockTicker);
 router.get('/stock', stockController.getStockTicker);
 
 // deletes stock
-router.put('/deleteStock', stockController.deleteStock);
+router.delete('/deleteStock', stockController.deleteStock);
 
 // update stock quantity
 router.post('/updateQuantity', stockController.updateStockQuantity);
@@ -25,7 +25,6 @@ router.post('/updateQuantity', stockController.updateStockQuantity);
 //posts tickers and their respective names to the database
 //only to be called once through postman to populate the database in the first place
 //never called by client
-
 router.post('/tickersAndNames', stockController.postTickersAndNames);
 
 module.exports = router;

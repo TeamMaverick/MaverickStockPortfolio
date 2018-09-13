@@ -14,13 +14,12 @@ const getData = (ticker) => {
 
 //get the most up-to-date price from IEX API
 const getCurrentPrice = (ticker) => {
-  var url = `https://api.iextrading.com/1.0/stock/${ticker}/price`;
-  console.log(url);
+  var url = `${process.env.API_ticker}/1.0/stock/${ticker}/price`;
   return axios.get(url)
 }
 
 const getTickersAndNames = () =>{
-  return axios.get('https://api.iextrading.com/1.0/ref-data/symbols')
+  return axios.get(`${process.env.API_ticker}/1.0/ref-data/symbols`)
   .catch((err) => (console.log(err)));
 }
 

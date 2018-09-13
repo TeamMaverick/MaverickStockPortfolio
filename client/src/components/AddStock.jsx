@@ -43,14 +43,14 @@ class AddStock extends React.Component {
   }
   render() {
     return (
-      <div class="field has-addons">
-        <div class="control is-expanded">
+      <div className="field has-addons">
+        <div className="control is-expanded">
           <input className={this.state.valid
             ? 'input'
             : 'input is-danger'} type="text" onChange={this.handleInputChange} value={this.state.stock} />
         </div>
-        <div class="control">
-          <a class="button is-info" onClick={this.handleClick}>
+        <div className="control">
+          <a className="button is-info" onClick={this.handleClick}>
             Add Stock
           </a>
         </div>

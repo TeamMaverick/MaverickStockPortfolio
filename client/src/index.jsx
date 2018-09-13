@@ -93,10 +93,13 @@ class App extends React.Component {
     }
 
     axios
-      .put('/api/deleteStock', { stocks: stockList, sort: this.state.sortBy })
+      .delete('/api/deleteStock', { data: {stocks: stockList }})
       .then(() => {
         this.getStocks();
-      });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   //queries the server to get most recent stock prices and then updates the database with the recent stock prices
@@ -107,7 +110,6 @@ class App extends React.Component {
         return axios
           .get('/api/currentStockPrice', { params: { STOCK: ticker } })
           .then(({ data }) => {
-            console.log('called a promise');
             return axios.post('/api/currentStockPrice', {
               ticker: ticker,
               price: data

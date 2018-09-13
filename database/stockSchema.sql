@@ -1,9 +1,9 @@
-DROP DATABASE IF EXISTS usersStocks;
-CREATE DATABASE usersStocks;
+-- DROP DATABASE IF EXISTS usersStocks;
+-- CREATE DATABASE usersStocks;
 
-USE usersStocks;
-DROP TABLE IF EXISTS stocks;
-DROP TABLE IF EXISTS tickersAndNames;
+-- USE usersStocks;
+-- DROP TABLE IF EXISTS stocks;
+-- DROP TABLE IF EXISTS tickersAndNames;
 
 -- CREATE TABLE stocks (
 --   id INT NOT NULL AUTO_INCREMENT,

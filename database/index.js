@@ -1,9 +1,8 @@
 // Boilerplate code for DB
 const Sequelize = require('sequelize');
-var { dbConfig } = require('../config.js');
 
-const db = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.password, {
-  host: dbConfig.host,
+const db = new Sequelize(process.env.database, process.env.dbuser, process.env.dbpassword, {
+  host: process.env.host,
   dialect: 'mysql',
   operatorsAliases: false,
 

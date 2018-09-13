@@ -68,10 +68,10 @@ class StockListItem extends React.Component {
                 />
               </p>
             </div>
-            <div className="level-item has-text-centered">
+            <div className="level-item">
               <p>
                 <a>
-                  {this.props.stock.stock_ticker} {this.props.stock.company_name}{' '}
+                  {this.props.stock.stock_ticker} <br/>{this.props.stock.company_name}{' '}
                 </a>
               </p>
             </div>
