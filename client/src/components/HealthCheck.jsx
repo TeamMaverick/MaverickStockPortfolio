@@ -41,7 +41,7 @@ class HealthCheck extends React.Component {
       <div>
         <h1>Health Check</h1>
         <div>
-          <p>Let's do a quick health check on your {this.props.stocks.length} Stocks</p>
+          {/* <p>Let's do a quick health check on your {this.props.stocks.length} Stocks</p> */}
           {this.state.stocksData
             ? this.props.stocks.map((stock, i) => {
                 return (

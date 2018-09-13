@@ -21,11 +21,12 @@ const SignIn = (props) => {
                       </span>
                     </div>
                   </div>
-                  <div className="field">
-                    <p className="control has-icons-left">
-                      <input className="input" type="password" value="Iceman" />
-                      <span className="icon is-small is-left">
-                        <i className="fas fa-lock"></i>
+                  <div class="field">
+                    <label className="label">Password</label>
+                    <p class="control has-icons-left">
+                      <input class="input" type="password" value="Iceman" />
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-lock"></i>
                       </span>
                     </p>
                   </div>
