@@ -152,7 +152,7 @@ class App extends React.Component {
       return ( 
         <React.Fragment>
               <div className="columns">
-                <div className="column">
+                <div className="column stocks">
                   <AddStock getStocks={this.getStocks} />
                   <SortBy updateSort={this.updateSort} />
                   <ListOfStocks
@@ -173,7 +173,7 @@ class App extends React.Component {
     } else if (view === 'healthcheck') {
       return (
       <div className="columns">
-        <div className="column">
+        <div className="column check">
           <HealthCheck stocks={this.state.stocks} displayStock={this.displayStock} />
         </div>
         <div className="column is-two-thirds">
@@ -199,13 +199,13 @@ class App extends React.Component {
         {this.state.view !== 'signin' &&
             <div className="tabs">
               <ul>
-                <li className={this.state.view === 'home' ? 'is-active' : ''}>
+                <li>
                   <a onClick={() => this.changeView('home')}>Home</a>
                 </li>
-                <li className={this.state.view === 'healthcheck' ? 'is-active' : ''}>
+                <li>
                   <a onClick={() => this.changeView('healthcheck')}>Health Check</a>
                 </li>
-                <li>
+                <li className="signOut">
                   <a onClick={() => this.changeView('signin')}>Sign Out</a>
                 </li>
               </ul>
