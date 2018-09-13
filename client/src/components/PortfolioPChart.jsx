@@ -35,7 +35,7 @@ var PortfolioPChart = ({ stocks }) => {
         colorByPoint: true,
         // currently portfolioTotal not working, seems like charts auto calculates
         data: stocks.map((stock) => ({
-          name: stock.ticker,
+          name: stock.stock_ticker,
           y: stock.price * stock.quantity
         }))
       }

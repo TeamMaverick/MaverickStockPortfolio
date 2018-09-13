@@ -1,6 +1,10 @@
 import React from 'react';
 
 const SignIn = (props) => {
+  function handleSubmit(event) {
+    event.preventDefault();
+    props.changeView('home');
+  }
   return (
     <section className="hero signinbg is-fullheight">
       <div className="hero-body">
@@ -9,10 +13,11 @@ const SignIn = (props) => {
             <div className="card">
               <div className="card-content">
                 <div className="content">
+                <form onSubmit={handleSubmit}>
                   <div className="field">
                     <label className="label">Username</label>
                     <div className="control has-icons-left has-icons-right">
-                      <input className="input is-success" type="text" value="Iceman" />
+                      <input className="input is-success" autoComplete="username" type="text" />
                       <span className="icon is-small is-left">
                         <i className="fas fa-user"></i>
                       </span>
@@ -21,20 +26,21 @@ const SignIn = (props) => {
                       </span>
                     </div>
                   </div>
-                  <div class="field">
+                  <div className="field">
                     <label className="label">Password</label>
-                    <p class="control has-icons-left">
-                      <input class="input" type="password" value="Iceman" />
-                      <span class="icon is-small is-left">
-                        <i class="fas fa-lock"></i>
+                    <p className="control has-icons-left">
+                      <input className="input" autoComplete="current-password" type="password" />
+                      <span className="icon is-small is-left">
+                        <i className="fas fa-lock"></i>
                       </span>
                     </p>
                   </div>
                   <div className="field is-grouped">
                     <div className="control">
-                      <button onClick={() => props.changeView('home')} className="button is-link">Sign In</button>
+                      <button className="button is-link">Sign In</button>
                     </div>
                   </div>
+                  </form>
                 </div>
               </div>
             </div>
