@@ -56,3 +56,7 @@
 .totalprice {
   text-align: right;
 }
+
+.signinbg {
+  background-image: url('./img/signin_bg.jpg');
+}
