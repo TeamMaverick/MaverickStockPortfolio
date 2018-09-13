@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const db = require('../../database/index.js');
 const Stock = require('./Stock.js');
 const TickerNames = require('./TickerNames');
@@ -14,34 +13,40 @@ module.exports = {
       }
     })
     .then((data) => {
-      Stock.create({stock_ticker : stock, company_name: data.company_name, quantity : quantity, price : price})
+      Stock.create({stock_ticker : stock, company_name: data.name, quantity : quantity, price : price})
        .then()
     })
 
-    var companyNameQuery = 'SELECT company_name FROM tickersAndNames WHERE stock_ticker = ?';
-    db.query(companyNameQuery, stock, (err, data) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(data);
-        var insertQuery = `INSERT INTO stock (stock_ticker, company_name, quantity, price) VALUES (?, ?, ?, ?)`;
-        var insertParams = [stock, data[0].company_name, quantity, price];
-        db.query(insertQuery, insertParams, (err, insertData) => {
-          if (err) {
-            console.log(err);
-          } else {
-            callback(null, insertData);
-          }
-        });
-      }
-    });
+    // var companyNameQuery = 'SELECT company_name FROM tickersAndNames WHERE stock_ticker = ?';
+    // db.query(companyNameQuery, stock, (err, data) => {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     console.log(data);
+    //     var insertQuery = `INSERT INTO stock (stock_ticker, company_name, quantity, price) VALUES (?, ?, ?, ?)`;
+    //     var insertParams = [stock, data[0].company_name, quantity, price];
+    //     db.query(insertQuery, insertParams, (err, insertData) => {
+    //       if (err) {
+    //         console.log(err);
+    //       } else {
+    //         callback(null, insertData);
+    //       }
+    //     });
+    //   }
+    // });
   },
   // Gets stock tickers from database
   getStocks: function(sort, callback) {
+
+
+    Stocks.findAll({order : []})
+
+    let sortArr = []
     if (sort === 'Alphabetical') {
       sort = 'stock_ticker';
     } else if (sort === 'Total Price') {
       sort = 'price * quantity DESC';
+      sortArr = [sequelize.fn('otherfunction', sequelize.col('col1'), 12, 'lalala'), 'DESC']
     } else {
       sort = 'quantity DESC';
     }
@@ -129,22 +134,12 @@ module.exports = {
 
   //inserts tickers and their company names into the tickersAndNames table in the database
   postTickersAndNames: function(stockArray) {
-
-    TickerNames.bulkCreate(stockArray)
+    return TickerNames.bulkCreate(stockArray)
      .then(() => {
        console.log('Created');
      })
      .catch((err) => {
        console.log(err);
      })
-    // stockArray.forEach((stock) => {
-    //   const params = [stock.symbol, stock.name];
-    //   const insertQuery = `INSERT INTO tickersAndNames (stock_ticker, company_name) VALUES (?, ?)`;
-    //   db.query(insertQuery, params, (err) => {
-    //     if (err) {
-    //       console.log(err);
-    //     }
-    //   })
-    // })
   }
 };

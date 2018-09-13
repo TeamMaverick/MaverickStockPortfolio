@@ -20,7 +20,6 @@ const getCurrentPrice = (ticker) => {
 }
 
 const getTickersAndNames = () =>{
-  console.log('inside alphavantage')
   return axios.get('https://api.iextrading.com/1.0/ref-data/symbols')
   .catch((err) => (console.log(err)));
 }
