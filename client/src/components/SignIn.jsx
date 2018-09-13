@@ -22,6 +22,7 @@ const SignIn = (props) => {
                     </div>
                   </div>
                   <div class="field">
+                    <label className="label">Password</label>
                     <p class="control has-icons-left">
                       <input class="input" type="password" value="Iceman" />
                       <span class="icon is-small is-left">
