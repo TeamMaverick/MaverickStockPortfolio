@@ -196,7 +196,7 @@ class App extends React.Component {
     return (
       <div className="container">
         <header className="navbar logo">
-          <h1>Stock Portfolio</h1>
+          <h1>Maverick</h1>
         </header>
         {this.state.view !== 'signin' &&
             <div className="tabs">
