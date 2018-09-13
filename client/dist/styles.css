@@ -113,3 +113,13 @@ li a:hover {
   border: 1px solid black;
   border-radius: 25px;
 }
+
+div.healthCheck {
+  text-align:center;
+}
+
+h1.healthCheckHeader {
+  margin: auto;
+  text-align: center;
+}
+
