@@ -42,7 +42,7 @@ class HealthCheck extends React.Component {
         <h1>Health Check</h1>
         <div>
           {/* <p>Let's do a quick health check on your {this.props.stocks.length} Stocks</p> */}
-          {this.state.stocksData
+          {/* {this.state.stocksData
             ? this.props.stocks.map((stock, i) => {
                 return (
                   <HealthCheckItem
@@ -52,7 +52,19 @@ class HealthCheck extends React.Component {
                   />
                 );
               })
-            : ''}
+            : ''} */}
+          <div className="column symbol">
+            <p className="heading">Symbol</p>
+            <ul>
+              {this.props.stocks.map((stock) => <li>{stock.stock_ticker}</li>)}
+            </ul>
+          </div>
+          <div className="column change">
+            <p className="heading">Today's Changes</p>
+            <ul>
+              {this.state.stockInfo.map((info) => <li></li>)}
+            </ul>
+          </div>
         </div>
       </div>
     );
