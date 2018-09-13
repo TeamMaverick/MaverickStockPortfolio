@@ -27,7 +27,7 @@ class StockListItem extends React.Component {
     Axios.post('/api/updateQuantity', {
       param: {
         quantity: newQuantity,
-        stock: this.props.stock.ticker
+        stock: this.props.stock.stock_ticker
       }
     })
       .then((response) => {
@@ -63,7 +63,7 @@ class StockListItem extends React.Component {
               <p>
                 <input
                   className="checkedStock checkbox"
-                  value={this.props.stock.ticker}
+                  value={this.props.stock.stock_ticker}
                   type="checkbox"
                 />
               </p>
@@ -71,7 +71,7 @@ class StockListItem extends React.Component {
             <div className="level-item has-text-centered">
               <p>
                 <a>
-                  {this.props.stock.ticker} {this.props.stock.companyName}{' '}
+                  {this.props.stock.stock_ticker} {this.props.stock.company_name}{' '}
                 </a>
               </p>
             </div>

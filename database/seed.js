@@ -12,6 +12,7 @@ db.authenticate()
   console.error('Unable to connect to the database:', err);
 });
 
+Stock.sync()
 
 TickerNames.sync({force: true}).then(() => {
   // Table created

@@ -17,7 +17,7 @@ router.post('/stock', stockController.postStockTicker);
 router.get('/stock', stockController.getStockTicker);
 
 // deletes stock
-router.put('/resetQuantity', stockController.resetStockQuantity);
+router.put('/deleteStock', stockController.deleteStock);
 
 // update stock quantity
 router.post('/updateQuantity', stockController.updateStockQuantity);

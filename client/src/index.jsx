@@ -82,20 +82,19 @@ class App extends React.Component {
 
   removeCheckedBoxes(evt) {
     evt.preventDefault();
-    const updateQuantity = [];
+    const stockList = [];
     const checkedStocks = document.getElementsByClassName('checkedStock');
     for (var i = 0; i < checkedStocks.length; i++) {
       var stock = checkedStocks[i];
 
       if (stock.checked) {
-        updateQuantity.push(stock.value);
+        stockList.push(stock.value);
       }
     }
 
     axios
-      .put('/api/resetQuantity', { stocks: updateQuantity, sort: this.state.sortBy })
+      .put('/api/deleteStock', { stocks: stockList, sort: this.state.sortBy })
       .then(() => {
-        console.log('getting new list');
         this.getStocks();
       });
   }
