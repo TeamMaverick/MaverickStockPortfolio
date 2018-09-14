@@ -175,10 +175,10 @@ class App extends React.Component {
     } else if (view === 'healthcheck') {
       return (
       <div className="columns">
-        <div className="column check">
+        <div className="column is-two-fifths">
           <HealthCheck stocks={this.state.stocks} displayStock={this.displayStock} />
         </div>
-        <div className="column is-two-thirds">
+        <div className="column">
           {this.state.currentStock.metaData === undefined ? null : (
             <StockChart currentStock={this.state.currentStock} />
           )}

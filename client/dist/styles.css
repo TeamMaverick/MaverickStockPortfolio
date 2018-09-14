@@ -103,6 +103,10 @@ li a:hover {
   border: 1px solid black;
   border-radius: 25px;
 }
+.column.is-two-fifths {
+  border: 1px solid black;
+  border-radius: 25px;
+}
 
 .column.stocks {
   border: 1px solid black;
@@ -122,4 +126,6 @@ h1.healthCheckHeader {
   margin: auto;
   text-align: center;
 }
-
+/* div.inline-block-child {
+  display: inline-block;
+} */
