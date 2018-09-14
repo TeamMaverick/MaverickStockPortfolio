@@ -123,3 +123,10 @@ h1.healthCheckHeader {
   text-align: center;
 }
 
+.healthCheckItem {
+  cursor: pointer;
+}
+
+.apiWait {
+  text-align: center;
+}
