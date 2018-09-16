@@ -1,6 +1,6 @@
 import React from 'react';
 import Axios from 'axios';
-import HealthCheckItem from './HealthCheckItem.jsx';
+// import HealthCheckItem from './HealthCheckItem.jsx';
 import StockChart from './StockChart.jsx';
 
 
@@ -8,7 +8,7 @@ class HealthCheck extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      stocksData: '',
+      stocksData: [],
       currentStock: {},
       apiWait : false
     };
@@ -68,32 +68,48 @@ class HealthCheck extends React.Component {
   render() {
     return (
       <div className="columns">
-        <div className="column check">
+        <div className="column check is-one-third">
           <div className="HealthCheck">
             <h1 className="healthCheckHeader">Health Check</h1>
-            <div>
-              {/* <p>Let's do a quick health check on your {this.props.stocks.length} Stocks</p> */}
-              {this.state.stocksData
-                ? this.props.stocks.map((stock, i) => {
-                    return (
-                      <HealthCheckItem
-                        key={i}
-                        stockInfo={this.state.stocksData[stock.stock_ticker]}
-                        displayStock={this.displayStock}
-                      />
-                    );
-                  })
-                : ''}
-            </div>
-          </div>
-        </div> 
-        <div className="column is-two-thirds is-centered">
+            <div className="columns is-gapless">
+              <div className="column is-one-fifth">
+                <p className="heading">Symbol</p>
+                <ul>
+                  {this.props.stocks.map((stock) => <li onClick={() => this.props.displayStock(stock.stock_ticker)} >{stock.stock_ticker}</li>)}
+                </ul>
+              </div>
+              <div className="column is-4">
+                <p className="heading">Today's Changes</p>
+                <ul>
+                  {Object.keys(this.state.stocksData).length > 0 ? Object.keys(this.state.stocksData).map((key) => { return (<li>{this.state.stocksData[key].quote.change < 0 ? (
+                    <i className="fas fa-arrow-down red" />
+                  ) : (
+                    <i className="fas fa-arrow-up green" />
+                  )}
+                  {this.state.stocksData[key].quote.change}</li>)}): ''}
+                </ul>
+              </div>
+              <div className="column is-3">
+                <p className="heading">Year-TO-Date</p>
+                <ul>
+                  {Object.keys(this.state.stocksData).length > 0 ? Object.keys(this.state.stocksData).map((key) => { return (<li>{this.state.stocksData[key].quote.ytdChange < 0 ? (
+                    <i className="fas fa-arrow-down red" />
+                  ) : (
+                    <i className="fas fa-arrow-up green" />
+                  )}
+                  {(this.state.stocksData[key].quote.ytdChange * 100).toFixed(2)}</li>)}): ''}
+                </ul>
+              </div>
+            </div> 
+        </div>
+      </div>
+      <div className="column is-two-thirds is-centered">
           {this.state.apiWait ? (<div className="apiWait"><i className="fas fa-pause"></i> Please wait.. API only can we called few times..</div>) : ''}
           {this.state.currentStock.metaData === undefined ? null : (
             <StockChart currentStock={this.state.currentStock} />
           )}
         </div>
-      </div>
+    </div>
     );
   }
 }
