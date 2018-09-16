@@ -40,13 +40,6 @@ class App extends React.Component {
     axios
       .get('/api/stock', { params: { sort: sort } })
       .then(({ data }) => {
-        // const stocksList = [];
-        // data.forEach((stock) => {
-        //   if (stock.quantity > 0) {
-        //     stocksList.push(stock);
-        //   }
-        // });
-        console.log(data);
         this.setStocks(data);
       })
       .then(() => {
@@ -134,24 +127,22 @@ class App extends React.Component {
 
     if(view === 'home') {
       return ( 
-        <React.Fragment>
-              <div className="columns">
-                <div className="column stocks">
-                  <AddStock getStocks={this.getStocks} />
-                  <SortBy updateSort={this.updateSort} />
-                  <ListOfStocks
-                    stocksArray={this.state.stocks}
-                    removeCheckedBoxes={this.removeCheckedBoxes}
-                    calculateTotal={this.calculateTotal}
-                    portfolioTotal={this.state.portfolioTotal}
-                    getStocks={this.getStocks}
-                  />
-                </div>
-                <div className="column is-two-thirds">
-                  <PortfolioPChart stocks={this.state.stocks} />
-                </div>
-              </div>
-            </React.Fragment>
+          <div className="columns">
+            <div className="column border">
+              <AddStock getStocks={this.getStocks} />
+              <SortBy updateSort={this.updateSort} />
+              <ListOfStocks
+                stocksArray={this.state.stocks}
+                removeCheckedBoxes={this.removeCheckedBoxes}
+                calculateTotal={this.calculateTotal}
+                portfolioTotal={this.state.portfolioTotal}
+                getStocks={this.getStocks}
+              />
+            </div>
+            <div className="column is-two-thirds border">
+              <PortfolioPChart stocks={this.state.stocks} />
+            </div>
+          </div>
       )
     } else if (view === 'healthcheck') {
       return (
@@ -169,18 +160,20 @@ class App extends React.Component {
       <div className="container">
         <header className="navbar logo">
           <h1>Maverick</h1>
+          {this.state.view !== 'signin' && 
+          <div className="navbar-end signout">
+            <a onClick={() => this.changeView('signin')}>Sign Out</a>
+          </div>
+          }
         </header>
         {this.state.view !== 'signin' &&
             <div className="tabs">
               <ul>
-                <li>
+                <li className={this.state.view === 'home' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('home')}>Home</a>
                 </li>
-                <li>
+                <li className={this.state.view === 'healthcheck' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('healthcheck')}>Health Check</a>
-                </li>
-                <li className="signOut">
-                  <a onClick={() => this.changeView('signin')}>Sign Out</a>
                 </li>
               </ul>
             </div>
