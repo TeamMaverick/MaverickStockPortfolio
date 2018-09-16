@@ -22,10 +22,10 @@ var ListOfStocks = function({ stocksArray, removeCheckedBoxes, portfolioTotal, g
           </div>
         </div>
       </div>
-      {stocksArray.map((stock) => {
-        return <StockListItem stock={stock} key={stock.ticker} getStocks={getStocks} />;
-      })}
-      <div className="total price">Portfolio Total : {portfolioTotal}</div>
+      {stocksArray.length ? stocksArray.map((stock) => {
+        return <StockListItem stock={stock} key={stock.stock_ticker} getStocks={getStocks} />;
+      }) : ''}
+      <div className="totalprice">Portfolio Total : ${Number.parseFloat(portfolioTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</div>
       <button className="button" onClick={(evt) => removeCheckedBoxes(evt)}>
         Remove Checked Stocks
       </button>

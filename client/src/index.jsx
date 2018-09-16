@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
-import StockChart from './components/StockChart.jsx';
 import HealthCheck from './components/HealthCheck.jsx';
 import SortBy from './components/SortBy.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
@@ -16,12 +15,10 @@ class App extends React.Component {
       view : 'signin',
       stocks: [],
       portfolioTotal: 0,
-      currentStock: {},
       sortBy: 'Alphabetical'
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
-    this.displayStock = this.displayStock.bind(this);
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
     this.updateSort = this.updateSort.bind(this);
@@ -32,8 +29,6 @@ class App extends React.Component {
   componentDidMount() {
     // get all stocks for this user
     this.getStocks(this.state.sortBy);
-    // update this to display first stock in database?
-    this.displayStock('MSFT');
 
     //will update the stock prices every 10 seconds
     // setInterval(this.updateAllStockPrices, 10000);
@@ -45,13 +40,7 @@ class App extends React.Component {
     axios
       .get('/api/stock', { params: { sort: sort } })
       .then(({ data }) => {
-        const stocksList = [];
-        data.forEach((stock) => {
-          if (stock.quantity > 0) {
-            stocksList.push(stock);
-          }
-        });
-        this.setStocks(stocksList);
+        this.setStocks(data);
       })
       .then(() => {
         this.calculateTotal();
@@ -65,19 +54,6 @@ class App extends React.Component {
     this.setState({
       stocks: stocks
     });
-  }
-
-  //called when a ticker symbol on the stocks list is clicked
-  //requests the data for that ticker symbol and deposits it in the state
-  displayStock(stock) {
-    return axios
-      .get('/api/stockInfo', { params: { STOCK: stock } })
-      .then(({ data }) => {
-        this.setState({ currentStock: data });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
 
   removeCheckedBoxes(evt) {
@@ -129,7 +105,7 @@ class App extends React.Component {
 
   //calculates grand total value for list of stocks
   calculateTotal() {
-    console.log(this.state.stocks);
+    // console.log(this.state.stocks);
     const total = this.state.stocks
       .map((stock) => {
         return stock.quantity * stock.price;
@@ -151,38 +127,26 @@ class App extends React.Component {
 
     if(view === 'home') {
       return ( 
-        <React.Fragment>
-              <div className="columns">
-                <div className="column stocks">
-                  <AddStock getStocks={this.getStocks} />
-                  <SortBy updateSort={this.updateSort} />
-                  <ListOfStocks
-                    stocksArray={this.state.stocks}
-                    displayStock={this.displayStock}
-                    removeCheckedBoxes={this.removeCheckedBoxes}
-                    calculateTotal={this.calculateTotal}
-                    portfolioTotal={this.state.portfolioTotal}
-                    getStocks={this.getStocks}
-                  />
-                </div>
-                <div className="column is-two-thirds">
-                  <PortfolioPChart stocks={this.state.stocks} />
-                </div>
-              </div>
-            </React.Fragment>
+          <div className="columns">
+            <div className="column border">
+              <AddStock getStocks={this.getStocks} />
+              <SortBy updateSort={this.updateSort} />
+              <ListOfStocks
+                stocksArray={this.state.stocks}
+                removeCheckedBoxes={this.removeCheckedBoxes}
+                calculateTotal={this.calculateTotal}
+                portfolioTotal={this.state.portfolioTotal}
+                getStocks={this.getStocks}
+              />
+            </div>
+            <div className="column is-two-thirds border">
+              <PortfolioPChart stocks={this.state.stocks} />
+            </div>
+          </div>
       )
     } else if (view === 'healthcheck') {
       return (
-      <div className="columns">
-        <div className="column check">
-          <HealthCheck stocks={this.state.stocks} displayStock={this.displayStock} />
-        </div>
-        <div className="column is-two-thirds">
-          {this.state.currentStock.metaData === undefined ? null : (
-            <StockChart currentStock={this.state.currentStock} />
-          )}
-        </div>
-      </div>
+        <HealthCheck stocks={this.state.stocks}  />      
     )
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} />
@@ -195,19 +159,21 @@ class App extends React.Component {
     return (
       <div className="container">
         <header className="navbar logo">
-          <h1>Stock Portfolio</h1>
+          <h1>Maverick</h1>
+          {this.state.view !== 'signin' && 
+          <div className="navbar-end signout">
+            <a onClick={() => this.changeView('signin')}>Sign Out</a>
+          </div>
+          }
         </header>
         {this.state.view !== 'signin' &&
             <div className="tabs">
               <ul>
-                <li>
+                <li className={this.state.view === 'home' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('home')}>Home</a>
                 </li>
-                <li>
+                <li className={this.state.view === 'healthcheck' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('healthcheck')}>Health Check</a>
-                </li>
-                <li className="signOut">
-                  <a onClick={() => this.changeView('signin')}>Sign Out</a>
                 </li>
               </ul>
             </div>
