@@ -6,6 +6,9 @@ var StockChart = ({ currentStock }) => {
   var ticker = currentStock.metaData['2. Symbol'];
   var options = {
     // use data from currentStock
+    chart: {
+      height: 600
+    },
     title: {
       text: `${ticker} intraday stock price`
     },
