@@ -7,7 +7,7 @@ class HealthCheck extends React.Component {
     super(props);
     this.getStockInfo = this.getStockInfo.bind(this);
     this.state = {
-      stocksData: ''
+      stocksData: []
     };
   }
 
@@ -40,9 +40,9 @@ class HealthCheck extends React.Component {
     return (
       <div className="HealthCheck">
         <h1 className="healthCheckHeader">Health Check</h1>
-        <div>
+        <div className="columns is-gapless">
           {/* <p>Let's do a quick health check on your {this.props.stocks.length} Stocks</p> */}
-          {this.state.stocksData
+          {/* {this.state.stocksData
             ? this.props.stocks.map((stock, i) => {
                 return (
                   <HealthCheckItem
@@ -52,7 +52,35 @@ class HealthCheck extends React.Component {
                   />
                 );
               })
-            : ''}
+            : ''} */}
+          <div className="column is-one-fifth">
+            <p className="heading">Symbol</p>
+            <ul>
+              {this.props.stocks.map((stock) => <li onClick={() => this.props.displayStock(stock.stock_ticker)} >{stock.stock_ticker}</li>)}
+            </ul>
+          </div>
+          <div className="column is-4">
+            <p className="heading">Today's Changes</p>
+            <ul>
+          {Object.keys(this.state.stocksData).length > 0 ? Object.keys(this.state.stocksData).map((key) => { return (<li>{this.state.stocksData[key].quote.change < 0 ? (
+              <i className="fas fa-arrow-down red" />
+            ) : (
+              <i className="fas fa-arrow-up green" />
+            )}
+          {this.state.stocksData[key].quote.change}</li>)}): ''}
+            </ul>
+          </div>
+          <div className="column is-3">
+            <p className="heading">Year-TO-Date</p>
+            <ul>
+            {Object.keys(this.state.stocksData).length > 0 ? Object.keys(this.state.stocksData).map((key) => { return (<li>{this.state.stocksData[key].quote.ytdChange < 0 ? (
+              <i className="fas fa-arrow-down red" />
+            ) : (
+              <i className="fas fa-arrow-up green" />
+            )}
+          {(this.state.stocksData[key].quote.ytdChange * 100).toFixed(2)}</li>)}): ''}
+            </ul>
+          </div>
         </div>
       </div>
     );
