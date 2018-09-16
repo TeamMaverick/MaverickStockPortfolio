@@ -126,6 +126,14 @@ h1.healthCheckHeader {
   margin: auto;
   text-align: center;
 }
+
+.healthCheckItem {
+  cursor: pointer;
+}
+
+.apiWait {
+  text-align: center;
+}
 /* div.inline-block-child {
   display: inline-block;
 } */

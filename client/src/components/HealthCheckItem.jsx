@@ -3,7 +3,7 @@ import React from 'react';
 const HealthCheckItem = (props) => {
   return (
     <div
-      className="level"
+      className="level healthCheckItem"
       onClick={() => {
         props.displayStock(props.stockInfo.quote.symbol);
       }}
