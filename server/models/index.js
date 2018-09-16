@@ -18,17 +18,13 @@ module.exports = {
   getStocks: function(sort) {
     let sortArr = []
     if (sort === 'Alphabetical') {
-      sortArr = ['stock_ticker', 'ASC'];
+      return Stock.findAll({order: [['stock_ticker', 'ASC']]})
     } else if (sort === 'Total Price') {
-      sort = 'price * quantity DESC';
-      sortArr = ['price', 'DESC'];
-      sortArr.push(['quantity', 'DESC']);
-
+      return Stock.findAll({order: [['price', 'DESC'],['quantity', 'DESC']]})
     } else {
-      sortArr = ['quantity', 'DESC'];
+      return Stock.findAll({order: [['quantity', 'DESC']]})
     }
-
-    return Stock.findAll({order: [sortArr]})
+    
   },
   // Changes quantity to 0
   deleteStock: function(stocklist) {

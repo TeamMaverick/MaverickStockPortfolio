@@ -32,25 +32,32 @@ module.exports = {
     alpha
       .getData(req.query.STOCK)
       .then(({ data }) => {
-        returnData = {
-          metaData: data['Meta Data'],
-          data: []
-        };
-        //get Time Series (5min)
-        // flatten object stucture into array for data vis
-        let timeSeries = data['Time Series (5min)'];
-        for (var key in timeSeries) {
-          if (timeSeries.hasOwnProperty(key)) {
-            var obj = timeSeries[key];
-            let arrVaules = [];
-            for (var prop in obj) {
-              arrVaules.push(parseFloat(obj[prop]));
-            }
-            returnData.data.push([new Date(key).getTime()].concat(arrVaules));
-          }
+        console.log(data);
+        if(data.Information){
+          res.send(data);
         }
-        returnData.data.reverse();
-        res.send(returnData);
+        else {
+          returnData = {
+            metaData: data['Meta Data'],
+            data: []
+          };
+          //get Time Series (5min)
+          // flatten object stucture into array for data vis
+          let timeSeries = data['Time Series (5min)'];
+          for (var key in timeSeries) {
+            if (timeSeries.hasOwnProperty(key)) {
+              var obj = timeSeries[key];
+              let arrVaules = [];
+              for (var prop in obj) {
+                arrVaules.push(parseFloat(obj[prop]));
+              }
+              returnData.data.push([new Date(key).getTime()].concat(arrVaules));
+            }
+          }
+          returnData.data.reverse();
+          res.send(returnData);
+        }
+        
       })
       .catch((err) => {
         console.log(err);

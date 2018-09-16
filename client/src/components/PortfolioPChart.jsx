@@ -8,7 +8,8 @@ var PortfolioPChart = ({ stocks }) => {
       plotBackgroundColor: null,
       plotBorderWidth: null,
       plotShadow: false,
-      type: 'pie'
+      type: 'pie',
+      height: 600
     },
     title: {
       text: 'Stock Portfolio Percentages'
@@ -35,7 +36,7 @@ var PortfolioPChart = ({ stocks }) => {
         colorByPoint: true,
         // currently portfolioTotal not working, seems like charts auto calculates
         data: stocks.map((stock) => ({
-          name: stock.ticker,
+          name: stock.stock_ticker,
           y: stock.price * stock.quantity
         }))
       }
