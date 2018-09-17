@@ -93,7 +93,8 @@ class App extends React.Component {
           })
           .catch((err) => console.log(err));
       })
-    );
+    )
+    .then(this.getStocks);
   }
 
   updateSort(criteria) {
