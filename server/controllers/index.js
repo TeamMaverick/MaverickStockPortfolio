@@ -110,7 +110,7 @@ module.exports = {
     } 
   },
 
-  //updates all stock prices in the database
+  //update stock price in the database
   updatePrice: (req, res) => {
     model.updateStockPrice(req.body.ticker, req.body.price)
       .then(()=> {
