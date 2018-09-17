@@ -31,10 +31,10 @@ class App extends React.Component {
     this.getStocks(this.state.sortBy);
 
     //will update the stock prices every 10 seconds
-    // setInterval(this.updateAllStockPrices, 10000);
+    setInterval(this.updateAllStockPrices, 10000);
   }
 
-  //gets all the stocks for the user stored in the database
+  //gets all the stocks for the user stored in the database and puts them in state
   getStocks(sort) {
     sort = sort || this.state.sortBy;
     axios
@@ -105,7 +105,6 @@ class App extends React.Component {
 
   //calculates grand total value for list of stocks
   calculateTotal() {
-    // console.log(this.state.stocks);
     const total = this.state.stocks
       .map((stock) => {
         return stock.quantity * stock.price;
