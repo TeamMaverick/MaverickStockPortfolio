@@ -63,7 +63,7 @@ module.exports = {
       });
   },
 
-  // deletes
+  // deletes stock
   deleteStock: (req, res) => {
     const stocks = req.body.stocks;
     if (stocks === undefined) {
@@ -110,7 +110,7 @@ module.exports = {
     } 
   },
 
-  //updates all stock prices in the database
+  //update stock price in the database
   updatePrice: (req, res) => {
     model.updateStockPrice(req.body.ticker, req.body.price)
       .then(()=> {
@@ -121,6 +121,9 @@ module.exports = {
       })
   },
 
+  //used with db:setup to get a list of ticker symbols and company names from an external api
+  //then populates database with ticker symbols and company names
+  //only needs to be called once with db:setup  
   postTickersAndNames: (req, res) => {
     alpha
       .getTickersAndNames()

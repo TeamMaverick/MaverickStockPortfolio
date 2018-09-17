@@ -27,6 +27,8 @@
 
 - Node 0.10.x
 - Sequelize
+- MySQL 
+- Bulma
 
 ## Development
 
@@ -36,11 +38,13 @@ From within the root directory:
 
 ```
 npm install
+rename env.sample.config to .env. =>  Set API_KEY (get from https://www.alphavantage.co), host (mysql host name), dbuser (mysql user name), and dbpassword (mysql password)
 npm run db:setup (seed DB)
 npm run react-dev
 npm run server-dev
 
-rename env.sample.config to .env. Set API_KEY, host, dbuser, and dbpassword
+npm run test (will run tests)
+
 ```
 
 ### Hosting AWS Database

@@ -14,10 +14,14 @@ const getData = (ticker) => {
 
 //get the most up-to-date price from IEX API
 const getCurrentPrice = (ticker) => {
+  console.log('API_ticker', process.env.API_ticker);
+  console.log('ticker', ticker);
   var url = `${process.env.API_ticker}/1.0/stock/${ticker}/price`;
   return axios.get(url)
 }
 
+//calls api that returns a list of ticker symbols and their company names.
+//Used with db:setup to seed the database
 const getTickersAndNames = () =>{
   return axios.get(`${process.env.API_ticker}/1.0/ref-data/symbols`)
   .catch((err) => (console.log(err)));
