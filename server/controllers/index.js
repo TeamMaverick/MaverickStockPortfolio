@@ -121,6 +121,9 @@ module.exports = {
       })
   },
 
+  //used with db:setup to get a list of ticker symbols and company names from an external api
+  //then populates database with ticker symbols and company names
+  //only needs to be called once with db:setup  
   postTickersAndNames: (req, res) => {
     alpha
       .getTickersAndNames()
