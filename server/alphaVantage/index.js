@@ -18,6 +18,8 @@ const getCurrentPrice = (ticker) => {
   return axios.get(url)
 }
 
+//calls api that returns a list of ticker symbols and their company names.
+//Used with db:setup to seed the database
 const getTickersAndNames = () =>{
   return axios.get(`${process.env.API_ticker}/1.0/ref-data/symbols`)
   .catch((err) => (console.log(err)));
