@@ -31,10 +31,10 @@ class App extends React.Component {
     this.getStocks(this.state.sortBy);
 
     //will update the stock prices every 10 seconds
-    // setInterval(this.updateAllStockPrices, 10000);
+    setInterval(this.updateAllStockPrices, 10000);
   }
 
-  //gets all the stocks for the user stored in the database
+  //gets all the stocks for the user stored in the database and puts them in state
   getStocks(sort) {
     sort = sort || this.state.sortBy;
     axios
@@ -55,7 +55,7 @@ class App extends React.Component {
       stocks: stocks
     });
   }
-
+  // Removes selected stocks from the database and will re-render the view
   removeCheckedBoxes(evt) {
     evt.preventDefault();
     const stockList = [];
@@ -82,18 +82,19 @@ class App extends React.Component {
   //once database is updated, grabs all of the prices and stock tickers and rerenders the screen
   updateAllStockPrices() {
     Promise.all(
-      this.state.stocks.map(({ ticker, quantity }) => {
+      this.state.stocks.map(({ stock_ticker }) => {
         return axios
-          .get('/api/currentStockPrice', { params: { STOCK: ticker } })
+          .get('/api/currentStockPrice', { params: { STOCK: stock_ticker } })
           .then(({ data }) => {
             return axios.post('/api/currentStockPrice', {
-              ticker: ticker,
+              ticker: stock_ticker,
               price: data
             });
           })
           .catch((err) => console.log(err));
       })
-    );
+    )
+    .then(this.getStocks);
   }
 
   updateSort(criteria) {
@@ -105,7 +106,6 @@ class App extends React.Component {
 
   //calculates grand total value for list of stocks
   calculateTotal() {
-    // console.log(this.state.stocks);
     const total = this.state.stocks
       .map((stock) => {
         return stock.quantity * stock.price;

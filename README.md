@@ -47,6 +47,14 @@ npm run test (will run tests)
 
 ```
 
+### Hosting AWS Database
+
+```
+1. Navigate to Amazon Relational Database Service (RDS) page, an offering of AWS
+2. Get started and create AWS account to set up an Amazon RDS instance
+3. MySQL and ensure that you choose the free DB instance service offering
+```
+
 ### Roadmap
 
 View the project roadmap [here](https://trello.com/b/wWSvfUdm)

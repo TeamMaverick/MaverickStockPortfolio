@@ -8,7 +8,7 @@ class SortBy extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
   }
-
+  // Event handler for sorting function
   handleChange(evt) {
     this.props.updateSort(evt.target.value);
   }

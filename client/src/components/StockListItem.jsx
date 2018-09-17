@@ -17,6 +17,8 @@ class StockListItem extends React.Component {
       quantity: this.props.stock.quantity
     });
   }
+
+  // Event handler for changing quantity based on user input
   handleInputChange(evt) {
     const newQuantity = Number(evt.target.value);
     this.callUpdateQuantity(newQuantity);
@@ -42,12 +44,14 @@ class StockListItem extends React.Component {
         console.log(err);
       });
   }
-
+  // Event handler for incereasing quantity
   handleAddQuantity(evt) {
     evt.preventDefault();
     const newQuantity = ++this.state.quantity;
     this.callUpdateQuantity(newQuantity);
   }
+
+  // Event Handler for decreasing quantity
   handleDeleteQuantity(evt) {
     evt.preventDefault();
     const newQuantity = this.state.quantity > 0 ? --this.state.quantity : 0;
@@ -111,15 +115,5 @@ class StockListItem extends React.Component {
     );
   }
 }
-
-// //individual item in the list of saved stocks
-// var StockListItem = function({ stock, displayStock }) {
-//   //displayStock here is the clickhandler function defined in the app that makes a get request
-//   //to get the data for that particular stock and deposits it in the app's state
-
-//           {/* <div>
-//           {`$ : ${stock.price} : ${stock.price * stock.quantity}`}
-//         </div> */}
-// };
 
 export default StockListItem;
