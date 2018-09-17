@@ -82,12 +82,12 @@ class App extends React.Component {
   //once database is updated, grabs all of the prices and stock tickers and rerenders the screen
   updateAllStockPrices() {
     Promise.all(
-      this.state.stocks.map(({ ticker, quantity }) => {
+      this.state.stocks.map(({ stock_ticker }) => {
         return axios
-          .get('/api/currentStockPrice', { params: { STOCK: ticker } })
+          .get('/api/currentStockPrice', { params: { STOCK: stock_ticker } })
           .then(({ data }) => {
             return axios.post('/api/currentStockPrice', {
-              ticker: ticker,
+              ticker: stock_ticker,
               price: data
             });
           })
