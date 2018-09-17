@@ -17,6 +17,7 @@ class StockListItem extends React.Component {
       quantity: this.props.stock.quantity
     });
   }
+  // Event handler for changing quantity based on user input
   handleInputChange(evt) {
     const newQuantity = Number(evt.target.value);
     this.callUpdateQuantity(newQuantity);
@@ -42,12 +43,14 @@ class StockListItem extends React.Component {
         console.log(err);
       });
   }
-
+  // Event handler for incereasing quantity
   handleAddQuantity(evt) {
     evt.preventDefault();
     const newQuantity = ++this.state.quantity;
     this.callUpdateQuantity(newQuantity);
   }
+
+  // Event Handler for decreasing quantity
   handleDeleteQuantity(evt) {
     evt.preventDefault();
     const newQuantity = this.state.quantity > 0 ? --this.state.quantity : 0;
