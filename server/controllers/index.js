@@ -32,7 +32,6 @@ module.exports = {
     alpha
       .getData(req.query.STOCK)
       .then(({ data }) => {
-        console.log(data);
         if(data.Information){
           res.send(data);
         }
@@ -98,8 +97,6 @@ module.exports = {
   updateStockQuantity: (req, res) => {
     let newQuantity = req.body.param.quantity;
     let stock = req.body.param.stock;
-    console.log(newQuantity)
-    console.log(stock)
     if(newQuantity && stock){
       model.updateStockQuantity(stock, newQuantity)
         .then((data) => {

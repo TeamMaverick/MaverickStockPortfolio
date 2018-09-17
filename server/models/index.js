@@ -10,13 +10,11 @@ module.exports = {
       }
     })
     .then((data) => {
-      console.log(data)
       return Stock.create({stock_ticker : stock, company_name: data.name, quantity : quantity, price : price})
     })
   },
   // Gets stock tickers from database
   getStocks: function(sort) {
-    let sortArr = []
     if (sort === 'Alphabetical') {
       return Stock.findAll({order: [['stock_ticker', 'ASC']]})
     } else if (sort === 'Total Price') {
@@ -41,7 +39,7 @@ module.exports = {
   },
 
   // update stock quantity
-  updateStockQuantity: function (stock, quantity, callback) {
+  updateStockQuantity: function (stock, quantity) {
     //check if we have stock
     console.log('updating')
     return Stock.update({
