@@ -55,7 +55,7 @@ class App extends React.Component {
       stocks: stocks
     });
   }
-
+  // Removes selected stocks from the database and will re-render the view
   removeCheckedBoxes(evt) {
     evt.preventDefault();
     const stockList = [];
