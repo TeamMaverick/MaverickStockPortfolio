@@ -63,7 +63,7 @@ module.exports = {
       });
   },
 
-  // deletes
+  // deletes stock
   deleteStock: (req, res) => {
     const stocks = req.body.stocks;
     if (stocks === undefined) {
