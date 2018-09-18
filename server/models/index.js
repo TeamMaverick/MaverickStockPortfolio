@@ -3,31 +3,31 @@ const TickerNames = require('./TickerNames');
 
 module.exports = {
   // Adds stock ticker to database
-  saveStock: function(stock, quantity = 1, price = 1) {
+  saveStock: function(stock, quantity = 1, price = 1, uid) {
     return TickerNames.findOne({
       where: {
         symbol: stock
       }
     })
     .then((data) => {
-      return Stock.create({stock_ticker : stock, company_name: data.name, quantity : quantity, price : price})
+      return Stock.create({stock_ticker : stock, company_name: data.name, quantity : quantity, price : price, uid : uid})
     })
   },
   // Gets stock tickers from database
-  getStocks: function(sort) {
+  getStocks: function(sort, uid) {
     if (sort === 'Alphabetical') {
-      return Stock.findAll({order: [['stock_ticker', 'ASC']]})
+      return Stock.findAll({where: {uid: uid}, order: [['stock_ticker', 'ASC']]})
     } else if (sort === 'Total Price') {
-      return Stock.findAll({order: [['price', 'DESC'],['quantity', 'DESC']]})
+      return Stock.findAll({where: {uid: uid}, order: [['price', 'DESC'],['quantity', 'DESC']]})
     } else {
-      return Stock.findAll({order: [['quantity', 'DESC']]})
+      return Stock.findAll({where: {uid: uid}, order: [['quantity', 'DESC']]})
     }
     
   },
   // Changes quantity to 0
-  deleteStock: function(stocklist) {
+  deleteStock: function(stocklist, uid) {
     return Stock.destroy({where: {
-      stock_ticker : stocklist
+      stock_ticker : stocklist, uid: uid
     }})
   },
 
