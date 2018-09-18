@@ -98,7 +98,7 @@ module.exports = {
   updateStockQuantity: (req, res) => {
     let newQuantity = req.body.param.quantity;
     let stock = req.body.param.stock;
-    if(newQuantity && stock){
+    if(stock){
       model.updateStockQuantity(stock, newQuantity)
         .then((data) => {
           res.sendStatus(201);
