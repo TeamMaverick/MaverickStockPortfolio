@@ -5,6 +5,7 @@ const model = require('../server/models/index.js');
 const alpha = require('../server/alphaVantage/index.js');
 const TickerNames = require('../server/models/TickerNames');
 const Stock = require('../server/models/Stock');
+const User = require('../server/models/User');
 
 db.authenticate()
 .then(() => {
@@ -28,7 +29,7 @@ TickerNames.sync({force: true}).then(() => {
        })
     })
     .catch((err) => {
-      console.log(err);
+      console.log('error in tickersandnames',err);
     });
 });
 

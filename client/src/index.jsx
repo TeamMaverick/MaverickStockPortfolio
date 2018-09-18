@@ -15,7 +15,9 @@ class App extends React.Component {
       view : 'signin',
       stocks: [],
       portfolioTotal: 0,
-      sortBy: 'Alphabetical'
+      sortBy: 'Alphabetical',
+      authenticated: false,
+      user: null
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -25,23 +27,74 @@ class App extends React.Component {
     this.calculateTotal = this.calculateTotal.bind(this);
     this.changeView = this.changeView.bind(this);
     this.renderView = this.renderView.bind(this);
+<<<<<<< HEAD
+    this.createUser = this.createUser.bind(this);
+    this.signInUser = this.signInUser.bind(this);
+    this.signOutUser = this.signOutUser.bind(this);
+
+=======
     this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
     this.downloadCSV = this.downloadCSV.bind(this);
     this.downloadPDF = this.downloadPDF.bind(this);
+>>>>>>> dev
   }
   componentDidMount() {
-    // get all stocks for this user
-    this.getStocks(this.state.sortBy);
+    //if user logged in or logged out
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) { 
+        console.log('this is the user data when componentdidmount', user);
+        this.setState({ authenticated: true, user, view: 'home' }, () => this.getStocks(this.state.sortBy, this.state.user.uid))
+      } else {
+        this.setState({ authenticated: false, user: null , view: 'signin' })
+      }
+    });
+
+    // // get all stocks for this user
+    // this.getStocks(this.state.sortBy);
 
     //will update the stock prices every 10 seconds
     setInterval(this.updateAllStockPrices, 10000);
+
+  }
+
+  createUser(email, password, firstname, lastname) {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      var user = firebase.auth().currentUser;
+      user.updateProfile({
+        displayName: firstname + ' ' + lastname
+      })
+      .then(() => console.log('updated displayname'))
+      .catch((err) => console.error(err))
+    })
+    .catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.error('error code:',errorCode, 'with message: ', errorMessage)
+    });
+  }
+
+  signInUser(email, password) {
+    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.error('error code:',errorCode, 'with message: ', errorMessage)
+      window.alert('incorrect username/password')
+    });
+  }
+
+  signOutUser() {
+    firebase.auth().signOut()
   }
 
   //gets all the stocks for the user stored in the database and puts them in state
-  getStocks(sort) {
+  getStocks(sort, uid) {
     sort = sort || this.state.sortBy;
+    uid = uid || this.state.user.uid;
     axios
-      .get('/api/stock', { params: { sort: sort } })
+      .get('/api/stock', { params: { sort: sort, uid: uid } })
       .then(({ data }) => {
         this.setStocks(data);
       })
@@ -54,10 +107,9 @@ class App extends React.Component {
   }
 
   setStocks(stocks) {
-    this.setState({
-      stocks: stocks
-    });
+    this.setState({ stocks });
   }
+
   // Removes selected stocks from the database and will re-render the view
   removeCheckedBoxes(evt) {
     evt.preventDefault();
@@ -72,7 +124,7 @@ class App extends React.Component {
     }
 
     axios
-      .delete('/api/deleteStock', { data: {stocks: stockList }})
+      .delete('/api/deleteStock', { data: {stocks: stockList, uid: this.state.user.uid }})
       .then(() => {
         this.getStocks();
       })
@@ -109,8 +161,7 @@ class App extends React.Component {
 
   //calculates grand total value for list of stocks
   calculateTotal() {
-    const total = this.state.stocks
-      .map((stock) => {
+    const total = this.state.stocks.map((stock) => {
         return stock.quantity * stock.price;
       })
       .reduce((total, subtotal) => {
@@ -215,8 +266,8 @@ class App extends React.Component {
         <HealthCheck stocks={this.state.stocks}  />      
     )
     } else if (view === 'signin'){
-      return <SignIn changeView={this.changeView} />
-    }
+      return <SignIn changeView={this.changeView} signInUser={this.signInUser} createUser={this.createUser}/>
+    } 
 
   }
 
@@ -228,7 +279,7 @@ class App extends React.Component {
           <h1>Maverick</h1>
           {this.state.view !== 'signin' && 
           <div className="navbar-end signout">
-            <a onClick={() => this.changeView('signin')}>Sign Out</a>
+            <a onClick={this.signOutUser}>Sign Out</a>
           </div>
           }
         </header>
