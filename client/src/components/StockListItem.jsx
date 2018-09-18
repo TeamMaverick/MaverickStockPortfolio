@@ -8,8 +8,6 @@ class StockListItem extends React.Component {
       quantity: 0
     };
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleAddQuantity = this.handleAddQuantity.bind(this);
-    this.handleDeleteQuantity = this.handleDeleteQuantity.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +32,6 @@ class StockListItem extends React.Component {
     })
       .then((response) => {
         //update state
-        console.log(response);
         this.setState({
           quantity: newQuantity
         });
@@ -43,19 +40,6 @@ class StockListItem extends React.Component {
       .catch((err) => {
         console.log(err);
       });
-  }
-  // Event handler for incereasing quantity
-  handleAddQuantity(evt) {
-    evt.preventDefault();
-    const newQuantity = ++this.state.quantity;
-    this.callUpdateQuantity(newQuantity);
-  }
-
-  // Event Handler for decreasing quantity
-  handleDeleteQuantity(evt) {
-    evt.preventDefault();
-    const newQuantity = this.state.quantity > 0 ? --this.state.quantity : 0;
-    this.callUpdateQuantity(newQuantity);
   }
 
   render() {
@@ -84,15 +68,9 @@ class StockListItem extends React.Component {
                 <input
                   className="stockInput"
                   onChange={this.handleInputChange}
+                  type="number"
                   value={this.state.quantity}
                 />
-                <a onClick={this.handleAddQuantity}>
-                  <i className="fas fa-plus" />
-                </a>
-                &nbsp;
-                <a onClick={this.handleDeleteQuantity}>
-                  <i className="fas fa-minus" />
-                </a>
               </p>
             </div>
           </div>

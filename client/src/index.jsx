@@ -17,7 +17,7 @@ class App extends React.Component {
       portfolioTotal: 0,
       sortBy: 'Alphabetical',
       authenticated: false,
-      user: null
+      user: {}
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -49,7 +49,7 @@ class App extends React.Component {
     // this.getStocks(this.state.sortBy);
 
     //will update the stock prices every 10 seconds
-    setInterval(this.updateAllStockPrices, 10000);
+    setInterval(this.updateAllStockPrices, 60000);
 
   }
 

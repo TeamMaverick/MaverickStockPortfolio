@@ -36,12 +36,12 @@ var ListOfStocks = function({ stocksArray, removeCheckedBoxes, portfolioTotal, g
       <div className="columns" style={{marginTop: '15px'}}> 
         <div className="column" style={{textAlign: 'center'}}>   
           <span className="exporter icon is-large has-text-danger" onClick={downloadPDF}>
-            <i className="fas fa-2x fa-file-pdf"></i>
+            <i className="fas fa-3x fa-file-pdf"></i>
           </span>
         </div>
         <div className="column" style={{textAlign: 'center'}}>
           <span className="exporter icon is-large has-text-success" onClick={downloadCSV}>
-            <i className="fas fa-2x fa-file-excel"></i>
+            <i className="fas fa-3x fa-file-excel"></i>
           </span>
         </div>
       </div>
