@@ -21,7 +21,7 @@ class App extends React.Component {
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
-    this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
+    this.removeStock = this.removeStock.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
     this.updateSort = this.updateSort.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
@@ -107,18 +107,8 @@ class App extends React.Component {
   }
 
   // Removes selected stocks from the database and will re-render the view
-  removeCheckedBoxes(evt) {
-    evt.preventDefault();
-    const stockList = [];
-    const checkedStocks = document.getElementsByClassName('checkedStock');
-    for (var i = 0; i < checkedStocks.length; i++) {
-      var stock = checkedStocks[i];
-
-      if (stock.checked) {
-        stockList.push(stock.value);
-      }
-    }
-
+  removeStock(evt, stock) {
+    const stockList = [stock.stock_ticker];
     axios
       .delete('/api/deleteStock', { data: {stocks: stockList, uid: this.state.user.uid }})
       .then(() => {
@@ -244,7 +234,7 @@ class App extends React.Component {
               <SortBy updateSort={this.updateSort} />
               <ListOfStocks
                 stocksArray={this.state.stocks}
-                removeCheckedBoxes={this.removeCheckedBoxes}
+                removeStock={this.removeStock}
                 calculateTotal={this.calculateTotal}
                 portfolioTotal={this.state.portfolioTotal}
                 getStocks={this.getStocks}

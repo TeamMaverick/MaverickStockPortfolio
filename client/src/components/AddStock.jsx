@@ -28,6 +28,10 @@ class AddStock extends React.Component {
       })
       .then(() => {
         //on success - refresh stock list
+        this.setState({
+          stock: '',
+          quantity: ''
+        })
         this.props.getStocks();
       })
       .catch((err) => {
