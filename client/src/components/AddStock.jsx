@@ -20,7 +20,8 @@ class AddStock extends React.Component {
         return axios.post('/api/stock', {
           stock: this.state.stock,
           quantity: 1,
-          price: data
+          price: data,
+          uid: firebase.auth().currentUser.uid
         });
       })
       .then(() => {
