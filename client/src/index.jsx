@@ -8,17 +8,21 @@ import SortBy from './components/SortBy.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
 import SignIn from './components/SignIn.jsx';
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       view : 'signin',
+      allStocks: [],
       stocks: [],
       portfolioTotal: 0,
       sortBy: 'Alphabetical'
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
+    this.getAllStocks = this.getAllStocks.bind(this);
+    this.setAllStocks = this.setAllStocks.bind(this);
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
     this.updateSort = this.updateSort.bind(this);
@@ -29,6 +33,7 @@ class App extends React.Component {
   componentDidMount() {
     // get all stocks for this user
     this.getStocks(this.state.sortBy);
+    this.getAllStocks();
 
     //will update the stock prices every 10 seconds
     setInterval(this.updateAllStockPrices, 10000);
@@ -50,10 +55,29 @@ class App extends React.Component {
       });
   }
 
+  //gets all stocks from ticker
+  getAllStocks() {
+    axios.get(`/api/allStocks/`)
+    .then((data) => {
+      this.setAllStocks(data);
+    })
+    .catch(err => console.log(err));
+  }
+
   setStocks(stocks) {
     this.setState({
       stocks: stocks
     });
+  }
+
+  setAllStocks(allStocks) {
+    let options = [];
+    allStocks.data.map(stock => {
+      options.push({ value: stock.symbol, label: stock.name })
+    })
+    this.setState({
+      allStocks: options
+    })
   }
   // Removes selected stocks from the database and will re-render the view
   removeCheckedBoxes(evt) {
@@ -129,7 +153,7 @@ class App extends React.Component {
       return ( 
           <div className="columns">
             <div className="column border">
-              <AddStock getStocks={this.getStocks} />
+              <AddStock getStocks={this.getStocks} allStocks={this.state.allStocks}/>
               <SortBy updateSort={this.updateSort} />
               <ListOfStocks
                 stocksArray={this.state.stocks}
