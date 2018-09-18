@@ -1,10 +1,6 @@
 import React from "react";
 import axios from "axios";
 import Select from 'react-virtualized-select';
-import createFilterOptions from 'react-select-fast-filter-options';
-// import "../../../node_modules/react-select/dist/react-select.css";
-// import "../../../node_modules/react-virtualized/styles.css";
-// import "../../../node_modules/react-virtualized-select/styles.css";
 
 class AddStock extends React.Component {
   constructor(props) {
