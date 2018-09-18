@@ -3,6 +3,54 @@ const alpha = require('../alphaVantage/index.js');
 
 //Return requests to the client
 module.exports = {
+  
+  // Handles all logic needed to 'buy' a stock.
+  buyStock: (req, res) => {  // HANDLE QUANTITIES OVER 1
+    alpha
+      .getCurrentPrice(req.body.stock)
+      .then(({ data }) => {
+        model.buyStock(req.body.stock, data, req.body.userId, req.body.transactionType)
+          .then(({data}) => {
+            res.send(data);
+          })
+      })
+      .catch((err) => {
+        console.log(err);
+        res.sendStatus(500);
+      });
+  },
+  
+  sellStock: (req, res) => { // HANDLE QUANTITIES OVER 1
+    alpha
+      .getCurrentPrice(req.body.stock)
+      .then(({ data }) => {
+        model.sellStock(req.body.stock, data, req.body.userId)
+          .then(({data}) => {
+            res.send(data)
+          })
+          .catch((err) => {
+            res.send({message: 'Failed to sell, you may not have enough shares'})
+          })
+      })
+      .catch((err) => {
+        console.log(err)
+        res.sendStatus(500)
+      });
+  },
+
+  history: (req, res) => {
+    model.pullUserTransactions(req.query.userId)
+      .then((data)=> {
+        console.log(data)
+        // With the data, punt to another controller file.
+        res.send(500)
+      })
+      .catch((err) => {
+        console.log(err)
+        res.sendStatus(500)
+      })
+  },
+  
   // Calls function in model to post stock ticker to database
   postStockTicker: (req, res) => {
     model.saveStock(req.body.stock, req.body.quantity, req.body.price)

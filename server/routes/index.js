@@ -27,4 +27,15 @@ router.post('/updateQuantity', stockController.updateStockQuantity);
 //never called by client
 router.post('/tickersAndNames', stockController.postTickersAndNames);
 
+
+// Call a buy of the stock
+router.post('/buy', stockController.buyStock);
+
+// Call a sell of the stock
+router.post('/sell', stockController.sellStock);
+
+// Retrieve the portfolio history (should contain multiple series)
+router.get('/portfolio', stockController.history);
+
+
 module.exports = router;

@@ -1,9 +1,10 @@
 const Stock = require('./Stock.js');
 const TickerNames = require('./TickerNames');
+const Transaction = require('./Transactions');
 
 module.exports = {
   // Adds stock ticker to database
-  saveStock: function(stock, quantity = 1, price = 1) {
+  saveStock: function(stock, quantity = 1, price = 1, userId = 1, transactionType) {
     return TickerNames.findOne({
       where: {
         symbol: stock
@@ -13,6 +14,66 @@ module.exports = {
       return Stock.create({stock_ticker : stock, company_name: data.name, quantity : quantity, price : price})
     })
   },
+
+  buyStock: function(stock, price, userId = 1, transactionType = 'Market Order') {
+    return TickerNames.findOne({
+      where: {
+        symbol: stock
+      }
+    })
+    .then(() => {
+      return Transaction.create({
+        user_id: userId,
+        stock_ticker: stock,
+        price_bought : price,
+        time_bought : Date.now(),
+        transaction_type: transactionType
+      })
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  },
+
+  sellStock: function(stock, price = 1, userId = 1, transactionType = 'Market Order') {
+    return Transaction.findOne({
+      where: {
+        stock_ticker: stock,
+        user_id: userId,
+        time_sold: null,
+        price_sold: null
+      }
+    })
+    .then((transaction) => {
+      if (transaction) {
+        return transaction.update({
+          price_sold : price,
+          time_sold : Date.now(),
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      } else {
+        return
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  },
+
+  // Pull the portfolio History
+  pullUserTransactions: function(userId) {
+    return Transaction.findAll({
+      where: {
+        user_id: userId
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  },
+
   // Gets stock tickers from database
   getStocks: function(sort) {
     if (sort === 'Alphabetical') {
