@@ -27,16 +27,12 @@ class App extends React.Component {
     this.calculateTotal = this.calculateTotal.bind(this);
     this.changeView = this.changeView.bind(this);
     this.renderView = this.renderView.bind(this);
-<<<<<<< HEAD
     this.createUser = this.createUser.bind(this);
     this.signInUser = this.signInUser.bind(this);
     this.signOutUser = this.signOutUser.bind(this);
-
-=======
     this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
     this.downloadCSV = this.downloadCSV.bind(this);
     this.downloadPDF = this.downloadPDF.bind(this);
->>>>>>> dev
   }
   componentDidMount() {
     //if user logged in or logged out
