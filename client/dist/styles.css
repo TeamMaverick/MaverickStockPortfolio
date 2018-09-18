@@ -123,3 +123,7 @@ h1.healthCheckHeader {
 .signout {
   font-size: 1rem;
 }
+
+.exporter {
+  cursor: pointer;
+}
