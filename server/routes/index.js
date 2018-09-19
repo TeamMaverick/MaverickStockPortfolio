@@ -27,4 +27,6 @@ router.post('/updateQuantity', stockController.updateStockQuantity);
 //never called by client
 router.post('/tickersAndNames', stockController.postTickersAndNames);
 
+router.get('/search', stockController.getTickerInfo)
+
 module.exports = router;

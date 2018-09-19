@@ -10,7 +10,7 @@ const SignIn = (props) => {
       <div className="hero-body">
         <div className="columns is-multiline is-centered">
           <div className="column">
-            <div className="card">
+            <div className="card card-signin">
               <div className="card-content">
                 <div className="content">
                 <form onSubmit={handleSubmit}>
