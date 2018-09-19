@@ -40,6 +40,9 @@ class HealthCheck extends React.Component {
           this.setState({ currentStock: data, apiWait : false });
         }
       })
+      .then(() => {
+        console.log('GETCHARTDATA', this.state.currentStock);
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -52,13 +55,16 @@ class HealthCheck extends React.Component {
       return stock.stock_ticker;
     });
     Axios.get(
-      `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stockArr}&types=quote&range=1m&last=5`
+      `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stockArr}&types=quote,news,chart&range=1m&last=5`
     )
       .then(({ data }) => {
         //save stock info to state
         this.setState({
           stocksData: data
         });
+      })
+      .then(() => {
+        console.log('GETSTOCKINFO', this.state.stocksData);
       })
       .catch((err) => {
         console.log(err);
