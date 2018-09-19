@@ -2,42 +2,28 @@ import React from 'react';
 import StockListItem from './StockListItem.jsx';
 
 //List component that displays all the stocks the user has saved
-var ListOfStocks = function({ stocksArray, removeStock, portfolioTotal, getStocks, downloadCSV, downloadPDF }) {
+var ListOfStocks = function({ stocksArray, removeStock, getStocks, downloadCSV, downloadPDF, displayStock }) {
   return (
     <div className="listOfStocks">
-      <span className="head">List of stocks in portfolio:</span>
-      <div className="level">
-        <div className="level-left">
-          <div className="level-item">
-            <p className="heading" />
-          </div>
-          <div className="level-item has-text-centered">
-            <p className="heading">Symbol</p>
-          </div>
-        </div>
-
-        <div className="level-right">
-          <div className="level-item has-text-centered">
-            <p className="heading">Quantity</p>
-          </div>
-        </div>
-      </div>
-      {stocksArray.length ? stocksArray.map((stock) => {
-        return <StockListItem stock={stock} key={stock.stock_ticker} getStocks={getStocks} removeStock={removeStock}/>;
-      }) : ''}
-      <div className="totalprice" style={{textAlign: 'center', marginTop: '15px', fontWeight: 'bold'}}>Portfolio Total : ${Number.parseFloat(portfolioTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</div>
-      <div className="columns" style={{marginTop: '15px'}}> 
-        <div className="column" style={{textAlign: 'center'}}>   
-          <span className="exporter icon is-large has-text-danger" onClick={downloadPDF}>
-            <i className="fas fa-3x fa-file-pdf"></i>
-          </span>
-        </div>
-        <div className="column" style={{textAlign: 'center'}}>
-          <span className="exporter icon is-large has-text-success" onClick={downloadCSV}>
-            <i className="fas fa-3x fa-file-excel"></i>
-          </span>
-        </div>
-      </div>
+      <table className="table">
+        <thead>
+          <tr>
+            <th><abbr title="Position"></abbr></th>
+            <th><abbr title="Position">Ticker</abbr></th>
+            <th><abbr title="Position">Name</abbr></th>
+            <th><abbr title="Position">Quantity</abbr></th>
+            <th><abbr title="Position">Price</abbr></th>
+            <th><abbr title="Position">Holdings</abbr></th>
+            <th><abbr title="Position">Today's Change</abbr></th>
+            <th><abbr title="Position">YTD Change</abbr></th>            
+          </tr>
+        </thead>
+        <tbody>
+          {stocksArray.length ? stocksArray.map((stock) => {
+            return <StockListItem stock={stock} key={stock.stock_ticker} getStocks={getStocks} removeStock={removeStock} displayStock={displayStock}/>;
+          }) : null}
+        </tbody>
+      </table>
     </div>
   );
 };

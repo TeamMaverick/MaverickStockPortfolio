@@ -45,47 +45,37 @@ class StockListItem extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div className="level">
-          <div className="level-left">
-            <div className="level-item">
-              <span className="exporter icon has-text-danger" 
-                onClick={(evt) => {this.props.removeStock(evt, this.props.stock)}}>
-                <i className="fas fa-lg fa-trash"></i>
-              </span>
-            </div>
-            <div className="level-item">
-              <p>
-                  {this.props.stock.stock_ticker.toUpperCase()} <br/>{this.props.stock.company_name}{' '}
-              </p>
-            </div>
-          </div>
-          <div className="level-right">
-            <div className="level-item has-text-centered">
-              <p>
-                <input
-                  className="stockInput"
-                  onChange={this.handleInputChange}
-                  type="number"
-                  value={this.state.quantity}
-                />
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="level">
-          <div className="level-left">
-            <div className="level-item">
-              <p>{`Price : $${Number.parseFloat(this.props.stock.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</p>
-            </div>
-          </div>
-          <div className="level-right">
-            <p>
-              {`Total : $${Number.parseFloat(
-                this.props.stock.price * this.props.stock.quantity
-              ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
-            </p>
-          </div>
-        </div>
+        <tr className="container" role="alert" 
+          onClick={() => {
+            this.props.displayStock(this.props.stock.stock_ticker)
+          }}>
+          <th scope="row">              
+            <span className="exporter icon has-text-danger" 
+              onClick={(evt) => {this.props.removeStock(evt, this.props.stock)}}>
+              <i className="fas fa-lg fa-trash"></i>
+            </span>
+          </th>
+          <td>{this.props.stock.stock_ticker.toUpperCase()}</td>
+          <td>{this.props.stock.company_name}</td>
+          <td>                
+            <input
+              className="stockInput"
+              onChange={this.handleInputChange}
+              type="number"
+              value={this.state.quantity}
+            />
+          </td>
+          <td>
+            {`$${Number.parseFloat(this.props.stock.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
+          </td>
+          <td>
+            {`$${Number.parseFloat(
+              this.props.stock.price * this.props.stock.quantity
+            ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
+          </td>
+          <td>7</td>
+          <td>8</td>
+        </tr>
       </React.Fragment>
     );
   }
