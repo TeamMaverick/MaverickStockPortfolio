@@ -59,6 +59,7 @@ class StockListItem extends React.Component {
           <td>{this.props.stock.company_name}</td>
           <td>                
             <input
+              onClick={(e) => e.stopPropagation()}
               className="stockInput"
               onChange={this.handleInputChange}
               type="number"
@@ -66,15 +67,16 @@ class StockListItem extends React.Component {
             />
           </td>
           <td>
-            {`$${Number.parseFloat(this.props.stock.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
+            {`$${Number.parseFloat(this.props.stock.price)
+              .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
           </td>
           <td>
             {`$${Number.parseFloat(
               this.props.stock.price * this.props.stock.quantity
             ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
           </td>
-          <td>7</td>
-          <td>8</td>
+          <td>$ </td>
+          <td>$ </td>
         </tr>
       </React.Fragment>
     );

@@ -50,40 +50,24 @@ class AddStock extends React.Component {
   }
   // handle input onchange event (update quantity state)
   handleQuantChange(evt) {
+    if (evt.target.value == '-') {
+      this.setState({
+        quantity: ''
+      })
+    }
     this.setState({
-      quantity: Math.abs(evt.target.value)
+      quantity: evt.target.value
     });
   }
   render() {
     return (
-      <div className="columns">
-        <div className="column is-6" style={{marginTop: '15px'}}> 
-          <h3>
-            Stock Portfolio
-            <span className="exporter icon is-large has-text-danger" onClick={this.props.downloadPDF}>
-              <i className="fas fa-lg fa-file-pdf"></i>
-            </span>
-            <span className="exporter icon is-large has-text-success" onClick={this.props.downloadCSV}>
-              <i className="fas fa-lg fa-file-excel"></i>
-            </span>
-          </h3>
-
-        </div>
-        <div className="column">
-          <form>
-            <div className="field is-horizontal">
-              <label className="label">
-                Quantity
-              </label>
-              <input 
-                className="input"
-                type="number" 
-                min="0" 
-                onChange={this.handleQuantChange} 
-                value={this.state.quantity} 
-                style={{marginRight: '15px'}}
-              />
-              <label className="label">Ticker</label>            
+      <div>
+        <h3 style={{textAlign: 'center', textDecoration: 'underline', marginBottom: '15px'}}>
+          Stock Portfolio
+        </h3>
+        <form className="field is-horizontal" style={{paddingLeft: '30%'}}>
+          <div className="field">
+            <p className="control">
               <input className={
                 this.state.valid
                 ? 'input'
@@ -91,21 +75,35 @@ class AddStock extends React.Component {
                 type="text" 
                 onChange={this.handleInputChange} 
                 value={this.state.stock} 
-                style={{marginRight: '15px'}}
+                placeholder="ticker"
               />
+            </p>
           </div>
-          <div style={{textAlign: 'right'}}>
-            <button className="button is-info" 
-              onClick={
-                (e) => {
-                e.preventDefault();
-                this.handleClick();
-              }}>
-              Add Stock
-            </button>
+          <div className="field" style={{marginLeft: '15px', marginRight: '15px'}}>
+            <p className="control">
+              <input
+                className="input"
+                type="number" 
+                min="0" 
+                onChange={this.handleQuantChange} 
+                value={this.state.quantity} 
+                placeholder="quantity"
+              />
+            </p>
+          </div>
+          <div className="field">
+            <p className="control">
+                <button className="button is-info" 
+                  onClick={
+                    (e) => {
+                    e.preventDefault();
+                    this.handleClick();
+                  }}>
+                  Add Stock
+                </button>
+            </p>
           </div>
         </form>
-      </div>
       </div>
     );
   }

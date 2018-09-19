@@ -9,7 +9,7 @@ var PortfolioPChart = ({ stocks }) => {
       plotBorderWidth: null,
       plotShadow: false,
       type: 'pie',
-      height: 600
+      height: 350
     },
     title: {
       text: 'Stock Portfolio Percentages'
