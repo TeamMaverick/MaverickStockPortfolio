@@ -57,6 +57,7 @@ class AddStock extends React.Component {
   render() {
     return (
       <div>
+        <form>
         <div className="field">
           <label className="label">Quantity</label>
           <div className="control">
@@ -73,10 +74,16 @@ class AddStock extends React.Component {
           </div>
         </div>
         <div className="control">
-          <a className="button is-info" onClick={this.handleClick}>
+          <button className="button is-info" 
+            onClick={
+              (e) => {
+                e.preventDefault();
+                this.handleClick();
+              }}>
             Add Stock
-          </a>
+          </button>
         </div>
+        </form>
       </div>
     );
   }
