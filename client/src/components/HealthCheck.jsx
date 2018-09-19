@@ -14,6 +14,7 @@ class HealthCheck extends React.Component {
       <div className="columns">
         <div className="column">
           <div className="box has-text-centered" style={{marginTop: '80px'}}>
+            {}
           </div>
         </div>
         <div className="column is-8"> 

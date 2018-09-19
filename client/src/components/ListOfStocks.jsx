@@ -2,7 +2,7 @@ import React from 'react';
 import StockListItem from './StockListItem.jsx';
 
 //List component that displays all the stocks the user has saved
-var ListOfStocks = function({ stocksArray, removeStock, portfolioTotal, getStocks, downloadCSV, downloadPDF, displayStock }) {
+var ListOfStocks = function({ stocksArray, removeStock, getStocks, downloadCSV, downloadPDF, displayStock }) {
   return (
     <div className="listOfStocks">
       <table className="table">
@@ -24,7 +24,6 @@ var ListOfStocks = function({ stocksArray, removeStock, portfolioTotal, getStock
           }) : null}
         </tbody>
       </table>
-      <div className="totalprice" style={{textAlign: 'center', marginTop: '15px', fontWeight: 'bold'}}>Portfolio Total : ${Number.parseFloat(portfolioTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</div>
     </div>
   );
 };

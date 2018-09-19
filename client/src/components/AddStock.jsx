@@ -93,6 +93,8 @@ class AddStock extends React.Component {
                 value={this.state.stock} 
                 style={{marginRight: '15px'}}
               />
+          </div>
+          <div style={{textAlign: 'right'}}>
             <button className="button is-info" 
               onClick={
                 (e) => {
