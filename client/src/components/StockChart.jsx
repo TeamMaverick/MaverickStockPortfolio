@@ -7,7 +7,7 @@ var StockChart = ({ currentStock }) => {
   var options = {
     // use data from currentStock
     chart: {
-      height: 600
+      height: 350
     },
     title: {
       text: `${ticker} intraday stock price`
