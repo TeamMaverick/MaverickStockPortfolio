@@ -4,7 +4,7 @@ const Transaction = require('./Transactions');
 
 module.exports = {
   // Adds stock ticker to database
-  saveStock: function(stock, quantity = 1, price = 1, userId = 1, transactionType) {
+  saveStock: function(stock, quantity = 1, price = 1) {
     return TickerNames.findOne({
       where: {
         symbol: stock
@@ -35,24 +35,32 @@ module.exports = {
     })
   },
 
-  sellStock: function(stock, price = 1, userId = 1, transactionType = 'Market Order') {
-    return Transaction.findOne({
+  sellStock: function(stock, price = 1, userId = 1, quantity) {
+    console.log(quantity);
+    return Transaction.findAll({
       where: {
         stock_ticker: stock,
         user_id: userId,
         time_sold: null,
         price_sold: null
-      }
+      },
+      limit: parseInt(quantity)
     })
-    .then((transaction) => {
-      if (transaction) {
-        return transaction.update({
-          price_sold : price,
-          time_sold : Date.now(),
+    .then((transactions) => {
+      if (transactions) {
+        soldShares = transactions.map((transaction) => {
+          return transaction.update({
+            price_sold : price,
+            time_sold : Date.now(),
+          })
+          .catch((err) => {
+            console.log(err)
+          })
         })
-        .catch((err) => {
-          console.log(err)
-        })
+        return Promise.all(soldShares)
+          .then((sold) => {
+            return sold;
+          })
       } else {
         return
       }

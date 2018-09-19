@@ -1,5 +1,6 @@
 const model = require('../models/index.js');
 const alpha = require('../alphaVantage/index.js');
+const portfolioCalculator = require('./portfolio.js');
 
 //Return requests to the client
 module.exports = {
@@ -9,8 +10,12 @@ module.exports = {
     alpha
       .getCurrentPrice(req.body.stock)
       .then(({ data }) => {
-        model.buyStock(req.body.stock, data, req.body.userId, req.body.transactionType)
-          .then(({data}) => {
+        let buyPromises = [];
+        for (var i = 0; i < req.body.quantity; i++) {
+          buyPromises.push(model.buyStock(req.body.stock, data, req.body.userId, req.body.transactionType))
+        }
+        Promise.all(buyPromises)
+          .then((data) => {
             res.send(data);
           })
       })
@@ -24,11 +29,12 @@ module.exports = {
     alpha
       .getCurrentPrice(req.body.stock)
       .then(({ data }) => {
-        model.sellStock(req.body.stock, data, req.body.userId)
-          .then(({data}) => {
+        model.sellStock(req.body.stock, data, req.body.userId, req.body.quantity)
+          .then((data) => {
             res.send(data)
           })
           .catch((err) => {
+            console.log(err)
             res.send({message: 'Failed to sell, you may not have enough shares'})
           })
       })
