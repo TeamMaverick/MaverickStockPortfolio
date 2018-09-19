@@ -48,17 +48,14 @@ class StockListItem extends React.Component {
         <div className="level">
           <div className="level-left">
             <div className="level-item">
-              <p>
-                <input
-                  className="checkedStock checkbox"
-                  value={this.props.stock.stock_ticker}
-                  type="checkbox"
-                />
-              </p>
+              <span className="exporter icon has-text-danger" 
+                onClick={(evt) => {this.props.removeStock(evt, this.props.stock)}}>
+                <i className="fas fa-lg fa-trash"></i>
+              </span>
             </div>
             <div className="level-item">
               <p>
-                  {this.props.stock.stock_ticker} <br/>{this.props.stock.company_name}{' '}
+                  {this.props.stock.stock_ticker.toUpperCase()} <br/>{this.props.stock.company_name}{' '}
               </p>
             </div>
           </div>
