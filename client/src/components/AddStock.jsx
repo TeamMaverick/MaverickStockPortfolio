@@ -6,10 +6,12 @@ class AddStock extends React.Component {
     super(props);
     this.state = {
       stock: '',
+      quantity: '',
       valid: true
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleQuantChange = this.handleQuantChange.bind(this);
   }
   // handle Add button click event
   handleClick() {
@@ -19,13 +21,17 @@ class AddStock extends React.Component {
       .then(({ data }) => {
         return axios.post('/api/stock', {
           stock: this.state.stock,
-          quantity: 1,
+          quantity: this.state.quantity,
           price: data,
           uid: firebase.auth().currentUser.uid
         });
       })
       .then(() => {
         //on success - refresh stock list
+        this.setState({
+          stock: '',
+          quantity: ''
+        })
         this.props.getStocks();
       })
       .catch((err) => {
@@ -42,13 +48,29 @@ class AddStock extends React.Component {
       valid : true
     });
   }
+  // handle input onchange event (update quantity state)
+  handleQuantChange(evt) {
+    this.setState({
+      quantity: evt.target.value
+    });
+  }
   render() {
     return (
-      <div className="field has-addons">
-        <div className="control is-expanded">
-          <input className={this.state.valid
-            ? 'input'
-            : 'input is-danger'} type="text" onChange={this.handleInputChange} value={this.state.stock} />
+      <div>
+        <div className="field">
+          <label className="label">Quantity</label>
+          <div className="control">
+            <input type="number" onChange={this.handleQuantChange} value={this.state.quantity} />
+          </div>
+        </div>
+
+        <div className="field">
+          <label className="label">Stock</label>
+          <div className="control">
+            <input className={this.state.valid
+              ? 'input'
+              : 'input is-danger'} type="text" onChange={this.handleInputChange} value={this.state.stock} />
+          </div>
         </div>
         <div className="control">
           <a className="button is-info" onClick={this.handleClick}>
@@ -56,7 +78,6 @@ class AddStock extends React.Component {
           </a>
         </div>
       </div>
-
     );
   }
 }

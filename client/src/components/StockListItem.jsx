@@ -8,8 +8,6 @@ class StockListItem extends React.Component {
       quantity: 0
     };
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleAddQuantity = this.handleAddQuantity.bind(this);
-    this.handleDeleteQuantity = this.handleDeleteQuantity.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +32,6 @@ class StockListItem extends React.Component {
     })
       .then((response) => {
         //update state
-        console.log(response);
         this.setState({
           quantity: newQuantity
         });
@@ -44,19 +41,6 @@ class StockListItem extends React.Component {
         console.log(err);
       });
   }
-  // Event handler for incereasing quantity
-  handleAddQuantity(evt) {
-    evt.preventDefault();
-    const newQuantity = ++this.state.quantity;
-    this.callUpdateQuantity(newQuantity);
-  }
-
-  // Event Handler for decreasing quantity
-  handleDeleteQuantity(evt) {
-    evt.preventDefault();
-    const newQuantity = this.state.quantity > 0 ? --this.state.quantity : 0;
-    this.callUpdateQuantity(newQuantity);
-  }
 
   render() {
     return (
@@ -64,17 +48,14 @@ class StockListItem extends React.Component {
         <div className="level">
           <div className="level-left">
             <div className="level-item">
-              <p>
-                <input
-                  className="checkedStock checkbox"
-                  value={this.props.stock.stock_ticker}
-                  type="checkbox"
-                />
-              </p>
+              <span className="exporter icon has-text-danger" 
+                onClick={(evt) => {this.props.removeStock(evt, this.props.stock)}}>
+                <i className="fas fa-lg fa-trash"></i>
+              </span>
             </div>
             <div className="level-item">
               <p>
-                  {this.props.stock.stock_ticker} <br/>{this.props.stock.company_name}{' '}
+                  {this.props.stock.stock_ticker.toUpperCase()} <br/>{this.props.stock.company_name}{' '}
               </p>
             </div>
           </div>
@@ -84,15 +65,9 @@ class StockListItem extends React.Component {
                 <input
                   className="stockInput"
                   onChange={this.handleInputChange}
+                  type="number"
                   value={this.state.quantity}
                 />
-                <a onClick={this.handleAddQuantity}>
-                  <i className="fas fa-plus" />
-                </a>
-                &nbsp;
-                <a onClick={this.handleDeleteQuantity}>
-                  <i className="fas fa-minus" />
-                </a>
               </p>
             </div>
           </div>
