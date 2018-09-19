@@ -11,8 +11,8 @@ module.exports = {
         .then(({data}) => {
           // now with the structure, create the object bones to return
           portfolio = calculatePortfolio(data, transactions)
-          console.log(portfolio);
-          return portfolio
+          console.log(portfolio)
+          return calculateValueOfHoldings(portfolio, time)
         })
         .catch((err) => {
           console.log(err)
@@ -26,13 +26,15 @@ module.exports = {
 
 const calculatePortfolio = function(oneStockChartPoints, positions) {
   // now with the structure
-  var portfolio = {}; 
-  portfolio.openPositions = [];
-  portfolio.realizedGL = [];
-  portfolio.investedAmount = [];
-  portfolio.time = [];
-  var realizedGL = 0;
-  portfolio.stocks = {};
+  var portfolio = {}
+  portfolio.openPositions = []
+  portfolio.realizedGL = []
+  portfolio.investedAmount = []
+  portfolio.time = []
+  var realizedGL = 0
+  portfolio.stocks = {}
+  portfolio.valueOfHoldings = []
+  portfolio.unrealizedGL = []
 
   // Loop through each time period on the chart
   oneStockChartPoints.forEach((chartPoint) => {
@@ -43,7 +45,7 @@ const calculatePortfolio = function(oneStockChartPoints, positions) {
 
     // for each transaction
     positions.forEach((position) => {
-      if (position.time_sold && time.isBefore(position.time_sold)) { // If position is passed completely
+      if (position.time_sold && time.isAfter(position.time_sold)) { // If position is passed completely
         realizedGL += (position.price_sold - position.price_bought) // add to Realized GL
       } else {
         filteredPositions.push(position) // if transaction is either open or not yet opened, then add it to those to continue looking at
@@ -73,6 +75,51 @@ const calculatePortfolio = function(oneStockChartPoints, positions) {
   return portfolio
 }
 
-const calculateValueOfHoldings = function() {
+const calculateValueOfHoldings = function(portfolio, time) {
+
+  if (portfolio.stocks) {
+
+    // gather all API data
+    var stockPriceCharts = Object.keys(portfolio.stocks).map((stock) => {
+      return axios.get(`https://api.iextrading.com/1.0/stock/${stock}/chart/${time}`)
+        .then(({data}) => {
+          return {
+            stock: stock,
+            data: data
+          }
+        })
+    })
+    return Promise.all(stockPriceCharts)
+      .then((stockPriceArray) => {
+
+        // Convert to an object
+        var stockPriceObject = {}
+        stockPriceArray.forEach((stock) => {
+          stockPriceObject[stock.stock] = stock.data
+        })
+
+        // loop over time
+        for (t = 0; t < portfolio.time.length; t++) {
+          let openPoss = portfolio.openPositions[t]
+          let value = 0
+          for (stock in openPoss) {
+            let adj = 0;
+            while (stockPriceObject[stock][t + adj]['high'] === -1 && (t + adj + 1) < portfolio.time.length) {
+              adj++
+            }
+            value += openPoss[stock] * stockPriceObject[stock][t + adj]['high']
+          }
+          portfolio.valueOfHoldings.push(value)
+          portfolio.unrealizedGL.push(value - portfolio.investedAmount[t])
+        }
+
+        return portfolio
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  } else {
+    return portfolio
+  }
 
 }
