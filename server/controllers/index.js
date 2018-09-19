@@ -47,9 +47,11 @@ module.exports = {
   history: (req, res) => {
     model.pullUserTransactions(req.query.userId)
       .then((data)=> {
-        console.log(data)
         // With the data, punt to another controller file.
-        res.send(500)
+        portfolioCalculator.getPortfolio(data)
+          .then((portfolio) => {
+            res.send(portfolio)
+          })
       })
       .catch((err) => {
         console.log(err)
