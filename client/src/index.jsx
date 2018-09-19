@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+
 import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
-import HealthCheck from './components/HealthCheck.jsx';
+import HealthCheckAPIFIX from './components/HealthCheckAPIFIX.jsx';
 import SortBy from './components/SortBy.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
 import SignIn from './components/SignIn.jsx';
@@ -249,7 +250,7 @@ class App extends React.Component {
       )
     } else if (view === 'healthcheck') {
       return (
-        <HealthCheck stocks={this.state.stocks}  />      
+        <HealthCheckAPIFIX stocks={this.state.stocks}  />      
     )
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} signInUser={this.signInUser} createUser={this.createUser}/>

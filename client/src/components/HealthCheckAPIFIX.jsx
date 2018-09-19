@@ -1,10 +1,34 @@
 import React from 'react';
-import Axios from 'axios';
+import axios from 'axios';
 // import HealthCheckItem from './HealthCheckItem.jsx';
 import StockChart from './StockChart.jsx';
 
 
-class HealthCheck extends React.Component {
+let iex = {
+  average:1939.829,
+  changeOverTime:0,
+  close:1939.055,
+  date:"20180919",
+  high:1940.57,
+  label:"09:30 AM",
+  low:1938.9,
+  marketAverage:1940.288,
+  marketChangeOverTime:0,
+  marketClose:1938.338,
+  marketHigh:1941,
+  marketLow:1938,
+  marketNotional:188017763.5098,
+  marketNumberOfTrades:840,
+  marketOpen:1940.5,
+  marketVolume:96902,
+  minute:"09:30",
+  notional:964094.94,
+  numberOfTrades:8,
+  open:1940.57,
+  volume:497};
+let alphavantage = [1537277400000, 1918.75, 1935, 1916.11, 1933.0732, 392477]
+
+class HealthCheckAPIFIX extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,17 +55,18 @@ class HealthCheck extends React.Component {
  //called when a ticker symbol on the stocks list is clicked
   //requests the data for that ticker symbol and deposits it in the state
   displayStock(stock) {
-    return Axios
+    return axios
       .get('/api/stockInfo', { params: { STOCK: stock } })
       .then(({ data }) => {
-        if(data.Information){
-          this.setState({ apiWait : true});
-        } else {
-          this.setState({ currentStock: data, apiWait : false });
-        }
+        console.log(data);
+        // if(data.Information){
+        //   this.setState({ apiWait : true});
+        // } else {
+        //   this.setState({ currentStock: data, apiWait : false });
+        // }
       })
       .then(() => {
-        console.log('GETCHARTDATA', this.state.currentStock);
+        console.log('GETCHARTDATA', this.state.currentStock.data);
       })
       .catch((err) => {
         console.log(err);
@@ -54,8 +79,8 @@ class HealthCheck extends React.Component {
     let stockArr = this.props.stocks.map((stock) => {
       return stock.stock_ticker;
     });
-    Axios.get(
-      `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stockArr}&types=quote,news,chart&range=1d`
+    axios.get(
+      `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stockArr}&types=quote,news,chart&range=1y`
     )
       .then(({ data }) => {
         //save stock info to state
@@ -120,4 +145,4 @@ class HealthCheck extends React.Component {
   }
 }
 
-export default HealthCheck;
+export default HealthCheckAPIFIX;
