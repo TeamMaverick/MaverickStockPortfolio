@@ -51,39 +51,59 @@ class AddStock extends React.Component {
   // handle input onchange event (update quantity state)
   handleQuantChange(evt) {
     this.setState({
-      quantity: evt.target.value
+      quantity: Math.abs(evt.target.value)
     });
   }
   render() {
     return (
-      <div>
-        <form>
-        <div className="field">
-          <label className="label">Quantity</label>
-          <div className="control">
-            <input type="number" onChange={this.handleQuantChange} value={this.state.quantity} />
-          </div>
-        </div>
+      <div className="columns">
+        <div className="column is-6" style={{marginTop: '15px'}}> 
+          <h3>
+            Stock Portfolio
+            <span className="exporter icon is-large has-text-danger" onClick={this.props.downloadPDF}>
+              <i className="fas fa-lg fa-file-pdf"></i>
+            </span>
+            <span className="exporter icon is-large has-text-success" onClick={this.props.downloadCSV}>
+              <i className="fas fa-lg fa-file-excel"></i>
+            </span>
+          </h3>
 
-        <div className="field">
-          <label className="label">Stock</label>
-          <div className="control">
-            <input className={this.state.valid
-              ? 'input'
-              : 'input is-danger'} type="text" onChange={this.handleInputChange} value={this.state.stock} />
-          </div>
         </div>
-        <div className="control">
-          <button className="button is-info" 
-            onClick={
-              (e) => {
+        <div className="column">
+          <form>
+            <div className="field is-horizontal">
+              <label className="label">
+                Quantity
+              </label>
+              <input 
+                className="input"
+                type="number" 
+                min="0" 
+                onChange={this.handleQuantChange} 
+                value={this.state.quantity} 
+                style={{marginRight: '15px'}}
+              />
+              <label className="label">Ticker</label>            
+              <input className={
+                this.state.valid
+                ? 'input'
+                : 'input is-danger'} 
+                type="text" 
+                onChange={this.handleInputChange} 
+                value={this.state.stock} 
+                style={{marginRight: '15px'}}
+              />
+            <button className="button is-info" 
+              onClick={
+                (e) => {
                 e.preventDefault();
                 this.handleClick();
               }}>
-            Add Stock
-          </button>
-        </div>
+              Add Stock
+            </button>
+          </div>
         </form>
+      </div>
       </div>
     );
   }

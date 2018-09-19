@@ -17,7 +17,12 @@ class App extends React.Component {
       portfolioTotal: 0,
       sortBy: 'Alphabetical',
       authenticated: false,
-      user: {}
+      user: {},
+      //taken from HealthCheck
+      currentStock: {},
+      apiWait: false,
+      stocksData: [],
+      currentStockData: {}
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -33,26 +38,33 @@ class App extends React.Component {
     this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
     this.downloadCSV = this.downloadCSV.bind(this);
     this.downloadPDF = this.downloadPDF.bind(this);
+
+    //taken from HealthCheck
+    this.displayStock = this.displayStock.bind(this);
+    this.getStockInfo = this.getStockInfo.bind(this);
+    this.getSpecificStockInfo = this.getSpecificStockInfo.bind(this);
   }
   componentDidMount() {
     //if user logged in or logged out
     firebase.auth().onAuthStateChanged((user) => {
       if (user) { 
         console.log('this is the user data when componentdidmount', user);
-        this.setState({ authenticated: true, user, view: 'home' }, () => this.getStocks(this.state.sortBy, this.state.user.uid))
+        this.setState({ authenticated: true, user, view: 'home' }, 
+          () => {
+            this.getStocks(this.state.sortBy, this.state.user.uid);
+          }
+        )
       } else {
         this.setState({ authenticated: false, user: null , view: 'signin' })
       }
     });
-
     // // get all stocks for this user
     // this.getStocks(this.state.sortBy);
-
+    
     //will update the stock prices every 10 seconds
     setInterval(this.updateAllStockPrices, 60000);
-
   }
-
+  
   createUser(email, password, firstname, lastname) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(() => {
@@ -70,7 +82,7 @@ class App extends React.Component {
       console.error('error code:',errorCode, 'with message: ', errorMessage)
     });
   }
-
+  
   signInUser(email, password) {
     firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
       // Handle Errors here.
@@ -80,34 +92,40 @@ class App extends React.Component {
       window.alert('incorrect username/password')
     });
   }
-
+  
   signOutUser() {
     firebase.auth().signOut()
   }
-
+  
   //gets all the stocks for the user stored in the database and puts them in state
   getStocks(sort, uid) {
     sort = sort || this.state.sortBy;
     uid = uid || this.state.user.uid;
     axios
-      .get('/api/stock', { params: { sort: sort, uid: uid } })
-      .then(({ data }) => {
-        this.setStocks(data);
-      })
-      .then(() => {
-        this.calculateTotal();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    .get('/api/stock', { params: { sort: sort, uid: uid } })
+    .then(({ data }) => {
+      this.setStocks(data);
+    })
+    .then(() => {
+      this.calculateTotal();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
-
+  
   setStocks(stocks) {
-    this.setState({ stocks });
+    this.setState({ stocks }, () => {    
+      this.getStockInfo();
+      //Default render of graph
+      this.displayStock(this.state.stocks[0].stock_ticker)
+    }
+    );
   }
-
+  
   // Removes selected stocks from the database and will re-render the view
   removeStock(evt, stock) {
+    evt.stopPropagation();
     const stockList = [stock.stock_ticker];
     axios
       .delete('/api/deleteStock', { data: {stocks: stockList, uid: this.state.user.uid }})
@@ -217,6 +235,59 @@ class App extends React.Component {
     doc.save('Test.pdf');
   }
 
+   //called when a ticker symbol on the stocks list is clicked
+  //requests the data for that ticker symbol and deposits it in the state
+  displayStock(stock) {
+    return axios
+      .get('/api/stockInfo', { params: { STOCK: stock } })
+      .then(({ data }) => {
+        if(data.Information){
+          this.setState({ apiWait : true});
+        } else {
+          this.setState({ currentStock: data, apiWait : false });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  getSpecificStockInfo(stock) {
+    //create stock array to pass to api
+    axios.get(
+      `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stock.stock_ticker}&types=quote&range=1m&last=5`
+    )
+      .then(({ data }) => {
+        //save stock info to state
+        this.setState({
+          currentStockData: data
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  getStockInfo() {
+    //create stock array to pass to api
+    let stockArr = this.state.stocks.map((stock) => {
+      return stock.stock_ticker;
+    });
+    axios.get(
+      `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stockArr}&types=quote&range=1m&last=5`
+    )
+      .then(({ data }) => {
+        //save stock info to state
+        console.log(data)
+        this.setState({
+          stocksData: data
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   changeView(option) {
     this.setState({
       view: option
@@ -228,9 +299,22 @@ class App extends React.Component {
 
     if(view === 'home') {
       return ( 
+        <div>
+          <div className="columns" >
+            <div className="column is-three-fifths" style={{borderStyle: 'groove'}}>
+              <HealthCheck apiWait={this.state.apiWait} currentStockData={this.state.currentStockData} stocksData={this.state.stocksData} currentStock={this.state.currentStock} />      
+            </div>
+            <div className="column" style={{borderStyle: 'groove'}}>
+              News component
+            </div>
+          </div>
           <div className="columns">
-            <div className="column border">
-              <AddStock getStocks={this.getStocks} />
+            <div className="column is-three-fifths" style={{borderStyle: 'groove'}}>
+              <AddStock 
+                getStocks={this.getStocks} 
+                downloadCSV={this.downloadCSV}
+                downloadPDF={this.downloadPDF}
+              />
               <SortBy updateSort={this.updateSort} />
               <ListOfStocks
                 stocksArray={this.state.stocks}
@@ -238,19 +322,18 @@ class App extends React.Component {
                 calculateTotal={this.calculateTotal}
                 portfolioTotal={this.state.portfolioTotal}
                 getStocks={this.getStocks}
-                downloadCSV={this.downloadCSV}
-                downloadPDF={this.downloadPDF}
+                displayStock={this.displayStock}
+                getSpecificStockInfo={this.getSpecificStockInfo}
               />
             </div>
-            <div className="column is-two-thirds border">
+            <div className="column" style={{borderStyle: 'groove'}}>
               <PortfolioPChart stocks={this.state.stocks} />
             </div>
           </div>
+        </div>
       )
     } else if (view === 'healthcheck') {
-      return (
-        <HealthCheck stocks={this.state.stocks}  />      
-    )
+
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} signInUser={this.signInUser} createUser={this.createUser}/>
     } 
