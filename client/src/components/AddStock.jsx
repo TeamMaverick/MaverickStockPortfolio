@@ -1,11 +1,12 @@
-import React from 'react';
-import axios from 'axios';
+import React from "react";
+import axios from "axios";
+import Select from 'react-virtualized-select';
 
 class AddStock extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      stock: '',
+      stock: "",
       valid: true
     };
     this.handleClick = this.handleClick.bind(this);
@@ -15,9 +16,9 @@ class AddStock extends React.Component {
   handleClick() {
     // call this within call to get stock api
     axios
-      .get('/api/currentStockPrice', { params: { STOCK: this.state.stock } })
+      .get("/api/currentStockPrice", { params: { STOCK: this.state.stock } })
       .then(({ data }) => {
-        return axios.post('/api/stock', {
+        return axios.post("/api/stock", {
           stock: this.state.stock,
           quantity: 1,
           price: data
@@ -27,27 +28,32 @@ class AddStock extends React.Component {
         //on success - refresh stock list
         this.props.getStocks();
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         this.setState({
-          valid : false
-        })
+          valid: false
+        });
       });
   }
   // handle input onchange event (update stock state)
   handleInputChange(evt) {
     this.setState({
-      stock: evt.target.value,
-      valid : true
+      stock: evt.value,
+      valid: true
     });
   }
+
   render() {
     return (
       <div className="field has-addons">
         <div className="control is-expanded">
-          <input className={this.state.valid
-            ? 'input'
-            : 'input is-danger'} type="text" onChange={this.handleInputChange} value={this.state.stock} />
+          <Select
+            type="text"
+            onChange={this.handleInputChange}
+            value={this.state.stock}
+            options={this.props.allStocks}
+            clearable={true}
+          />
         </div>
         <div className="control">
           <a className="button is-info" onClick={this.handleClick}>
@@ -55,7 +61,6 @@ class AddStock extends React.Component {
           </a>
         </div>
       </div>
-
     );
   }
 }

@@ -82,6 +82,17 @@ module.exports = {
       })
   },
 
+  // gets all stocks
+  getAllStocks: function(req, res) {
+    model.getAllStocks()
+    .then((data) => {
+      res.send(data)
+    })
+    .catch((err) => {
+      res.send(err)
+    })
+  },
+
   // get stock info from alphaVantage
   // input : STOCK = ticker symbol
   getStockInfo: (req, res) => {

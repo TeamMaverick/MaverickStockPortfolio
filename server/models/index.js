@@ -91,8 +91,12 @@ module.exports = {
     } else {
       return Stock.findAll({order: [['quantity', 'DESC']]})
     }
-    
   },
+
+  getAllStocks: function() {
+    return TickerNames.findAll()
+  },
+
   // Changes quantity to 0
   deleteStock: function(stocklist) {
     return Stock.destroy({where: {
@@ -110,7 +114,6 @@ module.exports = {
   // update stock quantity
   updateStockQuantity: function (stock, quantity) {
     //check if we have stock
-    console.log('updating')
     return Stock.update({
       quantity : quantity
     }, {

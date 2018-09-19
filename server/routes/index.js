@@ -16,6 +16,9 @@ router.post('/stock', stockController.postStockTicker);
 // get stock(s)
 router.get('/stock', stockController.getStockTicker);
 
+//get all stocks
+router.get('/allStocks', stockController.getAllStocks);
+
 // deletes stock
 router.delete('/deleteStock', stockController.deleteStock);
 
