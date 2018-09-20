@@ -10,7 +10,7 @@ const SignIn = (props) => {
       <div className="hero-body">
         <div className="columns is-multiline is-centered">
           <div className="column">
-            <div className="card">
+            <div className="card card-signin">
               <div className="card-content">
                 <div className="content">
                 <form onSubmit={handleSubmit}>
@@ -36,7 +36,7 @@ const SignIn = (props) => {
                     </p>
                   </div>
                   <div className="field is-grouped">
-                    <div className="control">
+                    <div className="control signin">
                       <button className="button is-link">Sign In</button>
                     </div>
                   </div>

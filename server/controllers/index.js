@@ -146,5 +146,14 @@ module.exports = {
         res.send(err);
         console.log(err);
       });
+  },
+
+  //sends query to IEX API and returns quote and stats
+  getTickerInfo: (req, res) => {
+    alpha.getTickerInfo(req.query.term)
+    .then(({data}) => {
+      res.status(200).send(data)
+    })
   }
+
 };
