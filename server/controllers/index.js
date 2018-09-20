@@ -138,7 +138,6 @@ module.exports = {
       });
   },
   getAllTickers: (req, res) => {
-    console.log(req.query)
     model
       .getAllTickers(req.query.stock_ticker)
       .then((data) => {
