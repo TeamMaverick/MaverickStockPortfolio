@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import Select from 'react-select';
+import Autocomplete from 'react-autocomplete';
 
 class AddStock extends React.Component {
   constructor(props) {
@@ -52,6 +52,15 @@ class AddStock extends React.Component {
   handleInputChange(evt) {
     this.setState({
       stock: evt.target.value
+    }, () => {
+      axios
+        .get('api/tickers',{ params: { stock_ticker: this.state.stock} })
+        .then(( data ) => {
+          this.setState({tickers:data.data})
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     });
   }
   // handle input onchange event (update quantity state)
@@ -67,14 +76,7 @@ class AddStock extends React.Component {
   }
 
   getTickers() {
-    axios
-    .get('api/tickers')
-    .then(( data ) => {
-      this.setState({tickers:data.data})
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+
   }
 
   render() {
@@ -83,14 +85,9 @@ class AddStock extends React.Component {
         <h3 style={{textAlign: 'center', textDecoration: 'underline', marginBottom: '15px'}}>
           Stock Portfolio
         </h3>
-        <form className="field is-horizontal" style={{paddingLeft: '13%'}}>
+        <form className="field is-horizontal" style={{paddingLeft: '30%'}}>
           <div className="field">
-          <Select 
-            options={this.state.tickers} 
-            onChange={this.handleInputChange}
-            style={{width:'500px'}}
-          />
-            {/* <Autocomplete
+            <Autocomplete
               items={
                 this.state.tickers
               }
@@ -104,11 +101,12 @@ class AddStock extends React.Component {
                   {item.label}
                 </div>
               }
+              wrapperStyle={{ position: 'relative', display: 'inline-block' }}
               value={this.state.stock}
-              
+              onChange={this.handleInputChange}
               onSelect={value => this.setState({ stock : value })}
               inputProps={{className:'input', placeholder:'ticker'}}
-            /> */}
+            />
           </div>
           <div className="field" style={{marginLeft: '15px', marginRight: '15px'}}>
             <p className="control">

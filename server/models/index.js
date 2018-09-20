@@ -73,7 +73,7 @@ module.exports = {
   },
 
   //gets a list of all tickers
-  getAllTickers: function () {
-    return TickerNames.findAll();
+  getAllTickers: function (ticker_name) {
+    return TickerNames.findAll({where: {symbol: ticker_name}});
   }
 };
