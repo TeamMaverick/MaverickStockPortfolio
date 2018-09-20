@@ -7,6 +7,7 @@ import HealthCheck from './components/HealthCheck.jsx';
 import News from './components/News.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
 import SignIn from './components/SignIn.jsx';
+import StockDetails from './components/StockDetails.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -273,8 +274,8 @@ class App extends React.Component {
           </div>
         </div>
       )
-    } else if (view === 'healthcheck') {
-
+    } else if (view === 'stockDetails') {
+      return <StockDetails currentStock={this.state.currentStock}/>
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} signInUser={this.signInUser} createUser={this.createUser}/>
     } 
@@ -299,8 +300,8 @@ class App extends React.Component {
                 <li className={this.state.view === 'home' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('home')}>Home</a>
                 </li>
-                <li className={this.state.view === 'healthcheck' ? 'is-active' : ''}>
-                  <a onClick={() => this.changeView('healthcheck')}>Health Check</a>
+                <li className={this.state.view === 'stockDetails' ? 'is-active' : ''}>
+                  <a onClick={() => this.changeView('stockDetails')}> Stock Details</a>
                 </li>
               </ul>
             </div>
