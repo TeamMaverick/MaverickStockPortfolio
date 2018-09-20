@@ -22,7 +22,6 @@ module.exports = {
     } else {
       return Stock.findAll({where: {uid: uid}, order: [['quantity', 'DESC']]})
     }
-    
   },
   // Changes quantity to 0
   deleteStock: function(stocklist, uid) {
@@ -71,5 +70,10 @@ module.exports = {
      .catch((err) => {
        console.log(err);
      })
+  },
+
+  //gets a list of all tickers
+  getAllTickers: function () {
+    return TickerNames.findAll();
   }
 };

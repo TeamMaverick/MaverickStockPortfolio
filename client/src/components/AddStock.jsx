@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Autocomplete from 'react-autocomplete';
 
 class AddStock extends React.Component {
   constructor(props) {
@@ -7,12 +8,18 @@ class AddStock extends React.Component {
     this.state = {
       stock: '',
       quantity: '',
-      valid: true
+      tickers: []
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleQuantChange = this.handleQuantChange.bind(this);
+    this.getTickers = this.getTickers.bind(this);
   }
+  componentDidMount() {
+    this.getTickers();
+  }
+
+
   // handle Add button click event
   handleClick() {
     // call this within call to get stock api
@@ -44,8 +51,7 @@ class AddStock extends React.Component {
   // handle input onchange event (update stock state)
   handleInputChange(evt) {
     this.setState({
-      stock: evt.target.value,
-      valid : true
+      stock: evt.target.value
     });
   }
   // handle input onchange event (update quantity state)
@@ -59,6 +65,21 @@ class AddStock extends React.Component {
       quantity: evt.target.value
     });
   }
+
+  getTickers(sort, uid) {
+    axios
+    .get('/tickers')
+    .then(( data ) => {
+      console.log(data);
+      this.setState({tickers:data}, () =>{
+        console.log(this.state.tickers);
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
   render() {
     return (
       <div>
@@ -67,17 +88,28 @@ class AddStock extends React.Component {
         </h3>
         <form className="field is-horizontal" style={{paddingLeft: '30%'}}>
           <div className="field">
-            <p className="control">
-              <input className={
-                this.state.valid
-                ? 'input'
-                : 'input is-danger'} 
-                type="text" 
-                onChange={this.handleInputChange} 
-                value={this.state.stock} 
-                placeholder="ticker"
-              />
-            </p>
+            <Autocomplete
+              items={[
+                { id: 'c', label: 'c' },
+                { id: 'bar', label: 'bar' },
+                { id: 'baz', label: 'baz' }
+                
+              ]}
+              shouldItemRender={(item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) > -1}
+              getItemValue={item => item.label}
+              renderItem={(item, highlighted) =>
+                <div
+                  key={item.id}
+                  style={{ backgroundColor: highlighted ? '#eee' : 'transparent'}}
+                >
+                  {item.label}
+                </div>
+              }
+              value={this.state.stock}
+              onChange={this.handleInputChange}
+              onSelect={value => this.setState({ stock : value })}
+              inputProps={{className:'input', placeholder:'ticker'}}
+            />
           </div>
           <div className="field" style={{marginLeft: '15px', marginRight: '15px'}}>
             <p className="control">

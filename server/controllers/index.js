@@ -136,5 +136,17 @@ module.exports = {
         res.send(err);
         console.log(err);
       });
+  },
+  getAllTickers: (req, res) => {
+    console.log('not here')
+    model
+      .getAllTickers()
+      .then((data) => {
+        res.send(data);
+      })
+      .catch((err) => {
+        res.send(err);
+        console.log(err);
+      });
   }
 };
