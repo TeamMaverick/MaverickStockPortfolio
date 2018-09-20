@@ -51,7 +51,8 @@ class StockListItem extends React.Component {
           }}>
           <th scope="row">              
             <span className="exporter icon has-text-danger" 
-              onClick={(evt) => {this.props.removeStock(evt, this.props.stock)}}>
+              onClick={(evt) => {
+                this.props.removeStock(evt, this.props.stock)}}>
               <i className="fas fa-lg fa-trash"></i>
             </span>
           </th>
