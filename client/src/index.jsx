@@ -19,8 +19,7 @@ class App extends React.Component {
       user: {},
       //taken from HealthCheck
       currentStock: {},
-      apiWait: false,
-      stocksData: []
+      apiWait: false
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -250,7 +249,7 @@ class App extends React.Component {
               <PortfolioPChart stocks={this.state.stocks} />
             </div>
             <div className="column border">
-              <HealthCheck apiWait={this.state.apiWait} stocksData={this.state.stocksData} currentStock={this.state.currentStock} />      
+              <HealthCheck apiWait={this.state.apiWait} currentStock={this.state.currentStock} displayStock={this.displayStock}/>      
             </div>
           </div>
           <div className="columns border">

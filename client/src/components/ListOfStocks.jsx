@@ -5,7 +5,7 @@ import StockListItem from './StockListItem.jsx';
 var ListOfStocks = function({ stocksArray, removeStock, getStocks, downloadCSV, downloadPDF, displayStock, portfolioTotal }) {
   return (
     <div className="listOfStocks" style={{paddingLeft: '10%', paddingBottom: '5%'}}>
-      <table className="table">
+      <table className="table is-hoverable">
         <thead>
           <tr>
             <th><abbr title="Position"></abbr></th>
@@ -20,17 +20,17 @@ var ListOfStocks = function({ stocksArray, removeStock, getStocks, downloadCSV, 
         </thead>
         <tfoot>
           <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th >
-              <span className="exporter icon is-large has-text-danger" onClick={downloadPDF}>
-                <i className="fas fa-lg fa-file-pdf"></i>
-              </span>
+            <th>
               <span className="exporter icon is-large has-text-success" onClick={downloadCSV}>
-                <i className="fas fa-lg fa-file-excel"></i>
+                <i className="fas fa-lg fa-file-excel" style={{marginRight:'20px'}}></i>
+              </span>
+              <span className="exporter icon is-large has-text-danger" onClick={downloadPDF}>
+                <i className="fas fa-lg fa-file-pdf" style={{marginRight:'60px'}}></i>
               </span>
             </th>
+            <th></th>
+            <th></th>
+            <th></th>
             <th><abbr title="Position">TOTAL</abbr></th>
             <th>              
               ${Number.parseFloat(portfolioTotal)
