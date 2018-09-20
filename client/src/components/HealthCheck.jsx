@@ -8,6 +8,9 @@ class HealthCheck extends React.Component {
   constructor(props) {
     super(props);
   }
+  componentDidMount() {
+    this.props.displayStock('goog')
+  }
 
   render() {
     return (
@@ -19,9 +22,11 @@ class HealthCheck extends React.Component {
           {this.props.apiWait ? (<div className="apiWait">
             <i className="fas fa-pause"></i> 
             Please wait.. API only can we called few times..</div>) : ''}
-          {this.props.currentStock.metaData === undefined ? null : (
+          {this.props.currentStock.quote ? (
             <StockChart currentStock={this.props.currentStock} />
-          )}
+          ): (<img src="https://loading.io/spinners/coolors/lg.palette-rotating-ring-loader.gif" 
+              style={{marginLeft: '30%', marginTop: '5%'}}></img>
+            ) }
         </div>
       </div>
     );
