@@ -27,6 +27,15 @@
   content: url(img/maverick.png);
 }
 
+.spinner {
+  content: url(img/spinner.gif);
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+}
+
 .red {
   color: red;
 }
@@ -134,5 +143,4 @@ h1.healthCheckHeader {
 .pie-label {
   text-decoration: none;
   text-shadow: 0 0 3px black;
-
 }

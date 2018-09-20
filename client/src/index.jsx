@@ -94,20 +94,20 @@ class App extends React.Component {
     sort = sort || this.state.sortBy;
     uid = uid || this.state.user.uid;
     axios
-    .get('/api/stock', { params: { sort: sort, uid: uid } })
-    .then(({ data }) => {
-      this.setStocks(data);
-    })
-    .then(() => {
-      this.calculateTotal();
-    })
-    .then(() => {
-      // console.log(this.state.stocks)
-      this.displayStock(this.state.stocks[0].stock_ticker)
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .get('/api/stock', { params: { sort: sort, uid: uid } })
+      .then(({ data }) => {
+        this.setStocks(data);
+      })
+      .then(() => {
+        this.calculateTotal();
+      })
+      .then(() => {
+        // console.log(this.state.stocks)
+        this.displayStock(this.state.stocks[0].stock_ticker)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   //gets all the stocks for the user stored in the database and puts them in state
@@ -290,15 +290,9 @@ class App extends React.Component {
                 displayStock={this.displayStock}/>      
             </div>
           </div>
-          <div className="columns border" style={{height: '500px'}} >
-            <div className="column">
-              <StockDetails currentStock={this.state.currentStock}/>    
-            </div>
-          </div>
+          <StockDetails peers={this.state.currentStock.peers} news={this.state.currentStock.news}/>    
         </div>
       )
-    // } else if (view === 'stockDetails') {
-    //   return <StockDetails currentStock={this.state.currentStock}/>
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} signInUser={this.signInUser} createUser={this.createUser}/>
     } 
@@ -323,9 +317,6 @@ class App extends React.Component {
                 <li className={this.state.view === 'home' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('home')}>Home</a>
                 </li>
-                {/* <li className={this.state.view === 'stockDetails' ? 'is-active' : ''}>
-                  <a onClick={() => this.changeView('stockDetails')}> Stock Details</a>
-                </li> */}
               </ul>
             </div>
         }

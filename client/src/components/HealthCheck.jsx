@@ -19,13 +19,9 @@ class HealthCheck extends React.Component {
           <div className="box has-text-centered">
             Chosen Stock (%Change Day, %Change Year, Volume)
           </div>
-          {this.props.apiWait ? (<div className="apiWait">
-            <i className="fas fa-pause"></i> 
-            Please wait.. API only can we called few times..</div>) : ''}
           {this.props.currentStock.quote ? (
             <StockChart currentStock={this.props.currentStock} />
-          ): (<img src="https://loading.io/spinners/coolors/lg.palette-rotating-ring-loader.gif" 
-              style={{marginLeft: '30%', marginTop: '5%'}}></img>
+          ): (<img className="spinner" style={{alignContent: 'center'}}/>
             ) }
         </div>
       </div>

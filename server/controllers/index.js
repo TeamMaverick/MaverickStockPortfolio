@@ -35,7 +35,8 @@ module.exports = {
         returnData = {
           quote: data.quote,
           data: [],
-          news: data.news
+          news: data.news,
+          peers: data.peers
         };
         // get stock info with quote, chart, and news
         // flatten object stucture into array for StockChart

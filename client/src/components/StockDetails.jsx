@@ -1,9 +1,12 @@
 import React from 'react';
+import Peers from './Peers.jsx';
+import News from './News.jsx';
 
-const StockDetails = ({ currentStock }) => (
+const StockDetails = ({ peers, news }) => (
   <div>
-    {/* ${currentStock.quote.symbol} */}
+    <Peers peers={peers} />
+    <News news={news}/>
   </div>
-);
+)
 
 export default StockDetails;
