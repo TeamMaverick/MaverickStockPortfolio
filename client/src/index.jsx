@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-
 import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
-import HealthCheckAPIFIX from './components/HealthCheckAPIFIX.jsx';
 import HealthCheck from './components/HealthCheck.jsx';
 import News from './components/News.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
@@ -21,7 +19,6 @@ class App extends React.Component {
       user: {},
       //taken from HealthCheck
       currentStock: {},
-      apiWait: false,
       stocksData: []
     };
     this.getStocks = this.getStocks.bind(this);
@@ -45,7 +42,6 @@ class App extends React.Component {
     //if user logged in or logged out
     firebase.auth().onAuthStateChanged((user) => {
       if (user) { 
-        console.log('this is the user data when componentdidmount', user);
         this.setState({ authenticated: true, user, view: 'home' }, 
         () => {
           this.getStocks(null, this.state.user.uid);
@@ -223,12 +219,8 @@ class App extends React.Component {
   displayStock(stock) {
     return axios
       .get('/api/stockInfo', { params: { STOCK: stock } })
-      .then(({ data }) => {
-        if(data.Information){
-          this.setState({ apiWait : true});
-        } else {
-          this.setState({ currentStock: data, apiWait : false });
-        }
+      .then(({data}) => {
+        this.setState({ currentStock: data });
       })
       .catch((err) => {
         console.log(err);
@@ -252,7 +244,7 @@ class App extends React.Component {
               <PortfolioPChart stocks={this.state.stocks} />
             </div>
             <div className="column border">
-              <HealthCheck apiWait={this.state.apiWait} stocksData={this.state.stocksData} currentStock={this.state.currentStock} />      
+              <HealthCheck stocksData={this.state.stocksData} currentStock={this.state.currentStock} />      
             </div>
           </div>
           <div className="columns border">
@@ -276,9 +268,7 @@ class App extends React.Component {
         </div>
       )
     } else if (view === 'healthcheck') {
-      return (
-        <HealthCheckAPIFIX stocks={this.state.stocks}  />      
-    )
+
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} signInUser={this.signInUser} createUser={this.createUser}/>
     } 

@@ -12,8 +12,10 @@ const getData = (ticker) => {
   //     symbol: ticker
   //   }
   // });
+
+  // https://api.iextrading.com/1.0/stock/amzn/batch?types=quote,news,chart&range=1m
   return axios.get(
-    `${process.env.API_ticker}/stock/${ticker}/batch?types=quote,news,chart&range=1m`)
+    `${process.env.API_ticker}/stock/${ticker}/batch?types=quote,news,chart&range=1y`)
 };
 
 // grabs peer stocks of given stock
@@ -25,8 +27,6 @@ const getPeers = (ticker) => {
 
 //get the most up-to-date price from IEX API
 const getCurrentPrice = (ticker) => {
-  console.log('API_ticker', process.env.API_ticker);
-  console.log('ticker', ticker);
   var url = `${process.env.API_ticker}/stock/${ticker}/price`;
   return axios.get(url)
 }

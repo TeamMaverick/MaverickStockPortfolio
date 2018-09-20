@@ -19,9 +19,9 @@ class HealthCheck extends React.Component {
           {this.props.apiWait ? (<div className="apiWait">
             <i className="fas fa-pause"></i> 
             Please wait.. API only can we called few times..</div>) : ''}
-          {this.props.currentStock.metaData === undefined ? null : (
+          {this.props.currentStock.quote ? (
             <StockChart currentStock={this.props.currentStock} />
-          )}
+          ): null}
         </div>
       </div>
     );

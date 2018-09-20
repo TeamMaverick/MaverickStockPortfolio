@@ -31,32 +31,32 @@ module.exports = {
   getStockInfo: (req, res) => {
     alpha
       .getData(req.query.STOCK)
-      .then(({ data }) => {
-        if(data.Information){
-          res.send(data);
+      .then(({data}) => {
+        returnData = {
+          quote: data.quote,
+          data: [],
+          news: data.news
+        };
+        // get stock info with quote, chart, and news
+        // flatten object stucture into array for StockChart
+        let timeSeries = data.chart;
+        for (let point of data.chart) {
+          // CODE FOR WHEN USING 1d FOR API CALL
+          /* 
+          let year = point.date.substring(0,4);
+          let month = point.date.substring(4,6);
+          let day = point.date.substring(6,8);
+          let hour = point.minute.substring(0,2);
+          let minute = point.minute.substring(3,5);
+          let date = new Date(year, month-1, day, hour, minute);
+          */
+
+          let date = new Date(point.date);
+          let arrVaules = [date.getTime(), point.open, point.high, 
+                              point.low, point.close, point.volume];
+          returnData.data.push(arrVaules);
         }
-        else {
-          returnData = {
-            metaData: data['Meta Data'],
-            data: []
-          };
-          //get Time Series (5min)
-          // flatten object stucture into array for data vis
-          let timeSeries = data['Time Series (5min)'];
-          for (var key in timeSeries) {
-            if (timeSeries.hasOwnProperty(key)) {
-              var obj = timeSeries[key];
-              let arrVaules = [];
-              for (var prop in obj) {
-                arrVaules.push(parseFloat(obj[prop]));
-              }
-              returnData.data.push([new Date(key).getTime()].concat(arrVaules));
-            }
-          }
-          returnData.data.reverse();
-          res.send(returnData);
-        }
-        
+        res.send(returnData);
       })
       .catch((err) => {
         console.log(err);
