@@ -22,6 +22,7 @@ class App extends React.Component {
       currentStock: {},
     };
     this.getStocks = this.getStocks.bind(this);
+    this.getStocksInitial = this.getStocksInitial.bind(this);
     this.setStocks = this.setStocks.bind(this);
     this.removeStock = this.removeStock.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
@@ -44,7 +45,7 @@ class App extends React.Component {
       if (user) { 
         this.setState({ authenticated: true, user, view: 'home' }, 
         () => {
-          this.getStocks(null, this.state.user.uid);
+          this.getStocksInitial(null, this.state.user.uid);
         }
       )
     } else {
@@ -88,6 +89,27 @@ class App extends React.Component {
     firebase.auth().signOut()
   }
   
+  //gets all the stocks for the user stored in the database and puts them in state
+  getStocksInitial(sort, uid) {
+    sort = sort || this.state.sortBy;
+    uid = uid || this.state.user.uid;
+    axios
+    .get('/api/stock', { params: { sort: sort, uid: uid } })
+    .then(({ data }) => {
+      this.setStocks(data);
+    })
+    .then(() => {
+      this.calculateTotal();
+    })
+    .then(() => {
+      // console.log(this.state.stocks)
+      this.displayStock(this.state.stocks[0].stock_ticker)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
   //gets all the stocks for the user stored in the database and puts them in state
   getStocks(sort, uid) {
     sort = sort || this.state.sortBy;
@@ -268,10 +290,15 @@ class App extends React.Component {
                 displayStock={this.displayStock}/>      
             </div>
           </div>
+          <div className="columns border" style={{height: '500px'}} >
+            <div className="column">
+              <StockDetails currentStock={this.state.currentStock}/>    
+            </div>
+          </div>
         </div>
       )
-    } else if (view === 'stockDetails') {
-      return <StockDetails currentStock={this.state.currentStock}/>
+    // } else if (view === 'stockDetails') {
+    //   return <StockDetails currentStock={this.state.currentStock}/>
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} signInUser={this.signInUser} createUser={this.createUser}/>
     } 
@@ -296,9 +323,9 @@ class App extends React.Component {
                 <li className={this.state.view === 'home' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('home')}>Home</a>
                 </li>
-                <li className={this.state.view === 'stockDetails' ? 'is-active' : ''}>
+                {/* <li className={this.state.view === 'stockDetails' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('stockDetails')}> Stock Details</a>
-                </li>
+                </li> */}
               </ul>
             </div>
         }

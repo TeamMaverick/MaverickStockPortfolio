@@ -4,7 +4,7 @@ import HighchartsReact from 'highcharts-react-official';
 
 var pieColors = (function () {
   var colors = [],
-      base = "#a24545",
+      base = "#003366",
       i;
   for (i = 0; i < 10; i += 1) {
       // Start out with a darkened base color (negative brighten), and end
