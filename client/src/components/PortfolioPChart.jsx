@@ -2,6 +2,18 @@ import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
+var pieColors = (function () {
+  var colors = [],
+      base = "#a24545",
+      i;
+  for (i = 0; i < 10; i += 1) {
+      // Start out with a darkened base color (negative brighten), and end
+      // up with a much brighter color
+      colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
+  }
+  return colors;
+}());
+
 var PortfolioPChart = ({ stocks }) => {
   var options = {
     chart: {
@@ -21,15 +33,22 @@ var PortfolioPChart = ({ stocks }) => {
       pie: {
         allowPointSelect: true,
         cursor: 'pointer',
+        colors: pieColors,
         dataLabels: {
-          enabled: true,
-          format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-          style: {
-            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-          }
+            enabled: true,
+            format: '<b>{point.name}</b><br>{point.percentage:.1f} %',
+            distance: -50,
+            filter: {
+                property: 'percentage',
+                operator: '>',
+                value: 4
+            },
+            style:{
+              textOutline: '1px #383838'
+            }
         }
-      }
-    },
+    }
+},
     series: [
       {
         name: 'Stocks',

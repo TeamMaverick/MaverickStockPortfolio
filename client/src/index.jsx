@@ -239,19 +239,8 @@ class App extends React.Component {
     if(view === 'home') {
       return ( 
         <div>
-          <div className="columns border" style={{height: '500px'}} >
-            <div className="column is-half">
-              <PortfolioPChart stocks={this.state.stocks} />
-            </div>
-            <div className="column border">
-              <HealthCheck 
-                stocksData={this.state.stocksData} 
-                currentStock={this.state.currentStock} 
-                displayStock={this.displayStock}/>      
-            </div>
-          </div>
           <div className="columns border">
-            <div className="column" style={{marginBottom: '50px'}}>
+            <div className="column is-two-thirds" style={{marginBottom: '50px'}}>
               <AddStock 
                 getStocks={this.getStocks} 
               />
@@ -266,6 +255,17 @@ class App extends React.Component {
                 downloadPDF={this.downloadPDF}
                 portfolioTotal={this.state.portfolioTotal}
               />
+            </div>
+            <div className="column border is-one-third">
+              <PortfolioPChart stocks={this.state.stocks} />
+            </div>
+          </div>
+          <div className="columns border" style={{height: '500px'}} >
+            <div className="column">
+              <HealthCheck 
+                stocksData={this.state.stocksData} 
+                currentStock={this.state.currentStock} 
+                displayStock={this.displayStock}/>      
             </div>
           </div>
         </div>

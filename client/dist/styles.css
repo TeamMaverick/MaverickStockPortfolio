@@ -37,10 +37,10 @@
 
 .listOfStocks {
   padding-top: 20px;
+  font-size: 14px;
 }
 
 .listOfStocks .head {
-  font-size: 16px;
   font-weight: bold;
   text-decoration: underline;
 }
@@ -129,4 +129,10 @@ h1.healthCheckHeader {
 
 .exporter {
   cursor: pointer;
+}
+
+.pie-label {
+  text-decoration: none;
+  text-shadow: 0 0 3px black;
+
 }
