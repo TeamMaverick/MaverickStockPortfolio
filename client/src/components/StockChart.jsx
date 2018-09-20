@@ -46,7 +46,7 @@ var StockChart = ({ currentStock }) => {
     },
     series: [
       {
-        name: `${ticker}`,
+        name: `${ticker.toUpperCase()}`,
         type: 'area',
         data: currentStock.data,
         gapSize: 5,

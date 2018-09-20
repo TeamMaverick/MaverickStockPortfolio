@@ -20,15 +20,14 @@ var ListOfStocks = function({ stocksArray, removeStock, getStocks, downloadCSV, 
         </thead>
         <tfoot>
           <tr>
-            <th>
+            <th colSpan={2}>
               <span className="exporter icon is-large has-text-success" onClick={downloadCSV}>
-                <i className="fas fa-lg fa-file-excel" style={{marginRight:'20px'}}></i>
+                <i className="fas fa-lg fa-file-excel"></i>
               </span>
               <span className="exporter icon is-large has-text-danger" onClick={downloadPDF}>
-                <i className="fas fa-lg fa-file-pdf" style={{marginRight:'60px'}}></i>
+                <i className="fas fa-lg fa-file-pdf"></i>
               </span>
             </th>
-            <th></th>
             <th></th>
             <th></th>
             <th><abbr title="Position">TOTAL</abbr></th>
