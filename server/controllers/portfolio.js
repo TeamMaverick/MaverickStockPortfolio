@@ -11,7 +11,6 @@ module.exports = {
         .then(({data}) => {
           // now with the structure, create the object bones to return
           portfolio = calculatePortfolio(data, transactions)
-          console.log(portfolio)
           return calculateValueOfHoldings(portfolio, time)
         })
         .catch((err) => {

@@ -179,3 +179,7 @@ div.search {
   display: block;
   margin: 0px auto
 }
+
+.table {
+  width: 100%;
+}

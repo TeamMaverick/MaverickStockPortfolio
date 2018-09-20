@@ -9,6 +9,9 @@ import PortfolioPChart from './components/PortfolioPChart.jsx';
 import SignIn from './components/SignIn.jsx';
 import Search from './components/Search.jsx';
 import CompareList from './components/CompareList.jsx';
+import BuySell from './components/BuySell.jsx';
+
+import PortfolioChart from './components/PortfolioChart.jsx';
 
 
 class App extends React.Component {
@@ -19,7 +22,12 @@ class App extends React.Component {
       allStocks: [],
       stocks: [],
       portfolioTotal: 0,
-      sortBy: 'Alphabetical'
+      sortBy: 'Alphabetical',
+      portfolio: {},
+      portfolioHistory: {},
+      paneToggle: 'pie',
+      portfolioDataToggle: 'unrealizedGL',
+      modalOpen: false
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -32,14 +40,42 @@ class App extends React.Component {
     this.changeView = this.changeView.bind(this);
     this.renderView = this.renderView.bind(this);
     this.removeStock = this.removeStock.bind(this);
+    this.getPortfolioHistory = this.getPortfolioHistory.bind(this);
+    this.getPortfolioHoldings = this.getPortfolioHoldings.bind(this);
+    this.changeToggle = this.changeToggle.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+
   }
+  
   componentDidMount() {
     // get all stocks for this user
     this.getStocks(this.state.sortBy);
     this.getAllStocks();
-
+    this.getPortfolioHoldings();
+    this.getPortfolioHistory();
     //will update the stock prices every 10 seconds
     setInterval(this.updateAllStockPrices, 30000);
+  }
+
+  getPortfolioHistory() {
+    axios.get('/api/portfolio', {
+      userId: 1,
+      })
+      .then(({data}) => {
+        this.setState({
+          portfolioHistory: data
+        })
+      })
+  }
+
+  getPortfolioHoldings() {
+    axios.get('/api/holdings')
+      .then(({data}) => {
+        this.setState({
+          portfolio: data
+        })
+        this.calculateTotal()
+      })
   }
 
   //gets all the stocks for the user stored in the database and puts them in state
@@ -56,6 +92,15 @@ class App extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  toggleModal() {
+    console.log('Toggle bitch');
+    let newState = !this.state.modalOpen
+    console.log(newState);
+    this.setState({
+      modalOpen: newState
+    })
   }
 
   //gets all stocks from ticker
@@ -145,14 +190,16 @@ class App extends React.Component {
 
   //calculates grand total value for list of stocks
   calculateTotal() {
-    const total = this.state.stocks
-      .map((stock) => {
-        return stock.quantity * stock.price;
-      })
-      .reduce((total, subtotal) => {
-        return total + subtotal;
-      }, 0);
-    this.setState({ portfolioTotal: total });
+    if (Object.keys(this.state.portfolio).length > 0) {
+      const total = this.state.portfolio
+        .map((stock) => {
+          return stock.quantity * stock.price
+        })
+        .reduce((total, subtotal) => {
+          return total + subtotal
+        }, 0);
+      this.setState({ portfolioTotal: total })
+    }
   }
 
   changeView(option) {
@@ -161,31 +208,93 @@ class App extends React.Component {
     });
   }
 
-  renderView (){
-    const {view} = this.state;
+  changeToggle(option) {
+    this.setState({
+      paneToggle: option
+    })
+  }
 
+  changeData(option) {
+    this.setState({
+      portfolioDataToggle: option
+    })
+  }
+
+  renderView (){
+    const {view} = this.state
+    let currentToggle
+
+    if (this.state.paneToggle === 'pie') {
+      currentToggle = 
+      (
+        <div className="column is-three-fifths border">
+          <div className="buttons has-addons">
+            <span className="button" onClick={() => {this.changeToggle('else')}}>Portfolio Returns</span>
+            <span className="button is-danger is-selected">Portfolio Composition</span>
+          </div>
+          <PortfolioPChart stocks={this.state.portfolio} />
+        </div>
+      )
+    } else {
+
+      currentToggle = 
+      (
+        <div className="column is-three-fifths border">
+          <div className="buttons has-addons">
+            <span className="button is-danger is-selected">Portfolio Returns</span>
+            <span className="button" onClick={() => {this.changeToggle('pie')}}>Portfolio Composition</span>
+          </div>
+          <div className="buttons has-addons">
+            <span 
+              className={`button is-small ${this.state.portfolioDataToggle === 'realizedGL' ? 'is-selected is-info': null}`}
+              onClick={() => {this.changeData('realizedGL')}}
+            >
+              Realized Gain/Loss
+            </span>
+            <span 
+              className={`button is-small ${this.state.portfolioDataToggle === 'valueOfHoldings' ? 'is-selected is-info': null}`}
+              onClick={() => {this.changeData('valueOfHoldings')}}
+            >
+              Value of Holdings
+            </span>
+            <span 
+              className={`button is-small ${this.state.portfolioDataToggle === 'unrealizedGL' ? 'is-selected is-info': null}`} 
+              onClick={() => {this.changeData('unrealizedGL')}}
+            >
+              Unrealized Gain/Loss
+            </span>
+          </div>
+          <PortfolioChart portfolioHistory={this.state.portfolioHistory} option={this.state.portfolioDataToggle}/>
+        </div>
+      )
+    }
+    
     if(view === 'home') {
       return ( 
           <div className="columns">
             <div className="column border">
-              <AddStock getStocks={this.getStocks} allStocks={this.state.allStocks}/>
-              <SortBy updateSort={this.updateSort} />
+              {/* <SortBy updateSort={this.updateSort} /> */}
               <ListOfStocks
-                stocksArray={this.state.stocks}
+                stocksArray={this.state.portfolio}
                 removeCheckedBoxes={this.removeCheckedBoxes}
                 calculateTotal={this.calculateTotal}
                 portfolioTotal={this.state.portfolioTotal}
                 getStocks={this.getStocks}
+                toggleModal={this.toggleModal}
               />
             </div>
-            <div className="column is-two-thirds border">
-              <PortfolioPChart stocks={this.state.stocks} />
-            </div>
+            {currentToggle}
           </div>
       )
     } else if (view === 'research') {
       return (
-        <Research stocks={this.state.stocks} getStocks={this.getStocks} removeStock={this.removeStock} allStocks={this.state.allStocks}  />      
+        <Research 
+          stocks={this.state.stocks} 
+          getStocks={this.getStocks} 
+          removeStock={this.removeStock} 
+          allStocks={this.state.allStocks} 
+          toggleModal={this.toggleModal} 
+        />      
     )
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} />
@@ -227,6 +336,7 @@ class App extends React.Component {
         <div className="container">
           {this.renderView()}
         </div>
+        <BuySell modalOpen={this.state.modalOpen} toggleModal={this.toggleModal}></BuySell>
       </div>
     );
   }
