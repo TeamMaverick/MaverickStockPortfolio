@@ -63,15 +63,13 @@ class AddStock extends React.Component {
   }
   // handle input onchange event (update quantity state)
   handleQuantChange(evt) {
+    // TODO: NOT DONE
     if (evt.target.validity.badInput) {
       console.log('hi')
       this.setState({quantity: 0})
     } else {
       this.setState({quantity: evt.target.value})
     }
-    // this.setState({
-    //   quantity: evt.target.value
-    // });
   }
 
   render() {
