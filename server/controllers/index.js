@@ -1,8 +1,64 @@
 const model = require('../models/index.js');
 const alpha = require('../alphaVantage/index.js');
+const portfolioCalculator = require('./portfolio.js');
 
 //Return requests to the client
 module.exports = {
+  
+  // Handles all logic needed to 'buy' a stock.
+  buyStock: (req, res) => {  // HANDLE QUANTITIES OVER 1
+    alpha
+      .getCurrentPrice(req.body.stock)
+      .then(({ data }) => {
+        let buyPromises = [];
+        for (var i = 0; i < req.body.quantity; i++) {
+          buyPromises.push(model.buyStock(req.body.stock, data, req.body.userId, req.body.transactionType))
+        }
+        Promise.all(buyPromises)
+          .then((data) => {
+            res.send(data);
+          })
+      })
+      .catch((err) => {
+        console.log(err);
+        res.sendStatus(500);
+      });
+  },
+  
+  sellStock: (req, res) => { // HANDLE QUANTITIES OVER 1
+    alpha
+      .getCurrentPrice(req.body.stock)
+      .then(({ data }) => {
+        model.sellStock(req.body.stock, data, req.body.userId, req.body.quantity)
+          .then((data) => {
+            res.send(data)
+          })
+          .catch((err) => {
+            console.log(err)
+            res.send({message: 'Failed to sell, you may not have enough shares'})
+          })
+      })
+      .catch((err) => {
+        console.log(err)
+        res.sendStatus(500)
+      });
+  },
+
+  history: (req, res) => {
+    model.pullUserTransactions(req.query.userId)
+      .then((data)=> {
+        // With the data, punt to another controller file.
+        portfolioCalculator.getPortfolio(data)
+          .then((portfolio) => {
+            res.send(portfolio)
+          })
+      })
+      .catch((err) => {
+        console.log(err)
+        res.sendStatus(500)
+      })
+  },
+  
   // Calls function in model to post stock ticker to database
   postStockTicker: (req, res) => {
     model.saveStock(req.body.stock, req.body.quantity, req.body.price)
@@ -108,7 +164,7 @@ module.exports = {
   updateStockQuantity: (req, res) => {
     let newQuantity = req.body.param.quantity;
     let stock = req.body.param.stock;
-    if(newQuantity && stock){
+    if(newQuantity !== undefined && stock){
       model.updateStockQuantity(stock, newQuantity)
         .then((data) => {
           res.sendStatus(201);
