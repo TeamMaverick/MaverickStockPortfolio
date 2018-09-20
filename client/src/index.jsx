@@ -19,7 +19,6 @@ class App extends React.Component {
       user: {},
       //taken from HealthCheck
       currentStock: {},
-      apiWait: false
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -42,7 +41,6 @@ class App extends React.Component {
     //if user logged in or logged out
     firebase.auth().onAuthStateChanged((user) => {
       if (user) { 
-        console.log('this is the user data when componentdidmount', user);
         this.setState({ authenticated: true, user, view: 'home' }, 
         () => {
           this.getStocks(null, this.state.user.uid);
@@ -220,12 +218,8 @@ class App extends React.Component {
   displayStock(stock) {
     return axios
       .get('/api/stockInfo', { params: { STOCK: stock } })
-      .then(({ data }) => {
-        if(data.Information){
-          this.setState({ apiWait : true});
-        } else {
-          this.setState({ currentStock: data, apiWait : false });
-        }
+      .then(({data}) => {
+        this.setState({ currentStock: data });
       })
       .catch((err) => {
         console.log(err);
@@ -249,7 +243,7 @@ class App extends React.Component {
               <PortfolioPChart stocks={this.state.stocks} />
             </div>
             <div className="column border">
-              <HealthCheck apiWait={this.state.apiWait} currentStock={this.state.currentStock} displayStock={this.displayStock}/>      
+              <HealthCheck stocksData={this.state.stocksData} currentStock={this.state.currentStock} />      
             </div>
           </div>
           <div className="columns border">
