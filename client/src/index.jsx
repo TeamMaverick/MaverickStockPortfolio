@@ -5,7 +5,6 @@ import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
 import HealthCheck from './components/HealthCheck.jsx';
 import News from './components/News.jsx';
-import SortBy from './components/SortBy.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
 import SignIn from './components/SignIn.jsx';
 
@@ -16,20 +15,17 @@ class App extends React.Component {
       view : 'signin',
       stocks: [],
       portfolioTotal: 0,
-      sortBy: 'Alphabetical',
       authenticated: false,
       user: {},
       //taken from HealthCheck
       currentStock: {},
       apiWait: false,
-      stocksData: [],
-      currentStockData: {}
+      stocksData: []
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
     this.removeStock = this.removeStock.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
-    this.updateSort = this.updateSort.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
     this.changeView = this.changeView.bind(this);
     this.renderView = this.renderView.bind(this);
@@ -42,7 +38,6 @@ class App extends React.Component {
     
     //taken from HealthCheck
     this.displayStock = this.displayStock.bind(this);
-    this.getSpecificStockInfo = this.getSpecificStockInfo.bind(this);
   }
   componentDidMount() {
     //if user logged in or logged out
@@ -51,15 +46,13 @@ class App extends React.Component {
         console.log('this is the user data when componentdidmount', user);
         this.setState({ authenticated: true, user, view: 'home' }, 
         () => {
-          this.getStocks(this.state.sortBy, this.state.user.uid);
+          this.getStocks(null, this.state.user.uid);
         }
       )
     } else {
         this.setState({ authenticated: false, user: null , view: 'signin' })
       }
     });
-    // // get all stocks for this user
-    // this.getStocks(this.state.sortBy);
     
     //will update the stock prices every 10 seconds
     setInterval(this.updateAllStockPrices, 60000);
@@ -115,10 +108,7 @@ class App extends React.Component {
   }
   
   setStocks(stocks) {
-    this.setState({ stocks }, () => {    
-      //Default render of graph
-    }
-    );
+    this.setState({ stocks });
   }
   
   // Removes selected stocks from the database and will re-render the view
@@ -152,13 +142,6 @@ class App extends React.Component {
       })
     )
     .then(this.getStocks);
-  }
-
-  updateSort(criteria) {
-    this.setState({
-      sortBy: criteria
-    });
-    this.getStocks(criteria);
   }
 
   //calculates grand total value for list of stocks
@@ -250,22 +233,6 @@ class App extends React.Component {
       });
   }
 
-  getSpecificStockInfo(stock) {
-    //create stock array to pass to api
-    axios.get(
-      `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stock.stock_ticker}&types=quote&range=1m&last=5`
-    )
-      .then(({ data }) => {
-        //save stock info to state
-        this.setState({
-          currentStockData: data
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
   changeView(option) {
     this.setState({
       view: option
@@ -278,22 +245,19 @@ class App extends React.Component {
     if(view === 'home') {
       return ( 
         <div>
-          <div className="columns" >
-            <div className="column is-three-fifths" style={{borderStyle: 'groove'}}>
-              <HealthCheck apiWait={this.state.apiWait} currentStockData={this.state.currentStockData} stocksData={this.state.stocksData} currentStock={this.state.currentStock} />      
+          <div className="columns border" style={{height: '500px'}} >
+            <div className="column is-half">
+              <PortfolioPChart stocks={this.state.stocks} />
             </div>
-            <div className="column" style={{borderStyle: 'groove'}}>
-              <News />
+            <div className="column border">
+              <HealthCheck apiWait={this.state.apiWait} stocksData={this.state.stocksData} currentStock={this.state.currentStock} />      
             </div>
           </div>
-          <div className="columns">
-            <div className="column is-three-fifths" style={{borderStyle: 'groove'}}>
+          <div className="columns border">
+            <div className="column" style={{marginBottom: '50px'}}>
               <AddStock 
                 getStocks={this.getStocks} 
-                downloadCSV={this.downloadCSV}
-                downloadPDF={this.downloadPDF}
               />
-              <SortBy updateSort={this.updateSort} />
               <ListOfStocks
                 stocksArray={this.state.stocks}
                 removeStock={this.removeStock}
@@ -301,11 +265,10 @@ class App extends React.Component {
                 getStocks={this.getStocks}
                 displayStock={this.displayStock}
                 getSpecificStockInfo={this.getSpecificStockInfo}
+                downloadCSV={this.downloadCSV}
+                downloadPDF={this.downloadPDF}
+                portfolioTotal={this.state.portfolioTotal}
               />
-            </div>
-            <div className="column" style={{borderStyle: 'groove'}}>
-              <div className="totalprice" style={{textAlign: 'center', marginTop: '15px', fontWeight: 'bold'}}>Portfolio Total : ${Number.parseFloat(this.state.portfolioTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</div>     
-              <PortfolioPChart stocks={this.state.stocks} />
             </div>
           </div>
         </div>

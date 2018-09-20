@@ -2,9 +2,9 @@ import React from 'react';
 import StockListItem from './StockListItem.jsx';
 
 //List component that displays all the stocks the user has saved
-var ListOfStocks = function({ stocksArray, removeStock, getStocks, downloadCSV, downloadPDF, displayStock }) {
+var ListOfStocks = function({ stocksArray, removeStock, getStocks, downloadCSV, downloadPDF, displayStock, portfolioTotal }) {
   return (
-    <div className="listOfStocks">
+    <div className="listOfStocks" style={{paddingLeft: '10%', paddingBottom: '5%'}}>
       <table className="table">
         <thead>
           <tr>
@@ -18,6 +18,28 @@ var ListOfStocks = function({ stocksArray, removeStock, getStocks, downloadCSV, 
             <th><abbr title="Position">YTD Change</abbr></th>            
           </tr>
         </thead>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th >
+              <span className="exporter icon is-large has-text-danger" onClick={downloadPDF}>
+                <i className="fas fa-lg fa-file-pdf"></i>
+              </span>
+              <span className="exporter icon is-large has-text-success" onClick={downloadCSV}>
+                <i className="fas fa-lg fa-file-excel"></i>
+              </span>
+            </th>
+            <th><abbr title="Position">TOTAL</abbr></th>
+            <th>              
+              ${Number.parseFloat(portfolioTotal)
+                .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+            </th>
+            <th>$ </th>
+            <th>$ </th>   
+          </tr> 
+        </tfoot>  
         <tbody>
           {stocksArray.length ? stocksArray.map((stock) => {
             return <StockListItem stock={stock} key={stock.stock_ticker} getStocks={getStocks} removeStock={removeStock} displayStock={displayStock}/>;
