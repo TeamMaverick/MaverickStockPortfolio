@@ -19,7 +19,6 @@ class App extends React.Component {
       user: {},
       //taken from HealthCheck
       currentStock: {},
-      stocksData: []
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
