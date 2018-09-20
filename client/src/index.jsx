@@ -243,7 +243,7 @@ class App extends React.Component {
               <PortfolioPChart stocks={this.state.stocks} />
             </div>
             <div className="column border">
-              <HealthCheck stocksData={this.state.stocksData} currentStock={this.state.currentStock} />      
+              <HealthCheck stocksData={this.state.stocksData} currentStock={this.state.currentStock} displayStock={this.displayStock}/>      
             </div>
           </div>
           <div className="columns border">

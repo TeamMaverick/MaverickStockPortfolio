@@ -13,10 +13,10 @@ class AddStock extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleQuantChange = this.handleQuantChange.bind(this);
-    this.getTickers = this.getTickers.bind(this);
+    // this.getTickers = this.getTickers.bind(this);
   }
   componentDidMount() {
-    this.getTickers();
+    // this.getTickers();
   }
 
 
@@ -66,19 +66,19 @@ class AddStock extends React.Component {
     });
   }
 
-  getTickers(sort, uid) {
-    axios
-    .get('/tickers')
-    .then(( data ) => {
-      console.log(data);
-      this.setState({tickers:data}, () =>{
-        console.log(this.state.tickers);
-      })
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
+  // getTickers(sort, uid) {
+  //   axios
+  //   .get('/tickers')
+  //   .then(( data ) => {
+  //     console.log(data);
+  //     this.setState({tickers:data}, () =>{
+  //       console.log(this.state.tickers);
+  //     })
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+  // }
 
   render() {
     return (
