@@ -138,7 +138,7 @@ module.exports = {
   postTickersAndNames: function(stockArray) {
     return TickerNames.bulkCreate(stockArray)
      .then(() => {
-       console.log('Created');
+      //  console.log('Created');
      })
      .catch((err) => {
        console.log(err);
