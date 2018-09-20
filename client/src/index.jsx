@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
+import axios from 'axios'
 import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
 import HealthCheck from './components/HealthCheck.jsx';
 import SortBy from './components/SortBy.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
 import SignIn from './components/SignIn.jsx';
-
+import MessageBox from './components/MessageBox.jsx'
 
 class App extends React.Component {
   constructor(props) {
@@ -36,7 +36,7 @@ class App extends React.Component {
     this.getAllStocks();
 
     //will update the stock prices every 10 seconds
-    setInterval(this.updateAllStockPrices, 10000);
+    // setInterval(this.updateAllStockPrices, 10000);
   }
 
   //gets all the stocks for the user stored in the database and puts them in state
@@ -174,6 +174,8 @@ class App extends React.Component {
     )
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} />
+    } else if (view === 'chat') {
+      return <MessageBox />
     }
 
   }
@@ -198,6 +200,9 @@ class App extends React.Component {
                 </li>
                 <li className={this.state.view === 'healthcheck' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('healthcheck')}>Health Check</a>
+                </li>
+                <li className={this.state.view === 'chat' ? 'is-active' : ''}>
+                  <a onClick={() => this.changeView('chat')}>Customer Service</a>
                 </li>
               </ul>
             </div>

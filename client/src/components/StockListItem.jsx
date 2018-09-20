@@ -34,7 +34,7 @@ class StockListItem extends React.Component {
     })
       .then((response) => {
         //update state
-        console.log(response);
+        // console.log(response);
         this.setState({
           quantity: newQuantity
         });
