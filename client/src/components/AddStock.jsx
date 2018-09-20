@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import Autocomplete from 'react-autocomplete';
+import Select from 'react-select';
 
 class AddStock extends React.Component {
   constructor(props) {
@@ -13,12 +13,12 @@ class AddStock extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleQuantChange = this.handleQuantChange.bind(this);
-    // this.getTickers = this.getTickers.bind(this);
-  }
-  componentDidMount() {
-    // this.getTickers();
+    this.getTickers = this.getTickers.bind(this);
   }
 
+  componentDidMount() {
+    this.getTickers();
+  }
 
   // handle Add button click event
   handleClick() {
@@ -66,19 +66,16 @@ class AddStock extends React.Component {
     });
   }
 
-  // getTickers(sort, uid) {
-  //   axios
-  //   .get('/tickers')
-  //   .then(( data ) => {
-  //     console.log(data);
-  //     this.setState({tickers:data}, () =>{
-  //       console.log(this.state.tickers);
-  //     })
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-  // }
+  getTickers() {
+    axios
+    .get('api/tickers')
+    .then(( data ) => {
+      this.setState({tickers:data.data})
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   render() {
     return (
@@ -88,13 +85,15 @@ class AddStock extends React.Component {
         </h3>
         <form className="field is-horizontal" style={{paddingLeft: '30%'}}>
           <div className="field">
-            <Autocomplete
-              items={[
-                { id: 'c', label: 'c' },
-                { id: 'bar', label: 'bar' },
-                { id: 'baz', label: 'baz' }
-                
-              ]}
+          <Select 
+            options={this.state.tickers} 
+            onChange={this.handleInputChange}
+            style={{width:'500px'}}
+          />
+            {/* <Autocomplete
+              items={
+                this.state.tickers
+              }
               shouldItemRender={(item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) > -1}
               getItemValue={item => item.label}
               renderItem={(item, highlighted) =>
@@ -106,10 +105,10 @@ class AddStock extends React.Component {
                 </div>
               }
               value={this.state.stock}
-              onChange={this.handleInputChange}
+              
               onSelect={value => this.setState({ stock : value })}
               inputProps={{className:'input', placeholder:'ticker'}}
-            />
+            /> */}
           </div>
           <div className="field" style={{marginLeft: '15px', marginRight: '15px'}}>
             <p className="control">

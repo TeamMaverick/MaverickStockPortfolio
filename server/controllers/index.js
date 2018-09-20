@@ -138,11 +138,14 @@ module.exports = {
       });
   },
   getAllTickers: (req, res) => {
-    console.log('not here')
     model
       .getAllTickers()
       .then((data) => {
-        res.send(data);
+        var newData = []
+        for(let i = 0; i<data.length; i++) {
+          newData.push({id: data[i].id, label: data[i].symbol+': ' + data[i].name});
+        }
+        res.send(newData);
       })
       .catch((err) => {
         res.send(err);
