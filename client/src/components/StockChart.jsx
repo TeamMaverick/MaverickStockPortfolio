@@ -3,14 +3,14 @@ import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 
 var StockChart = ({ currentStock }) => {
-  var ticker = currentStock.metaData['2. Symbol'];
+  var ticker = currentStock.quote.symbol;
   var options = {
     // use data from currentStock
     chart: {
       height: 350
     },
     title: {
-      text: `${ticker} intraday stock price`
+      text: `${ticker} Stock Price for the Year`
     },
     subtitle: {
       text: 'Using ordinal X axis'
@@ -21,29 +21,33 @@ var StockChart = ({ currentStock }) => {
     rangeSelector: {
       buttons: [
         {
-          type: 'hour',
+          type: 'month',
           count: 1,
-          text: '1h'
-        },
-        {
-          type: 'day',
+          text: '1m',
+        }, {
+          type: 'month',
+          count: 3,
+          text: '3m'
+        }, {
+          type: 'month',
+          count: 6,
+          text: '6m'
+        }, {
+          type: 'ytd',
+          text: 'YTD'
+        }, {
+          type: 'year',
           count: 1,
-          text: '1D'
-        },
-        {
-          type: 'all',
-          count: 1,
-          text: 'All'
+          text: '1y'
         }
       ],
-      selected: 1,
+      selected: 0,
       inputEnabled: false
     },
     series: [
       {
         name: `${ticker}`,
         type: 'area',
-        // this will be what Milton passes in
         data: currentStock.data,
         gapSize: 5,
         tooltip: {
