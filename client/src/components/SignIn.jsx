@@ -36,7 +36,7 @@ const SignIn = (props) => {
                     </p>
                   </div>
                   <div className="field is-grouped">
-                    <div className="control">
+                    <div className="control signin">
                       <button className="button is-link">Sign In</button>
                     </div>
                   </div>

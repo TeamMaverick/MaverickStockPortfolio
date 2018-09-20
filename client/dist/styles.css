@@ -68,7 +68,7 @@
   border-radius: 10px;
 }
 
-.control {
+div.signin {
   margin-left: auto;
   margin-right: auto;
 }
@@ -134,7 +134,44 @@ h1.healthCheckHeader {
 }
 
 .vcenter {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+}
+
+.stock-header {
+  padding-top: 10px
+}
+
+.no-margin {
+  margin: 10px, 0px
+}
+
+div.compare {
+  font-size: 12px
+}
+
+.compare {
+  margin-bottom: 10px;
+}
+
+.card-footer-item:hover {
+  font-weight: bolder;
+}
+
+input.quantity {
+  text-align: center;
+}
+
+table.search {
+  font-size: 13px
+}
+
+div.search {
+  text-align: center;
+}
+
+.cent {
   display: block;
-  /* justify-content: center; */
-  align-items: center;
+  margin: 0px auto
 }
