@@ -8,9 +8,9 @@ class HealthCheck extends React.Component {
   constructor(props) {
     super(props);
   }
-  componentDidMount() {
-    this.props.displayStock('goog')
-  }
+  // componentDidMount() {
+  //   this.props.displayStock('goog')
+  // }
 
   render() {
     return (
