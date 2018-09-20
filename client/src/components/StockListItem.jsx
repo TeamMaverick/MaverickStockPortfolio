@@ -49,13 +49,13 @@ class StockListItem extends React.Component {
           onClick={() => {
             this.props.displayStock(this.props.stock.stock_ticker)
           }}>
-          <th scope="row">              
+          <td>              
             <span className="exporter icon has-text-danger" 
               onClick={(evt) => {
                 this.props.removeStock(evt, this.props.stock)}}>
-              <i className="fas fa-lg fa-trash"></i>
+              <i className="fas fa-trash"></i>
             </span>
-          </th>
+          </td>
           <td>{this.props.stock.stock_ticker.toUpperCase()}</td>
           <td>{this.props.stock.company_name}</td>
           <td>                
