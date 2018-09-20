@@ -12,7 +12,7 @@ class MessageBox extends React.Component {
     }
   }
 
-  render() {
+  componentDidMount() {
     let allMessages = [...this.state.messages]
     socket.on('chat', (data) => {
       allMessages.push(data);
@@ -20,6 +20,9 @@ class MessageBox extends React.Component {
         messages: allMessages
       }))
     })
+  }
+
+  render() {
     
     return(
       <div id="chat">

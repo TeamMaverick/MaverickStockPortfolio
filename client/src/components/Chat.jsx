@@ -7,10 +7,20 @@ class Chat extends React.Component {
     super(props)
     this.state = {
       handle: '',
-      chat: ''
+      chat: '',
+      typer: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+ 
+  componentDidMount() {
+    socket.on('typing', data => {
+      this.setState({
+        typer: data
+      })
+    })
   }
 
   handleChange(evt) {
@@ -29,11 +39,17 @@ class Chat extends React.Component {
       chat: ''
     })
     this.refs.chat.value = '';
+    socket.emit('typing', '');
+  }
+
+  handleKeyPress() {
+    socket.emit('typing', this.state.handle);
   }
 
   render(){
     return (
       <div>
+        {this.state.typer && <p><em>{this.state.typer} is typing a message...</em></p>}
         <input type="text" id="handle" placeholder="Name" onChange={this.handleChange} name='handle'/>
         <input type="text" id="chat" ref="chat" placeholder="Chat" onChange={this.handleChange} onKeyPress={this.handleKeyPress} name='chat'/>
         <button id="send" onClick={() => {this.handleClick()}} type="submit">Send</button>
