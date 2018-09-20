@@ -7,6 +7,8 @@ import HealthCheck from './components/HealthCheck.jsx';
 import SortBy from './components/SortBy.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
 import SignIn from './components/SignIn.jsx';
+import Search from './components/Search.jsx';
+import CompareList from './components/CompareList.jsx';
 
 
 class App extends React.Component {
@@ -36,7 +38,7 @@ class App extends React.Component {
     this.getAllStocks();
 
     //will update the stock prices every 10 seconds
-    setInterval(this.updateAllStockPrices, 10000);
+    setInterval(this.updateAllStockPrices, 30000);
   }
 
   //gets all the stocks for the user stored in the database and puts them in state
@@ -174,6 +176,10 @@ class App extends React.Component {
     )
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} />
+    } else if (view === 'search') {
+      return <Search changeView={this.changeView} />
+    } else if (view === 'compare') {
+      return <CompareList changeView={this.changeView} />
     }
 
   }
@@ -198,6 +204,9 @@ class App extends React.Component {
                 </li>
                 <li className={this.state.view === 'healthcheck' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('healthcheck')}>Health Check</a>
+                </li>
+                <li className={this.state.view === 'search' ? 'is-active' : ''}>
+                  <a onClick={() => this.changeView('search')}>Search</a>
                 </li>
               </ul>
             </div>
