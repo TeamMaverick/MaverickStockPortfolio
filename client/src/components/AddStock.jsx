@@ -13,11 +13,9 @@ class AddStock extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleQuantChange = this.handleQuantChange.bind(this);
-    this.getTickers = this.getTickers.bind(this);
   }
 
   componentDidMount() {
-    this.getTickers();
   }
 
   // handle Add button click event
@@ -65,18 +63,15 @@ class AddStock extends React.Component {
   }
   // handle input onchange event (update quantity state)
   handleQuantChange(evt) {
-    if (evt.target.value == '-') {
-      this.setState({
-        quantity: ''
-      })
+    if (evt.target.validity.badInput) {
+      console.log('hi')
+      this.setState({quantity: 0})
+    } else {
+      this.setState({quantity: evt.target.value})
     }
-    this.setState({
-      quantity: evt.target.value
-    });
-  }
-
-  getTickers() {
-
+    // this.setState({
+    //   quantity: evt.target.value
+    // });
   }
 
   render() {
