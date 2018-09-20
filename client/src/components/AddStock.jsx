@@ -83,7 +83,7 @@ class AddStock extends React.Component {
         <h3 style={{textAlign: 'center', textDecoration: 'underline', marginBottom: '15px'}}>
           Stock Portfolio
         </h3>
-        <form className="field is-horizontal" style={{paddingLeft: '30%'}}>
+        <form className="field is-horizontal" style={{paddingLeft: '13%'}}>
           <div className="field">
           <Select 
             options={this.state.tickers} 
