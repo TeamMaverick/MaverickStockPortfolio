@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom';
 import axios from 'axios'
 import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
-import HealthCheck from './components/HealthCheck.jsx';
+import Research from './components/Research.jsx';
 import SortBy from './components/SortBy.jsx';
-import PortfolioPChart from './components/PortfolioPChart.jsx';
+import PortfolioPChart from './components/PortfolioPChart.jsx'; 
 import SignIn from './components/SignIn.jsx';
 import MessageBox from './components/MessageBox.jsx'
+import Search from './components/Search.jsx';
+import CompareList from './components/CompareList.jsx';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -29,6 +32,7 @@ class App extends React.Component {
     this.calculateTotal = this.calculateTotal.bind(this);
     this.changeView = this.changeView.bind(this);
     this.renderView = this.renderView.bind(this);
+    this.removeStock = this.removeStock.bind(this);
   }
   componentDidMount() {
     // get all stocks for this user
@@ -36,7 +40,7 @@ class App extends React.Component {
     this.getAllStocks();
 
     //will update the stock prices every 10 seconds
-    // setInterval(this.updateAllStockPrices, 10000);
+    setInterval(this.updateAllStockPrices, 30000);
   }
 
   //gets all the stocks for the user stored in the database and puts them in state
@@ -94,6 +98,18 @@ class App extends React.Component {
 
     axios
       .delete('/api/deleteStock', { data: {stocks: stockList }})
+      .then(() => {
+        this.getStocks();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
+  // Removes selected stocks from the database and will re-render the view
+  removeStock(stock) {
+    axios
+      .delete('/api/deleteStock', { data: {stocks: stock.stock_ticker }})
       .then(() => {
         this.getStocks();
       })
@@ -168,14 +184,18 @@ class App extends React.Component {
             </div>
           </div>
       )
-    } else if (view === 'healthcheck') {
+    } else if (view === 'research') {
       return (
-        <HealthCheck stocks={this.state.stocks}  />      
+        <Research stocks={this.state.stocks} getStocks={this.getStocks} removeStock={this.removeStock} allStocks={this.state.allStocks}  />      
     )
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} />
     } else if (view === 'chat') {
       return <MessageBox />
+    } else if (view === 'search') {
+      return <Search changeView={this.changeView} />
+    } else if (view === 'compare') {
+      return <CompareList changeView={this.changeView} />
     }
 
   }
@@ -183,7 +203,7 @@ class App extends React.Component {
   render() {
     // proceed as usual after initial componentDidMount
     return (
-      <div className="container">
+      <div className="container-span">
         <header className="navbar logo">
           <h1>Maverick</h1>
           {this.state.view !== 'signin' && 
@@ -196,10 +216,13 @@ class App extends React.Component {
             <div className="tabs">
               <ul>
                 <li className={this.state.view === 'home' ? 'is-active' : ''}>
-                  <a onClick={() => this.changeView('home')}>Home</a>
+                  <a onClick={() => this.changeView('home')}>Portfolio View</a>
                 </li>
-                <li className={this.state.view === 'healthcheck' ? 'is-active' : ''}>
-                  <a onClick={() => this.changeView('healthcheck')}>Health Check</a>
+                <li className={this.state.view === 'research' ? 'is-active' : ''}>
+                  <a onClick={() => this.changeView('research')}>Research</a>
+                </li>
+                <li className={this.state.view === 'search' ? 'is-active' : ''}>
+                  <a onClick={() => this.changeView('search')}>Search</a>
                 </li>
                 <li className={this.state.view === 'chat' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('chat')}>Customer Service</a>

@@ -61,14 +61,14 @@
   background-image: url('./img/signin_bg.jpg');
 }
 
-.card {
+.card-signin {
   position: fixed;
   top: 10px;
   left: 130%;
-  border-radius: 25px;
+  border-radius: 10px;
 }
 
-.control {
+div.signin {
   margin-left: auto;
   margin-right: auto;
 }
@@ -85,18 +85,18 @@ li a:hover {
 }
 
 .highcharts-container {
-  border-radius: 25px;
+  border-radius: 10px;
 }
 
 .column.border {
   border: 1px solid black;
-  border-radius: 25px;
+  border-radius: 10px;
   margin-left:10px;
 }
 
 .column.check {
   border: 1px solid black;
-  border-radius: 25px;
+  border-radius: 10px;
 }
 
 div.healthCheck {
@@ -192,4 +192,60 @@ button{
   padding: 12px 0;
   width: 100%;
   border-radius: 0 0 2px 2px;
+}
+
+.heading {
+  height: 29px;
+}
+
+.section-border {
+  border-width: 2px
+}
+
+.image, img {
+  width: 50px;
+  height: 50px
+}
+
+.vcenter {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+}
+
+.stock-header {
+  padding-top: 10px
+}
+
+.no-margin {
+  margin: 10px, 0px
+}
+
+div.compare {
+  font-size: 12px
+}
+
+.compare {
+  margin-bottom: 10px;
+}
+
+.card-footer-item:hover {
+  font-weight: bolder;
+}
+
+input.quantity {
+  text-align: center;
+}
+
+table.search {
+  font-size: 13px
+}
+
+div.search {
+  text-align: center;
+}
+
+.cent {
+  display: block;
+  margin: 0px auto
 }

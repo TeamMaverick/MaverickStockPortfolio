@@ -20,7 +20,7 @@ class StockListItem extends React.Component {
 
   // Event handler for changing quantity based on user input
   handleInputChange(evt) {
-    const newQuantity = Number(evt.target.value);
+    const newQuantity = Number(evt.target.value)
     this.callUpdateQuantity(newQuantity);
   }
 
