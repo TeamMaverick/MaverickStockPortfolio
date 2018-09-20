@@ -123,3 +123,7 @@ h1.healthCheckHeader {
 .signout {
   font-size: 1rem;
 }
+
+.heading {
+  height: 29px;
+}
