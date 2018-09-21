@@ -1,9 +1,8 @@
 import React from 'react'
 import axios from 'axios'
-import Select from 'react-virtualized-select';
 import CompareList from './CompareList.jsx'
 
-class Search extends React.Component {
+export default class Search extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -11,19 +10,25 @@ class Search extends React.Component {
       searchInput: '',
       history: [],
       compare: [],
-      checked: 0
+      checked: 0,
+      test: true
     }
     this.onChange = this.onChange.bind(this)
     this.submitSearch = this.submitSearch.bind(this)
     this.submitCompare = this.submitCompare.bind(this)
     this.setView = this.setView.bind(this)
     this.onCheck = this.onCheck.bind(this)
+    this.onTest = this.onTest.bind(this)
   }
 
   onChange(e) {
     this.setState({
       searchInput: e.target.value
     })
+  }
+
+  onTest() {
+    this.setState({ test: !this.state.test})
   }
 
   submitSearch(e, query) {
@@ -79,7 +84,8 @@ class Search extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container" >
+      {this.state.test && <div>Testing</div>}
         {this.state.view === 'search' &&
           <React.Fragment>
             <div className="columns search">
@@ -152,5 +158,3 @@ class Search extends React.Component {
     )
   }
 }
-
-export default Search
