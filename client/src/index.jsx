@@ -25,7 +25,7 @@ class App extends React.Component {
       stocks: [],
       portfolioTotal: 0,
       sortBy: 'Alphabetical',
-      user: false
+      user: null
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -40,19 +40,20 @@ class App extends React.Component {
     this.removeStock = this.removeStock.bind(this);
     this.signIn = this.signIn.bind(this);
     this.signUp = this.signUp.bind(this);
-    this.signOut = this.signOut.bind(this)
-    this.setGuest = this.setGuest.bind(this)
+    this.signOut = this.signOut.bind(this);
+    this.setGuest = this.setGuest.bind(this);
+    this.setUser = this.setUser.bind(this);
   }
   componentDidMount() {
     // if (this.state.user) {
     //   this.changeView('home')
     // }
     // get all stocks for this user
-    // this.getStocks(this.state.sortBy);
-    // this.getAllStocks();
+    this.getStocks(this.state.sortBy);
+    this.getAllStocks();
 
-    //will update the stock prices every 10 seconds
-    // setInterval(this.updateAllStockPrices, 100000);
+    // will update the stock prices every 10 seconds
+    setInterval(this.updateAllStockPrices, 100000);
   }
 
   signIn(email, pw) {
@@ -62,7 +63,7 @@ class App extends React.Component {
         params: {uid: res.user.uid}
       })
       .then(user => {
-        this.setState({ user: user.data, view: 'home' })
+        this.setUser(user.data)
       })
       .catch(err => console.log(err))
     })
@@ -133,6 +134,13 @@ class App extends React.Component {
     })
     this.setState({
       allStocks: options
+    })
+  }
+
+  setUser(user) {
+    this.setState({
+      user: user,
+      view: 'home'
     })
   }
   // Removes selected stocks from the database and will re-render the view
@@ -242,7 +250,7 @@ class App extends React.Component {
     } else if (view === 'signup') {
       return <SignUp signUp={this.signUp} />
     } else if (view === 'chat') {
-      return <MessageBox />
+      return <MessageBox user={this.state.user}/>
     } else if (view === 'search') {
       return <Search changeView={this.changeView} />
     } else if (view === 'compare') {
@@ -251,7 +259,7 @@ class App extends React.Component {
   }
 
   render() {
-    {console.log(this.state.view)}
+    // console.log(this.state.user);
     // proceed as usual after initial componentDidMount
     return (
       <div className="container-span">
