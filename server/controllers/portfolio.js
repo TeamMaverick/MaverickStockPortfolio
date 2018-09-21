@@ -103,6 +103,9 @@ const calculateValueOfHoldings = function(portfolio, time) {
           let value = 0
           for (stock in openPoss) {
             let adj = 0;
+            if (stockPriceObject[stock][t + adj] === undefined) {
+              console.log( stockPriceObject)
+            }
             while (stockPriceObject[stock][t + adj]['high'] === -1 && (t + adj + 1) < portfolio.time.length) {
               adj++
             }

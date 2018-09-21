@@ -1,18 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
+import axios from 'axios'
 import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
 import Research from './components/Research.jsx';
 import SortBy from './components/SortBy.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx'; 
 import SignIn from './components/SignIn.jsx';
+import SignUp from './components/SignUp.jsx';
+import MessageBox from './components/MessageBox.jsx'
 import Search from './components/Search.jsx';
 import CompareList from './components/CompareList.jsx';
 import BuySell from './components/BuySell.jsx';
 
 import PortfolioChart from './components/PortfolioChart.jsx';
+import firebase from 'firebase'
+import config from '../../config.js'
 
+firebase.initializeApp(config)
 
 class App extends React.Component {
   constructor(props) {
@@ -30,7 +35,8 @@ class App extends React.Component {
       modalOpen: false,
       stockToBuy: {},
       buyOrSell: '',
-      sellLimit: 0
+      sellLimit: 0,
+      user: null
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -47,7 +53,10 @@ class App extends React.Component {
     this.getPortfolioHoldings = this.getPortfolioHoldings.bind(this);
     this.changeToggle = this.changeToggle.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
-
+    this.signIn = this.signIn.bind(this);
+    this.signUp = this.signUp.bind(this);
+    this.signOut = this.signOut.bind(this)
+    this.setGuest = this.setGuest.bind(this)
   }
   
   componentDidMount() {
@@ -57,7 +66,47 @@ class App extends React.Component {
     this.getPortfolioHoldings();
     this.getPortfolioHistory();
     //will update the stock prices every 10 seconds
-    setInterval(this.updateAllStockPrices, 30000);
+    setInterval(this.updateAllStockPrices, 100000);
+  }
+
+  signIn(email, pw) {
+    firebase.auth().signInWithEmailAndPassword(email, pw)
+    .then(res => {
+      axios.get('/api/signin', {
+        params: {uid: res.user.uid}
+      })
+      .then(user => {
+        this.setState({ user: user.data, view: 'home' })
+      })
+      .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
+  }
+
+  signUp(username, email, pw) {
+    firebase.auth().createUserWithEmailAndPassword(email, pw)
+    .then(res => {
+      axios.post('/api/signup', {
+        username, username,
+        email: email,
+        uid: res.user.uid
+      })
+      .then(() => this.signIn(email, pw))
+      .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err));
+  }
+
+  signOut() {
+    firebase.auth().signOut()
+    .then(() => {
+      this.setState({ user: null, view: 'signin' })
+      console.log('signed out')})
+    .catch(err => console.log(err));
+  }
+
+  setGuest() {
+    this.setState({ user: true, view: 'home' })
   }
 
   getPortfolioHistory() {
@@ -75,10 +124,14 @@ class App extends React.Component {
     console.log('Update portfolio');
     axios.get('/api/holdings')
       .then(({data}) => {
+        console.log('Got Portfolio')
         this.setState({
           portfolio: data
         })
         this.calculateTotal()
+      })
+      .catch((err) => {
+        console.log(err);
       })
   }
 
@@ -137,7 +190,7 @@ class App extends React.Component {
   setAllStocks(allStocks) {
     let options = [];
     allStocks.data.map(stock => {
-      options.push({ value: stock.symbol, label: stock.name })
+      options.push({ value: stock.symbol, label: stock.name.split(' ').slice(0, 4).join(' ') })
     })
     this.setState({
       allStocks: options
@@ -150,7 +203,6 @@ class App extends React.Component {
     const checkedStocks = document.getElementsByClassName('checkedStock');
     for (var i = 0; i < checkedStocks.length; i++) {
       var stock = checkedStocks[i];
-
       if (stock.checked) {
         stockList.push(stock.value);
       }
@@ -219,6 +271,7 @@ class App extends React.Component {
   }
 
   changeView(option) {
+    console.log("Change the view to " + option)
     this.setState({
       view: option
     });
@@ -287,6 +340,7 @@ class App extends React.Component {
     
     if(view === 'home') {
       return ( 
+        <div>
           <div className="columns">
             <div className="column border">
               {/* <SortBy updateSort={this.updateSort} /> */}
@@ -301,6 +355,7 @@ class App extends React.Component {
             </div>
             {currentToggle}
           </div>
+        </div>
       )
     } else if (view === 'research') {
       return (
@@ -311,30 +366,34 @@ class App extends React.Component {
           allStocks={this.state.allStocks} 
           toggleModal={this.toggleModal} 
         />      
-    )
-    } else if (view === 'signin'){
-      return <SignIn changeView={this.changeView} />
+      )
+    } else if (view === 'signin') {
+      return <SignIn setGuest={this.setGuest} signIn={this.signIn} changeView={this.changeView} />
+    } else if (view === 'signup') {
+      return <SignUp signUp={this.signUp} />
+    } else if (view === 'chat') {
+      return <MessageBox />
     } else if (view === 'search') {
       return <Search changeView={this.changeView} getPortfolioHoldings={this.getPortfolioHoldings} />
     } else if (view === 'compare') {
       return <CompareList changeView={this.changeView} getPortfolioHoldings={this.getPortfolioHoldings} />
     }
-
   }
 
   render() {
+    {console.log(this.state.view)}
     // proceed as usual after initial componentDidMount
     return (
       <div className="container-span">
         <header className="navbar logo">
           <h1>Maverick</h1>
-          {this.state.view !== 'signin' && 
+          {this.state.user !== null && 
           <div className="navbar-end signout">
-            <a onClick={() => this.changeView('signin')}>Sign Out</a>
+            <a onClick={() => this.signOut()}>Sign Out</a>
           </div>
           }
         </header>
-        {this.state.view !== 'signin' &&
+        {this.state.user !== null &&
             <div className="tabs">
               <ul>
                 <li className={this.state.view === 'home' ? 'is-active' : ''}>
@@ -345,6 +404,9 @@ class App extends React.Component {
                 </li>
                 <li className={this.state.view === 'search' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('search')}>Search</a>
+                </li>
+                <li className={this.state.view === 'chat' ? 'is-active' : ''}>
+                  <a onClick={() => this.changeView('chat')}>Customer Service</a>
                 </li>
               </ul>
             </div>

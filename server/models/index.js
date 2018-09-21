@@ -3,6 +3,7 @@ const TickerNames = require('./TickerNames');
 const Transaction = require('./Transactions');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const User = require('./User')
 
 module.exports = {
   // Adds stock ticker to database
@@ -171,10 +172,22 @@ module.exports = {
   postTickersAndNames: function(stockArray) {
     return TickerNames.bulkCreate(stockArray)
      .then(() => {
-       console.log('Created');
+      //  console.log('Created');
      })
      .catch((err) => {
        console.log(err);
      })
+  },
+
+  createUser: (username, email, uid) => {
+    return User.create({ username: username, email: email, uid: uid })
+    .then(() => console.log('created user'))
+    .catch(err => console.log(err))
+  },
+
+  retrieveUser: (uid) => {
+    return User.findOne({ where: {uid: uid}})
   }
+
+
 };

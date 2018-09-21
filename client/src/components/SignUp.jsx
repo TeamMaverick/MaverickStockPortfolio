@@ -1,22 +1,17 @@
-import React from 'react';
+import React from 'react'
 
-class SignIn extends React.Component {
+class SignUp extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      username: '',
       email: '',
       pw: ''
     }
     this.onChange = this.onChange.bind(this)
-    this.handleSignUp = this.handleSignUp.bind(this)
-    this.handleSignIn = this.handleSignIn.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
-
-  handleSignIn(e) {
-    e.preventDefault()
-    this.props.signIn(this.state.email, this.state.pw)
-  }
-
+  
   onChange(e, type) {
     e.preventDefault()
     this.setState({
@@ -24,14 +19,14 @@ class SignIn extends React.Component {
     })
   }
 
-  handleSignUp(e) {
+  handleSubmit(e) {
     e.preventDefault()
-    this.props.changeView('signup')
+    this.props.signUp(this.state.username, this.state.email, this.state.pw)
   }
 
   render() {
     return (
-      <section className="hero signinbg is-fullheight">
+              <section className="hero signinbg is-fullheight">
         <div className="hero-body">
           <div className="columns is-multiline is-centered">
             <div className="column">
@@ -39,10 +34,22 @@ class SignIn extends React.Component {
                 <div className="card-content">
                   <div className="content">
                   <form>
+                  <div className="field">
+                      <label className="label">Username</label>
+                      <div className="control has-icons-left has-icons-right">
+                        <input className="input" onChange={(e) => this.onChange(e,'username')} value={this.state.username} autoComplete="username" type="text" />
+                        <span className="icon is-small is-left">
+                          <i className="fas fa-user"></i>
+                        </span>
+                        <span className="icon is-small is-right">
+                          <i className="fas fa-check"></i>
+                        </span>
+                      </div>
+                    </div>
                     <div className="field">
                       <label className="label">Email</label>
                       <div className="control has-icons-left has-icons-right">
-                        <input className="input is-success" onChange={(e) => this.onChange(e, 'email')} value={this.state.email} autoComplete="email" type="text" />
+                        <input className="input" onChange={(e) => this.onChange(e,'email')} value={this.state.email} autoComplete="email" type="text" />
                         <span className="icon is-small is-left">
                           <i className="fas fa-envelope"></i>
                         </span>
@@ -62,17 +69,7 @@ class SignIn extends React.Component {
                     </div>
                     <div className="field is-grouped">
                       <div className="control signin">
-                        <button onClick={this.handleSignIn} className="button is-link">Sign In</button>
-                      </div>
-                    </div>
-                    <div className="field is-grouped">
-                      <div className="control signin">
-                        Don't have an account? <a onClick={this.handleSignUp} className="is-link">Sign Up</a>
-                      </div>
-                    </div>
-                    <div className="field is-grouped">
-                      <div className="control signin">
-                        Or sign in as a <a onClick={() => this.props.setGuest()} className="is-link">Guest</a>
+                        <button className="button" onClick={(e) => this.handleSubmit(e)}>Sign Up</button>
                       </div>
                     </div>
                     </form>
@@ -87,4 +84,4 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+export default SignUp

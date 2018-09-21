@@ -34,6 +34,7 @@ class BuySell extends React.Component {
       quantity: this.state.quantity
     })
       .then((result) => {
+        console.log('successful buy')
         this.props.getPortfolioHoldings()
         this.props.toggleModal(null)
       })

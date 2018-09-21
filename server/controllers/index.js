@@ -2,6 +2,17 @@ const model = require('../models/index.js');
 const alpha = require('../alphaVantage/index.js');
 const portfolioCalculator = require('./portfolio.js');
 
+const admin = require('firebase-admin');
+const config = require('../../config.js').firebaseCred
+const db = require('../../config.js').firebaseDB
+const firebase = require('firebase')
+
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(config),
+//   databaseURL: db
+// });
+
 //Return requests to the client
 module.exports = {
   
@@ -236,13 +247,28 @@ module.exports = {
         console.log(err);
       });
   },
-
   //sends query to IEX API and returns quote and stats
   getTickerInfo: (req, res) => {
     alpha.getTickerInfo(req.query.term)
     .then(({data}) => {
       res.status(200).send(data)
     })
+  },
+
+  signUp: (req, res) => {
+    var username = req.body.username
+    var email = req.body.email
+    var uid = req.body.uid
+    model.createUser(username, email, uid)
+    .then(data => res.status(201).send(data))
+    .catch(err => console.log(err))
+  },
+
+  signIn: (req, res) => {
+    model.retrieveUser(req.query.uid)
+    .then(data => res.status(200).send(data))
+    .catch(err => console.log(err))
   }
+
 
 };
