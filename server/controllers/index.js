@@ -5,7 +5,14 @@ const alpha = require('../alphaVantage/index.js');
 module.exports = {
   // Calls function in model to post stock ticker to database
   postStockTicker: (req, res) => {
-    model.saveStock(req.body.stock, req.body.quantity, req.body.price, req.body.uid)
+    model.saveStock(
+      req.body.stock, 
+      req.body.quantity, 
+      req.body.price, 
+      req.body.uid, 
+      req.body.change, 
+      req.body.ytdChange, 
+      req.body.latestVolume)
      .then((data) => {
         res.sendStatus(201);       
      })
@@ -113,7 +120,11 @@ module.exports = {
 
   //update stock price in the database
   updatePrice: (req, res) => {
-    model.updateStockPrice(req.body.ticker, req.body.price)
+    model.updateStockPrice(req.body.ticker, 
+      req.body.price, 
+      req.body.change, 
+      req.body.ytdChange, 
+      req.body.latestVolume)
       .then(()=> {
         res.sendStatus(201);
       })
