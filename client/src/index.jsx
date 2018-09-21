@@ -11,7 +11,6 @@ import MessageBox from './components/MessageBox.jsx'
 import Search from './components/Search.jsx';
 import CompareList from './components/CompareList.jsx';
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -77,7 +76,7 @@ class App extends React.Component {
   setAllStocks(allStocks) {
     let options = [];
     allStocks.data.map(stock => {
-      options.push({ value: stock.symbol, label: stock.name })
+      options.push({ value: stock.symbol, label: stock.name.split(' ').slice(0, 4).join(' ') })
     })
     this.setState({
       allStocks: options

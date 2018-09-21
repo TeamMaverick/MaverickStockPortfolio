@@ -30,7 +30,8 @@ class Chat extends React.Component {
     })
   }
 
-  handleClick() {
+  handleClick(e) {
+    e.preventDefault();
     socket.emit('chat', {
       handle: this.state.handle,
       chat: this.state.chat
@@ -50,9 +51,11 @@ class Chat extends React.Component {
     return (
       <div>
         {this.state.typer && <p><em>{this.state.typer} is typing a message...</em></p>}
-        <input type="text" id="handle" placeholder="Name" onChange={this.handleChange} name='handle'/>
-        <input type="text" id="chat" ref="chat" placeholder="Chat" onChange={this.handleChange} onKeyPress={this.handleKeyPress} name='chat'/>
-        <button id="send" onClick={() => {this.handleClick()}} type="submit">Send</button>
+        <form type="submit" onSubmit={this.handleClick}>
+          <input type="text" id="handle" placeholder="Name" onChange={this.handleChange} name='handle'/>
+          <input type="text" id="chat" ref="chat" placeholder="Chat" onChange={this.handleChange} onKeyPress={this.handleKeyPress} name='chat'/>
+          <button id="send" type="submit">Send</button>
+        </form>
       </div>
     )
   }
