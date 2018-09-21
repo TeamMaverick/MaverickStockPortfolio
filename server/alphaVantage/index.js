@@ -18,7 +18,7 @@ const getPeersChange = (peers) => {
 
 //get the most up-to-date price from IEX API
 const getCurrentPrice = (ticker) => {
-  var url = `${process.env.API_ticker}/stock/${ticker}/price`;
+  var url = `${process.env.API_ticker}/stock/${ticker}/batch?types=quote`;
   return axios.get(url)
 }
 
@@ -29,7 +29,31 @@ const getTickersAndNames = () =>{
   .catch((err) => (console.log(err)));
 }
 
+const getAllBannerInfo = () => {
+  var final = []
+  return axios.get('https://api.iextrading.com/1.0/stock/market/list/mostactive')
+    .then((data) => {
+      data.data.forEach(dat => final.push(dat))
+    })
+    .then(() => {
+      return axios.get('https://api.iextrading.com/1.0/stock/market/list/gainers')
+        .then((data) => data.data.forEach(dat => final.push(dat)))
+        .then(() => {
+          return axios.get('https://api.iextrading.com/1.0/stock/market/list/losers')
+            .then((data) => {
+              data.data.forEach(dat => final.push(dat))
+              return final
+            })
+            .catch((err) => console.error(err))
+        })
+        .catch((err) => console.error(err))
+    })
+    .catch((err) => console.error(err))
+  }
+  
+
 module.exports.getData = getData;
 module.exports.getCurrentPrice = getCurrentPrice;
 module.exports.getTickersAndNames = getTickersAndNames;
 module.exports.getPeersChange = getPeersChange;
+module.exports.getAllBannerInfo = getAllBannerInfo;

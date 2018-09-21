@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Maverick Stock Portfolio",
   "main": "index.js",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/TeamGandalf/MaverickStockPortfolio"
+  },
   "scripts": {
     "test": "mocha --bail --reporter nyan test/ServerSpec.js",
     "react-dev": "webpack -d --watch",
@@ -39,6 +43,7 @@
     "react": "^16.4.2",
     "react-autocomplete": "^1.8.1",
     "react-dom": "^16.4.2",
+    "react-marquee": "^1.0.0",
     "sequelize": "^4.38.1"
   }
 }

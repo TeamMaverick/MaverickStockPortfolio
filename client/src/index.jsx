@@ -8,6 +8,7 @@ import HealthCheck from './components/HealthCheck.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
 import SignIn from './components/SignIn.jsx';
 import StockDetails from './components/StockDetails.jsx';
+import Infinite from './components/Infinite.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -16,12 +17,13 @@ class App extends React.Component {
       view : 'signin',
       stocks: [],
       portfolioTotal: 0,
+      todaysChange: 0,
       authenticated: false,
       user: {},
-      //taken from HealthCheck
       currentStock: {},
       peersQuotes: {},
-      peersUpdated: false
+      peersUpdated: false,
+      sortBy: ''
     };
     this.getStocks = this.getStocks.bind(this);
     this.getStocksInitial = this.getStocksInitial.bind(this);
@@ -30,6 +32,7 @@ class App extends React.Component {
     this.removeStock = this.removeStock.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
+    this.calculateTodaysChange = this.calculateTodaysChange.bind(this);    
     this.changeView = this.changeView.bind(this);
     this.renderView = this.renderView.bind(this);
     this.createUser = this.createUser.bind(this);
@@ -92,28 +95,26 @@ class App extends React.Component {
     firebase.auth().signOut()
   }
   
-  //gets all the stocks for the user stored in the database and puts them in state
   getStocksInitial(sort, uid) {
+    //gets all the stocks for the user stored in the database and puts them in state
     sort = sort || this.state.sortBy;
     uid = uid || this.state.user.uid;
     axios
-      .get('/api/stock', { params: { sort: sort, uid: uid } })
-      .then(({ data }) => {
-        this.setStocks(data);
-      })
-      .then(() => {
-        // console.log(this.state.stocks)
-        this.displayStock(this.state.stocks[0].stock_ticker)
-      })
-      .then(() => {
-        console.log("PEERS SETUP IN INDEX.JSX", this.state.peers)
-      })
-      .then(() => {
-        this.calculateTotal();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    .get('/api/stock', { params: { sort: sort, uid: uid } })
+    .then(({ data }) => {
+      this.setStocks(data);
+    })
+    .then(() => {
+      this.calculateTotal();
+      this.calculateTodaysChange();
+    })
+    .then(() => {
+      // console.log(this.state.stocks)
+      this.displayStock(this.state.stocks[0].stock_ticker)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   //gets all the stocks for the user stored in the database and puts them in state
@@ -173,7 +174,10 @@ class App extends React.Component {
           .then(({ data }) => {
             return axios.post('/api/currentStockPrice', {
               ticker: stock_ticker,
-              price: data
+              price: data.quote.latestPrice,
+              change: data.quote.change,
+              ytdChange: data.quote.ytdChange,
+              latestVolume: data.quote.latestVolume
             });
           })
           .catch((err) => console.log(err));
@@ -191,6 +195,16 @@ class App extends React.Component {
         return total + subtotal;
       }, 0);
     this.setState({ portfolioTotal: total });
+  }
+
+  calculateTodaysChange() {
+    const today = this.state.stocks.map((stock) => {
+        return stock.quantity * stock.change;
+      })
+      .reduce((today, subtotal) => {
+        return today + subtotal;
+      }, 0);
+    this.setState({ todaysChange: today });
   }
 
   //Convert into CSV this.state.stocks
@@ -296,6 +310,7 @@ class App extends React.Component {
                 downloadCSV={this.downloadCSV}
                 downloadPDF={this.downloadPDF}
                 portfolioTotal={this.state.portfolioTotal}
+                todaysChange={this.state.todaysChange}                
               />
             </div>
             <div className="column border is-one-third">
@@ -305,7 +320,6 @@ class App extends React.Component {
           <div className="columns border" style={{height: '500px'}} >
             <div className="column">
               <HealthCheck 
-                stocksData={this.state.stocksData} 
                 currentStock={this.state.currentStock} 
                 displayStock={this.displayStock}/>      
             </div>
@@ -343,6 +357,7 @@ class App extends React.Component {
               </ul> */}
             </div>
         }
+        <Infinite/>
         <div className="container">
           {this.renderView()}
         </div>

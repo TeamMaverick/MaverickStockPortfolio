@@ -15,9 +15,6 @@ class AddStock extends React.Component {
     this.handleQuantChange = this.handleQuantChange.bind(this);
   }
 
-  componentDidMount() {
-  }
-
   // handle Add button click event
   handleClick() {
     // call this within call to get stock api
@@ -25,10 +22,13 @@ class AddStock extends React.Component {
       .get('/api/currentStockPrice', { params: { STOCK: this.state.stock } })
       .then(({ data }) => {
         return axios.post('/api/stock', {
-          stock: this.state.stock,
-          quantity: this.state.quantity,
-          price: data,
-          uid: firebase.auth().currentUser.uid
+          stock : this.state.stock,
+          quantity : this.state.quantity,
+          price : data.quote.latestPrice,
+          uid : firebase.auth().currentUser.uid,
+          change : data.quote.change,
+          ytdChange : data.quote.ytdChange,
+          latestVolume : data.quote.latestVolume 
         });
       })
       .then(() => {
@@ -46,6 +46,7 @@ class AddStock extends React.Component {
         })
       });
   }
+
   // handle input onchange event (update stock state)
   handleInputChange(evt) {
     this.setState({
@@ -61,15 +62,11 @@ class AddStock extends React.Component {
         });
     });
   }
+
   // handle input onchange event (update quantity state)
   handleQuantChange(evt) {
-    // TODO: NOT DONE
-    if (evt.target.validity.badInput) {
-      console.log('hi')
-      this.setState({quantity: 0})
-    } else {
-      this.setState({quantity: evt.target.value})
-    }
+    const quantity = (evt.target.validity.valid) ? evt.target.value : this.state.quantity;
+    this.setState({ quantity });
   }
 
   render() {
@@ -78,7 +75,7 @@ class AddStock extends React.Component {
         <h3 style={{textAlign: 'center', textDecoration: 'underline', marginBottom: '15px'}}>
           Stock Portfolio
         </h3>
-        <form className="field is-horizontal" style={{paddingLeft: '30%'}}>
+        <form className="field is-horizontal" style={{paddingLeft: '15%'}}>
           <div className="field">
             <Autocomplete
               items={
@@ -97,16 +94,16 @@ class AddStock extends React.Component {
               wrapperStyle={{ position: 'relative', display: 'inline-block' }}
               value={this.state.stock}
               onChange={this.handleInputChange}
-              onSelect={value => this.setState({ stock : value })}
+              onSelect={value => this.setState({ stock : (value.substring(0, value.indexOf(':'))) })}
               inputProps={{className:'input', placeholder:'ticker'}}
             />
           </div>
           <div className="field" style={{marginLeft: '15px', marginRight: '15px'}}>
             <p className="control">
-              <input
+              <input 
                 className="input"
-                type="number" 
-                min="0" 
+                type="text" 
+                pattern="[0-9]*" 
                 onChange={this.handleQuantChange} 
                 value={this.state.quantity} 
                 placeholder="quantity"

@@ -1,11 +1,19 @@
 const model = require('../models/index.js');
 const alpha = require('../alphaVantage/index.js');
+const axios = require('axios');
 
 //Return requests to the client
 module.exports = {
   // Calls function in model to post stock ticker to database
   postStockTicker: (req, res) => {
-    model.saveStock(req.body.stock, req.body.quantity, req.body.price, req.body.uid)
+    model.saveStock(
+      req.body.stock, 
+      req.body.quantity, 
+      req.body.price, 
+      req.body.uid, 
+      req.body.change, 
+      req.body.ytdChange, 
+      req.body.latestVolume)
      .then((data) => {
         res.sendStatus(201);       
      })
@@ -125,7 +133,11 @@ module.exports = {
 
   //update stock price in the database
   updatePrice: (req, res) => {
-    model.updateStockPrice(req.body.ticker, req.body.price)
+    model.updateStockPrice(req.body.ticker, 
+      req.body.price, 
+      req.body.change, 
+      req.body.ytdChange, 
+      req.body.latestVolume)
       .then(()=> {
         res.sendStatus(201);
       })
@@ -149,19 +161,37 @@ module.exports = {
         console.log(err);
       });
   },
+  //handles input ticker search autocomplete
   getAllTickers: (req, res) => {
     model
       .getAllTickers(req.query.stock_ticker)
       .then((data) => {
-        var newData = []
-        for(let i = 0; i<data.length; i++) {
-          newData.push({id: data[i].id, label: data[i].symbol+': ' + data[i].name});
+        if(data===null) {
+          model.getGroupTickers(req.query.stock_ticker).then( (data) => {
+            var newData = []
+            for(let i = 0; i<data.length; i++) {
+              newData.push({id: data[i].id, label: data[i].symbol+': ' + data[i].name});
+            }
+            res.send(newData);
+          })
+          .catch(err => {
+            res.send(err);
+            console.log(err);
+          })
+        } else {
+          var newData = [{id: data.id, label: data.symbol+': ' + data.name}]
+          res.send(newData);
         }
-        res.send(newData);
       })
       .catch((err) => {
         res.send(err);
         console.log(err);
       });
+  },
+  getBannerInfo: (req, res) => {
+    alpha.getAllBannerInfo()
+      .then((result) => res.send(result))
+      .catch((e) => console.log(e))
+    // res.send(alpha.getAllBannerInfo())
   }
 };
