@@ -1,6 +1,7 @@
 const Stock = require('./Stock.js');
 const TickerNames = require('./TickerNames');
 const Transaction = require('./Transactions');
+const User = require('./User')
 
 module.exports = {
   // Adds stock ticker to database
@@ -143,5 +144,17 @@ module.exports = {
      .catch((err) => {
        console.log(err);
      })
+  },
+
+  createUser: (username, email, uid) => {
+    return User.create({ username: username, email: email, uid: uid })
+    .then(() => console.log('created user'))
+    .catch(err => console.log(err))
+  },
+
+  retrieveUser: (uid) => {
+    return User.findOne({ where: {uid: uid}})
   }
+
+
 };
