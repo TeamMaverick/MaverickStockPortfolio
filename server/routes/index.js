@@ -30,7 +30,6 @@ router.post('/updateQuantity', stockController.updateStockQuantity);
 //never called by client
 router.post('/tickersAndNames', stockController.postTickersAndNames);
 
-
 // Call a buy of the stock
 router.post('/buy', stockController.buyStock);
 

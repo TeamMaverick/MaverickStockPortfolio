@@ -2,6 +2,8 @@ const Stock = require('./Stock.js');
 const TickerNames = require('./TickerNames');
 const Transaction = require('./Transactions');
 const User = require('./User')
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
   // Adds stock ticker to database
@@ -94,24 +96,21 @@ module.exports = {
     }
   },
 
-  getAllStocks: function() {
-    return TickerNames.findAll()
-  },
-
+  
   // Changes quantity to 0
   deleteStock: function(stocklist) {
     return Stock.destroy({where: {
       stock_ticker : stocklist
     }})
   },
-
+  
   //get stock
   getStock: function(stockTicker) {
     return Stock.findOne({where: {
       stock_ticker : stockTicker
     }})
   },
-
+  
   // update stock quantity
   updateStockQuantity: function (stock, quantity) {
     //check if we have stock
@@ -123,7 +122,7 @@ module.exports = {
       }
     })
   },
-
+  
   //updates stock price field in database to reflect latest price
   updateStockPrice: function(ticker, price) {
     return Stock.update({
@@ -134,27 +133,48 @@ module.exports = {
       }
     })
   },
-
+  
   //inserts tickers and their company names into the tickersAndNames table in the database
   postTickersAndNames: function(stockArray) {
     return TickerNames.bulkCreate(stockArray)
-     .then(() => {
+    .then(() => {
       //  console.log('Created');
-     })
-     .catch((err) => {
-       console.log(err);
-     })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   },
-
+  
   createUser: (username, email, uid) => {
     return User.create({ username: username, email: email, uid: uid })
     .then(() => console.log('created user'))
     .catch(err => console.log(err))
   },
-
+  
   retrieveUser: (uid) => {
     return User.findOne({ where: {uid: uid}})
+  },
+  //gets a ticker if it is found
+  getAllTickers: function (ticker_name) {
+    return TickerNames.findOne({
+      where: {
+        symbol: ticker_name
+      }
+    })
+  },
+    
+  //gets a list of all tickers that may similarly match input
+  getGroupTickers: function (ticker_name) {
+    return TickerNames.findAll(
+      {
+        limit: 20,
+        where: { [Op.or]: 
+          [
+            {symbol: { [Op.like]: ticker_name +'%' }},
+            {name: { [Op.like]: ticker_name +'%' }}        
+          ] 
+        }
+      }
+    );
   }
-
-
 };

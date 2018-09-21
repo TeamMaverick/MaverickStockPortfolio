@@ -21,7 +21,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       view : 'signin',
-      allStocks: [],
+      // allStocks: [],
       stocks: [],
       portfolioTotal: 0,
       sortBy: 'Alphabetical',
@@ -29,8 +29,8 @@ class App extends React.Component {
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
-    this.getAllStocks = this.getAllStocks.bind(this);
-    this.setAllStocks = this.setAllStocks.bind(this);
+    // this.getAllStocks = this.getAllStocks.bind(this);
+    // this.setAllStocks = this.setAllStocks.bind(this);
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
     this.updateSort = this.updateSort.bind(this);
@@ -50,7 +50,7 @@ class App extends React.Component {
     // }
     // get all stocks for this user
     this.getStocks(this.state.sortBy);
-    this.getAllStocks();
+    // this.getAllStocks();
 
     // will update the stock prices every 10 seconds
     setInterval(this.updateAllStockPrices, 100000);
@@ -113,13 +113,13 @@ class App extends React.Component {
   }
 
   //gets all stocks from ticker
-  getAllStocks() {
-    axios.get(`/api/allStocks/`)
-    .then((data) => {
-      this.setAllStocks(data);
-    })
-    .catch(err => console.log(err));
-  }
+  // getAllStocks() {
+  //   axios.get(`/api/allStocks/`)
+  //   .then((data) => {
+  //     this.setAllStocks(data);
+  //   })
+  //   .catch(err => console.log(err));
+  // }
 
   setStocks(stocks) {
     this.setState({
@@ -127,15 +127,15 @@ class App extends React.Component {
     });
   }
 
-  setAllStocks(allStocks) {
-    let options = [];
-    allStocks.data.map(stock => {
-      options.push({ value: stock.symbol, label: stock.name.split(' ').slice(0, 4).join(' ') })
-    })
-    this.setState({
-      allStocks: options
-    })
-  }
+  // setAllStocks(allStocks) {
+  //   let options = [];
+  //   allStocks.data.map(stock => {
+  //     options.push({ value: stock.symbol, label: `${stock.symbol}: ${stock.name.split(' ').slice(0, 3).join(' ')}`})
+  //   })
+  //   this.setState({
+  //     allStocks: options
+  //   })
+  // }
 
   setUser(user) {
     this.setState({
