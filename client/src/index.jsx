@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
+import axios from 'axios'
 import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
 import Research from './components/Research.jsx';
@@ -8,6 +8,7 @@ import SortBy from './components/SortBy.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx'; 
 import SignIn from './components/SignIn.jsx';
 import SignUp from './components/SignUp.jsx';
+import MessageBox from './components/MessageBox.jsx'
 import Search from './components/Search.jsx';
 import CompareList from './components/CompareList.jsx';
 import firebase from 'firebase'
@@ -128,7 +129,7 @@ class App extends React.Component {
   setAllStocks(allStocks) {
     let options = [];
     allStocks.data.map(stock => {
-      options.push({ value: stock.symbol, label: stock.name })
+      options.push({ value: stock.symbol, label: stock.name.split(' ').slice(0, 4).join(' ') })
     })
     this.setState({
       allStocks: options
@@ -240,6 +241,8 @@ class App extends React.Component {
       return <SignIn setGuest={this.setGuest} signIn={this.signIn} changeView={this.changeView} />
     } else if (view === 'signup') {
       return <SignUp signUp={this.signUp} />
+    } else if (view === 'chat') {
+      return <MessageBox />
     } else if (view === 'search') {
       return <Search changeView={this.changeView} />
     } else if (view === 'compare') {
@@ -271,6 +274,9 @@ class App extends React.Component {
                 </li>
                 <li className={this.state.view === 'search' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('search')}>Search</a>
+                </li>
+                <li className={this.state.view === 'chat' ? 'is-active' : ''}>
+                  <a onClick={() => this.changeView('chat')}>Customer Service</a>
                 </li>
               </ul>
             </div>
