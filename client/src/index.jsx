@@ -27,7 +27,10 @@ class App extends React.Component {
       portfolioHistory: {},
       paneToggle: 'pie',
       portfolioDataToggle: 'unrealizedGL',
-      modalOpen: false
+      modalOpen: false,
+      stockToBuy: {},
+      buyOrSell: '',
+      sellLimit: 0
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -69,6 +72,7 @@ class App extends React.Component {
   }
 
   getPortfolioHoldings() {
+    console.log('Update portfolio');
     axios.get('/api/holdings')
       .then(({data}) => {
         this.setState({
@@ -94,13 +98,25 @@ class App extends React.Component {
       });
   }
 
-  toggleModal() {
-    console.log('Toggle bitch');
-    let newState = !this.state.modalOpen
-    console.log(newState);
-    this.setState({
-      modalOpen: newState
-    })
+  toggleModal(stock, buyOrSell, limit) {
+    if (stock === null) {
+      this.setState({
+        modalOpen: false
+      })
+    } else {
+      axios.get('/api/search', {
+        params: { term: stock }
+      })
+      .then(({data}) => {
+        this.setState({
+          modalOpen: true,
+          stockToBuy: data,
+          buyOrSell: buyOrSell,
+          sellLimit: limit
+        })
+      })
+      .catch(err => console.log(err))
+    }
   }
 
   //gets all stocks from ticker
@@ -299,9 +315,9 @@ class App extends React.Component {
     } else if (view === 'signin'){
       return <SignIn changeView={this.changeView} />
     } else if (view === 'search') {
-      return <Search changeView={this.changeView} />
+      return <Search changeView={this.changeView} getPortfolioHoldings={this.getPortfolioHoldings} />
     } else if (view === 'compare') {
-      return <CompareList changeView={this.changeView} />
+      return <CompareList changeView={this.changeView} getPortfolioHoldings={this.getPortfolioHoldings} />
     }
 
   }
@@ -336,7 +352,7 @@ class App extends React.Component {
         <div className="container">
           {this.renderView()}
         </div>
-        <BuySell modalOpen={this.state.modalOpen} toggleModal={this.toggleModal}></BuySell>
+        <BuySell getPortfolioHoldings={this.getPortfolioHoldings} modalOpen={this.state.modalOpen} toggleModal={this.toggleModal} stock={this.state.stockToBuy} sellLimit={this.state.sellLimit} buyOrSell={this.state.buyOrSell}></BuySell>
       </div>
     );
   }

@@ -86,7 +86,7 @@ class StockListItem extends React.Component {
           </td>
           <td>
             <p>
-              <a onClick={this.props.toggleModal}>
+              <a onClick={() => {this.props.toggleModal(this.props.stock.stock_ticker, 'Sell', this.props.stock.quantity)}}>
                 <i className="fas fa-minus" />
               </a>
             </p>
