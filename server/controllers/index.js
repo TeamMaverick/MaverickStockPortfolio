@@ -1,5 +1,6 @@
 const model = require('../models/index.js');
 const alpha = require('../alphaVantage/index.js');
+const axios = require('axios');
 
 //Return requests to the client
 module.exports = {
@@ -151,5 +152,11 @@ module.exports = {
         res.send(err);
         console.log(err);
       });
+  },
+  getBannerInfo: (req, res) => {
+    alpha.getAllBannerInfo()
+      .then((result) => res.send(result))
+      .catch((e) => console.log(e))
+    // res.send(alpha.getAllBannerInfo())
   }
 };
