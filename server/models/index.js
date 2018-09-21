@@ -5,14 +5,23 @@ const Op = Sequelize.Op;
 
 module.exports = {
   // Adds stock ticker to database
-  saveStock: function(stock, quantity = 1, price = 1, uid) {
+  saveStock: function(stock, quantity = 1, price = 1, uid, change, ytdChange, latestVolume) {
     return TickerNames.findOne({
       where: {
         symbol: stock
       }
     })
     .then((data) => {
-      return Stock.create({stock_ticker : stock, company_name: data.name, quantity : quantity, price : price, uid : uid})
+      return Stock.create(
+        {stock_ticker : stock, 
+          company_name: data.name, 
+          quantity : quantity, 
+          price : price, 
+          uid : uid, 
+          change : change,
+          ytdChange: ytdChange,
+          latestVolume: latestVolume
+        })
     })
   },
   // Gets stock tickers from database
@@ -53,9 +62,12 @@ module.exports = {
   },
 
   //updates stock price field in database to reflect latest price
-  updateStockPrice: function(ticker, price) {
+  updateStockPrice: function(ticker, price, ytdChange, latestVolume) {
     return Stock.update({
-      price : price
+      price : price,
+      change : change,
+      ytdChange : ytdChange,
+      latestVolume : latestVolume
     }, {
       where: {
         stock_ticker : ticker

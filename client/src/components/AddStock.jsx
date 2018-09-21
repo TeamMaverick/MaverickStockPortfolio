@@ -22,10 +22,13 @@ class AddStock extends React.Component {
       .get('/api/currentStockPrice', { params: { STOCK: this.state.stock } })
       .then(({ data }) => {
         return axios.post('/api/stock', {
-          stock: this.state.stock,
-          quantity: this.state.quantity,
-          price: data,
-          uid: firebase.auth().currentUser.uid
+          stock : this.state.stock,
+          quantity : this.state.quantity,
+          price : data.quote.latestPrice,
+          uid : firebase.auth().currentUser.uid,
+          change : data.quote.change,
+          ytdChange : data.quote.ytdChange,
+          latestVolume : data.quote.latestVolume 
         });
       })
       .then(() => {
