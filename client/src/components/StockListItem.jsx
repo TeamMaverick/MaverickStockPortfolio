@@ -73,11 +73,17 @@ class StockListItem extends React.Component {
           </td>
           <td>
             {`$${Number.parseFloat(
-              this.props.stock.price * this.props.stock.quantity
-            ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
+              this.props.stock.price * this.props.stock.quantity)
+                .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
           </td>
-          <td>$ </td>
-          <td>$ </td>
+          <td>
+            {`$${Number.parseFloat(this.props.stock.change * this.props.stock.quantity)
+              .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
+          </td>
+          <td>
+            {`${Number.parseFloat(this.props.stock.ytdChange*100)
+              .toFixed(0).replace(/\d(?=(\d{3})+\.)/g, '$&,')}%`}
+          </td>
         </tr>
       </React.Fragment>
     );

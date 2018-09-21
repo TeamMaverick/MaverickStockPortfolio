@@ -27,7 +27,7 @@ const getPeers = (ticker) => {
 
 //get the most up-to-date price from IEX API
 const getCurrentPrice = (ticker) => {
-  var url = `${process.env.API_ticker}/stock/${ticker}/price`;
+  var url = `${process.env.API_ticker}/stock/${ticker}/batch?types=quote`;
   return axios.get(url)
 }
 

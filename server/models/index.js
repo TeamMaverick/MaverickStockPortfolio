@@ -1,16 +1,27 @@
 const Stock = require('./Stock.js');
 const TickerNames = require('./TickerNames');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
   // Adds stock ticker to database
-  saveStock: function(stock, quantity = 1, price = 1, uid) {
+  saveStock: function(stock, quantity = 1, price = 1, uid, change, ytdChange, latestVolume) {
     return TickerNames.findOne({
       where: {
         symbol: stock
       }
     })
     .then((data) => {
-      return Stock.create({stock_ticker : stock, company_name: data.name, quantity : quantity, price : price, uid : uid})
+      return Stock.create(
+        {stock_ticker : stock, 
+          company_name: data.name, 
+          quantity : quantity, 
+          price : price, 
+          uid : uid, 
+          change : change,
+          ytdChange: ytdChange,
+          latestVolume: latestVolume
+        })
     })
   },
   // Gets stock tickers from database
@@ -51,9 +62,12 @@ module.exports = {
   },
 
   //updates stock price field in database to reflect latest price
-  updateStockPrice: function(ticker, price) {
+  updateStockPrice: function(ticker, price, ytdChange, latestVolume) {
     return Stock.update({
-      price : price
+      price : price,
+      change : change,
+      ytdChange : ytdChange,
+      latestVolume : latestVolume
     }, {
       where: {
         stock_ticker : ticker
@@ -72,13 +86,28 @@ module.exports = {
      })
   },
 
-  //gets a list of all tickers
+  //gets a ticker if it is found
   getAllTickers: function (ticker_name) {
+      return TickerNames.findOne({
+        where: {
+          symbol: ticker_name
+        }
+      })
+    },
+    
+  //gets a list of all tickers that may similarly match input
+  getGroupTickers: function (ticker_name) {
     return TickerNames.findAll(
       {
         limit: 10,
-        where: {symbol: ticker_name}
+        where: { [Op.or]: 
+          [
+            {symbol: { [Op.like]: ticker_name +'%' }},
+            {name: { [Op.like]: ticker_name +'%' }}        
+          ] 
+        }
       }
     );
   }
-};
+
+  }
