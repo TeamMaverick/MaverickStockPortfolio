@@ -137,15 +137,27 @@ module.exports = {
         console.log(err);
       });
   },
+  //handles input ticker search autocomplete
   getAllTickers: (req, res) => {
     model
       .getAllTickers(req.query.stock_ticker)
       .then((data) => {
-        var newData = []
-        for(let i = 0; i<data.length; i++) {
-          newData.push({id: data[i].id, label: data[i].symbol+': ' + data[i].name});
+        if(data===null) {
+          model.getGroupTickers(req.query.stock_ticker).then( (data) => {
+            var newData = []
+            for(let i = 0; i<data.length; i++) {
+              newData.push({id: data[i].id, label: data[i].symbol+': ' + data[i].name});
+            }
+            res.send(newData);
+          })
+          .catch(err => {
+            res.send(err);
+            console.log(err);
+          })
+        } else {
+          var newData = [{id: data.id, label: data.symbol+': ' + data.name}]
+          res.send(newData);
         }
-        res.send(newData);
       })
       .catch((err) => {
         res.send(err);
