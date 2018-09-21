@@ -134,7 +134,9 @@ module.exports = {
 
   //update stock price in the database
   updatePrice: (req, res) => {
-    model.updateStockPrice(req.body.ticker, 
+    console.log(req.body);
+    model.updateStockPrice(
+      req.body.ticker, 
       req.body.price, 
       req.body.change, 
       req.body.ytdChange, 
