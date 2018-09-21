@@ -23,11 +23,10 @@ class MessageBox extends React.Component {
   }
 
   render() {
-    
     return(
       <div id="chat">
         <EachChat messages={this.state.messages}/>
-        <Chat />
+        <Chat user={this.props.user}/>
       </div>
     )
   }

@@ -128,13 +128,30 @@ module.exports = {
 
   // gets all stocks
   getAllStocks: function(req, res) {
-    model.getAllStocks()
-    .then((data) => {
-      res.send(data)
-    })
-    .catch((err) => {
-      res.send(err)
-    })
+    model
+      .getAllTickers(req.query.stock)
+      .then((data) => {
+        if(data===null) {
+          model.getGroupTickers(req.query.stock).then( (data) => {
+            var newData = []
+            for(let i = 0; i<data.length; i++) {
+              newData.push({id: data[i].id, label: data[i].symbol+': ' + data[i].name.split(' ').slice(0, 3).join(' ')});
+            }
+            res.send(newData);
+          })
+          .catch(err => {
+            res.send(err);
+            console.log(err);
+          })
+        } else {
+          var newData = [{id: data.id, label: data.symbol+': ' + data.name.split(' ').slice(0, 3).join(' ')}]
+          res.send(newData);
+        }
+      })
+      .catch((err) => {
+        res.send(err);
+        console.log(err);
+      });
   },
 
   // get stock info from alphaVantage

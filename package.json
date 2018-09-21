@@ -4,6 +4,7 @@
   "description": "Maverick Stock Portfolio",
   "main": "index.js",
   "scripts": {
+    "jest": "jest",
     "test": "mocha --bail --reporter nyan test/ServerSpec.js",
     "react-dev": "webpack -d --watch",
     "server-dev": "nodemon --inspect server/index.js",
@@ -40,6 +41,7 @@
     "mysql": "^2.16.0",
     "mysql2": "^1.6.1",
     "react": "^16.4.2",
+    "react-autocomplete": "^1.8.1",
     "react-dom": "^16.4.2",
     "react-select": "^2.0.0",
     "react-select-fast-filter-options": "^0.2.3",
