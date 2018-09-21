@@ -8,6 +8,7 @@ import News from './components/News.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
 import SignIn from './components/SignIn.jsx';
 import StockDetails from './components/StockDetails.jsx';
+import Infinite from './components/Infinite.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -345,6 +346,7 @@ class App extends React.Component {
               </ul>
             </div>
         }
+        <Infinite/>
         <div className="container">
           {this.renderView()}
         </div>

@@ -38,6 +38,30 @@ const getTickersAndNames = () =>{
   .catch((err) => (console.log(err)));
 }
 
+const getAllBannerInfo = () => {
+  var final = []
+  return axios.get('https://api.iextrading.com/1.0/stock/market/list/mostactive')
+    .then((data) => {
+      data.data.forEach(dat => final.push(dat))
+    })
+    .then(() => {
+      return axios.get('https://api.iextrading.com/1.0/stock/market/list/gainers')
+        .then((data) => data.data.forEach(dat => final.push(dat)))
+        .then(() => {
+          return axios.get('https://api.iextrading.com/1.0/stock/market/list/losers')
+            .then((data) => {
+              data.data.forEach(dat => final.push(dat))
+              return final
+            })
+            .catch((err) => console.error(err))
+        })
+        .catch((err) => console.error(err))
+    })
+    .catch((err) => console.error(err))
+  }
+  
+
 module.exports.getData = getData;
 module.exports.getCurrentPrice = getCurrentPrice;
 module.exports.getTickersAndNames = getTickersAndNames;
+module.exports.getAllBannerInfo = getAllBannerInfo;
