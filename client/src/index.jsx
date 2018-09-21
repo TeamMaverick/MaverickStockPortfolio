@@ -25,7 +25,7 @@ class App extends React.Component {
       stocks: [],
       portfolioTotal: 0,
       sortBy: 'Alphabetical',
-      user: false
+      user: null
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -44,15 +44,12 @@ class App extends React.Component {
     this.setGuest = this.setGuest.bind(this)
   }
   componentDidMount() {
-    // if (this.state.user) {
-    //   this.changeView('home')
-    // }
     // get all stocks for this user
-    // this.getStocks(this.state.sortBy);
-    // this.getAllStocks();
+    this.getStocks(this.state.sortBy);
+    this.getAllStocks();
 
     //will update the stock prices every 10 seconds
-    // setInterval(this.updateAllStockPrices, 100000);
+    setInterval(this.updateAllStockPrices, 100000);
   }
 
   signIn(email, pw) {
