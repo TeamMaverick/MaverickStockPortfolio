@@ -62,7 +62,7 @@ module.exports = {
   },
 
   //updates stock price field in database to reflect latest price
-  updateStockPrice: function(ticker, price, ytdChange, latestVolume) {
+  updateStockPrice: function(ticker, price, change, ytdChange, latestVolume) {
     return Stock.update({
       price : price,
       change : change,
