@@ -144,3 +144,8 @@ h1.healthCheckHeader {
   text-decoration: none;
   text-shadow: 0 0 3px black;
 }
+
+.field {
+  margin-left: auto;
+  margin-right: auto;
+}

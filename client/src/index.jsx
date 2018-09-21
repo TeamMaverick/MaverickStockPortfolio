@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+
 import AddStock from './components/AddStock.jsx';
 import ListOfStocks from './components/ListOfStocks.jsx';
 import HealthCheck from './components/HealthCheck.jsx';
-import News from './components/News.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx';
 import SignIn from './components/SignIn.jsx';
 import StockDetails from './components/StockDetails.jsx';
@@ -20,9 +20,12 @@ class App extends React.Component {
       user: {},
       //taken from HealthCheck
       currentStock: {},
+      peersQuotes: {},
+      peersUpdated: false
     };
     this.getStocks = this.getStocks.bind(this);
     this.getStocksInitial = this.getStocksInitial.bind(this);
+    this.getPeersChange = this.getPeersChange.bind(this);
     this.setStocks = this.setStocks.bind(this);
     this.removeStock = this.removeStock.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
@@ -99,11 +102,14 @@ class App extends React.Component {
         this.setStocks(data);
       })
       .then(() => {
-        this.calculateTotal();
-      })
-      .then(() => {
         // console.log(this.state.stocks)
         this.displayStock(this.state.stocks[0].stock_ticker)
+      })
+      .then(() => {
+        console.log("PEERS SETUP IN INDEX.JSX", this.state.peers)
+      })
+      .then(() => {
+        this.calculateTotal();
       })
       .catch((err) => {
         console.log(err);
@@ -129,6 +135,18 @@ class App extends React.Component {
   
   setStocks(stocks) {
     this.setState({ stocks });
+  }
+
+  getPeersChange() {
+    axios
+      .get('/api/peers', {params: { peers: this.state.currentStock.peers }})
+      .then((RES) => {
+        console.log("PEERSCHANGE",RES);
+        this.setState({ peersQuotes: RES });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   
   // Removes selected stocks from the database and will re-render the view
@@ -236,13 +254,15 @@ class App extends React.Component {
     doc.save('Test.pdf');
   }
 
-   //called when a ticker symbol on the stocks list is clicked
+  //called when a ticker symbol on the stocks list is clicked
   //requests the data for that ticker symbol and deposits it in the state
   displayStock(stock) {
     return axios
       .get('/api/stockInfo', { params: { STOCK: stock } })
       .then(({data}) => {
-        this.setState({ currentStock: data });
+        console.log("DISPLAY STOCK", this.state.peers)
+        console.log("PEERS OF CURRENT STOCK", this.state.currentStock.peers)
+        this.setState({ currentStock: data }, () => {this.getPeersChange()});
       })
       .catch((err) => {
         console.log(err);
@@ -290,7 +310,10 @@ class App extends React.Component {
                 displayStock={this.displayStock}/>      
             </div>
           </div>
-          <StockDetails peers={this.state.currentStock.peers} news={this.state.currentStock.news}/>    
+          <StockDetails 
+            peers={this.state.currentStock.peers} 
+            peersQuotes={this.state.peersQuotes} 
+            news={this.state.currentStock.news}/>    
         </div>
       )
     } else if (view === 'signin'){
@@ -313,11 +336,11 @@ class App extends React.Component {
         </header>
         {this.state.view !== 'signin' &&
             <div className="tabs">
-              <ul>
+              {/* <ul>
                 <li className={this.state.view === 'home' ? 'is-active' : ''}>
                   <a onClick={() => this.changeView('home')}>Home</a>
                 </li>
-              </ul>
+              </ul> */}
             </div>
         }
         <div className="container">

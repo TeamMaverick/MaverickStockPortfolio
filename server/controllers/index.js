@@ -64,6 +64,17 @@ module.exports = {
       });
   },
 
+  getPeersChange: (req, res) => {
+    alpha
+      .getPeersChange(req.query.peers)
+      .then(({data}) => {
+        res.send(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  },
+
   // deletes stock
   deleteStock: (req, res) => {
     const stocks = req.body.stocks;
