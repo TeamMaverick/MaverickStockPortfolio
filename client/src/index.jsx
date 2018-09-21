@@ -59,6 +59,7 @@ class App extends React.Component {
         params: {uid: res.user.uid}
       })
       .then(user => {
+        console.log(user)
         this.setState({ user: user.data, view: 'home' })
       })
       .catch(err => console.log(err))
