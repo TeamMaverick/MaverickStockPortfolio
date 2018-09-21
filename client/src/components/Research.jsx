@@ -19,13 +19,13 @@ class Research extends React.Component {
 
   // call getstockinfo for all stocks passed down in props
   componentDidMount() {
-    this.getStockInfo();
-
     if(this.props.stocks.length > 0){
       this.displayStock(this.props.stocks[0].stock_ticker);
     } else {
       this.displayStock('MSFT');
     }
+
+    setInterval(this.getStockInfo, 1000);
   }
 
   displayStock(stock) {
@@ -63,9 +63,6 @@ class Research extends React.Component {
   }
 
   render() {
-    if (this.props.stocks) {
-      this.getStockInfo();
-    }
     return (
       <div className="columns">
         <div className="column check is-two-fifths">

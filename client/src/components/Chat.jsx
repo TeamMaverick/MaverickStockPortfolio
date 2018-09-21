@@ -6,7 +6,6 @@ class Chat extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      handle: '',
       chat: '',
       typer: ''
     }
@@ -25,7 +24,6 @@ class Chat extends React.Component {
 
   handleChange(evt) {
     this.setState({
-      [evt.target.name]: evt.target.value,
       [evt.target.name]: evt.target.value
     })
   }
@@ -33,7 +31,7 @@ class Chat extends React.Component {
   handleClick(e) {
     e.preventDefault();
     socket.emit('chat', {
-      handle: this.state.handle,
+      handle: this.props.user.username,
       chat: this.state.chat
     })
     this.setState({
@@ -44,7 +42,7 @@ class Chat extends React.Component {
   }
 
   handleKeyPress() {
-    socket.emit('typing', this.state.handle);
+    socket.emit('typing', this.props.user.username);
   }
 
   render(){
@@ -52,7 +50,6 @@ class Chat extends React.Component {
       <div>
         {this.state.typer && <p><em>{this.state.typer} is typing a message...</em></p>}
         <form type="submit" onSubmit={this.handleClick}>
-          <input type="text" id="handle" placeholder="Name" onChange={this.handleChange} name='handle'/>
           <input type="text" id="chat" ref="chat" placeholder="Chat" onChange={this.handleChange} onKeyPress={this.handleKeyPress} name='chat'/>
           <button id="send" type="submit">Send</button>
         </form>

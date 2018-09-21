@@ -24,7 +24,6 @@ class App extends React.Component {
     super(props);
     this.state = {
       view : 'signin',
-      allStocks: [],
       stocks: [],
       portfolioTotal: 0,
       sortBy: 'Alphabetical',
@@ -40,8 +39,6 @@ class App extends React.Component {
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
-    this.getAllStocks = this.getAllStocks.bind(this);
-    this.setAllStocks = this.setAllStocks.bind(this);
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
     this.updateSort = this.updateSort.bind(this);
@@ -55,23 +52,21 @@ class App extends React.Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.signIn = this.signIn.bind(this);
     this.signUp = this.signUp.bind(this);
-    this.signOut = this.signOut.bind(this)
-    this.setGuest = this.setGuest.bind(this)
-    this.sum = this.sum.bind(this)
+    this.signOut = this.signOut.bind(this);
+    this.setGuest = this.setGuest.bind(this);
+    this.setUser = this.setUser.bind(this);
   }
   
   componentDidMount() {
     // get all stocks for this user
     this.getStocks(this.state.sortBy);
-    this.getAllStocks();
+
+    // will update the stock prices every 10 seconds
     this.getPortfolioHoldings();
     this.getPortfolioHistory();
+
     //will update the stock prices every 10 seconds
     setInterval(this.updateAllStockPrices, 100000);
-  }
-  
-   sum(a, b) {
-    return a + b;
   }
 
   signIn(email, pw) {
@@ -81,7 +76,7 @@ class App extends React.Component {
         params: {uid: res.user.uid}
       })
       .then(user => {
-        this.setState({ user: user.data, view: 'home' })
+        this.setUser(user.data)
       })
       .catch(err => console.log(err))
     })
@@ -177,28 +172,16 @@ class App extends React.Component {
     }
   }
 
-  //gets all stocks from ticker
-  getAllStocks() {
-    axios.get(`/api/allStocks/`)
-    .then((data) => {
-      this.setAllStocks(data);
-    })
-    .catch(err => console.log(err));
-  }
-
   setStocks(stocks) {
     this.setState({
       stocks: stocks
     });
   }
-
-  setAllStocks(allStocks) {
-    let options = [];
-    allStocks.data.map(stock => {
-      options.push({ value: stock.symbol, label: stock.name.split(' ').slice(0, 4).join(' ') })
-    })
+  
+  setUser(user) {
     this.setState({
-      allStocks: options
+      user: user,
+      view: 'home'
     })
   }
   // Removes selected stocks from the database and will re-render the view
@@ -377,7 +360,7 @@ class App extends React.Component {
     } else if (view === 'signup') {
       return <SignUp signUp={this.signUp} />
     } else if (view === 'chat') {
-      return <MessageBox />
+      return <MessageBox user={this.state.user}/>
     } else if (view === 'search') {
       return <Search changeView={this.changeView} getPortfolioHoldings={this.getPortfolioHoldings} />
     } else if (view === 'compare') {
@@ -386,7 +369,7 @@ class App extends React.Component {
   }
 
   render() {
-    {console.log(this.state.view)}
+    // console.log(this.state.user);
     // proceed as usual after initial componentDidMount
     return (
       <div className="container-span">
