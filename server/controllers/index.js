@@ -76,6 +76,7 @@ module.exports = {
     alpha
       .getPeersChange(req.query.peers)
       .then(({data}) => {
+        console.log("GET PEERS CHANGE IN CONTROLLER", data);
         res.send(data);
       })
       .catch((err) => {

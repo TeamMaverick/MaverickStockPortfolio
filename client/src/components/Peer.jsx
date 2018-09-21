@@ -8,7 +8,7 @@ const Peer = ({ stock, quote }) => {
     <p>
     {stock}
     </p>
-    <div>
+    <div style={{display: "inline-block"}}>
     {quote[stock].quote.change < 0 ? 
       (<i className="fas fa-arrow-down red" />) : 
       (<i className="fas fa-arrow-up green" />)}

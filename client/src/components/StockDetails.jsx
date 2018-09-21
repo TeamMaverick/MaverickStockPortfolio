@@ -2,13 +2,17 @@ import React from 'react';
 import Peers from './Peers.jsx';
 import News from './News.jsx';
 
-const StockDetails = ({ peers, peersQuotes, news }) => {
-  console.log("STOCK DETAILS QUOTES", peersQuotes.data);
-  console.log("STOCK DETAILS PEERS", peers);
+const StockDetails = ({ currentStock, peersQuotes }) => {
+  console.log("STOCK DETAILS CURRENTSTOCK", currentStock);
+  console.log("STOCK DETAILS QUOTES", peersQuotes);
+    // console.log("STOCK DETAILS QUOTES", peersQuotes.data);
+    // console.log("STOCK DETAILS PEERS", currentStock.peers);
+    // console.log("STOCK DETAILS STOCK", currentStock.quote.symbol);
+
   return(
   <React.Fragment>
-    <Peers peers={peers} peersQuotes={peersQuotes.data} />
-    <News news={news}/>
+    <Peers currentStock={currentStock} peersQuotes={peersQuotes.data} />
+    <News currentStock={currentStock}/> 
   </React.Fragment>
 )}
 

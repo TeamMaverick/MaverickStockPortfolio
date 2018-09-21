@@ -325,9 +325,12 @@ class App extends React.Component {
             </div>
           </div>
           <StockDetails 
-            peers={this.state.currentStock.peers} 
+            currentStock={this.state.currentStock}
+            // stock={this.state.currentStock.quote}
+            // peers={this.state.currentStock.peers} 
             peersQuotes={this.state.peersQuotes} 
-            news={this.state.currentStock.news}/>    
+            // news={this.state.currentStock.news}
+            />    
         </div>
       )
     } else if (view === 'signin'){
