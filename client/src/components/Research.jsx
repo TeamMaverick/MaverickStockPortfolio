@@ -107,7 +107,7 @@ class Research extends React.Component {
                   {this.props.stocks.map((stock) => 
                     (
                       <li key={stock.stock_ticker + "-buy"}>
-                        <a onClick={() => {this.props.buyStock()}}>
+                        <a onClick={() => {this.props.toggleModal(stock.stock_ticker, 'Buy', null)}}>
                           <i className="fas fa-hand-holding-usd" />
                         </a>
                       </li>

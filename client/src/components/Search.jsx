@@ -125,7 +125,7 @@ class Search extends React.Component {
                   {this.state.history.length > 0 &&
                     <React.Fragment>
                       {this.state.history.map((item, i) => (
-                        <tr key={i}>
+                        <tr key={item.quote.symbol + '-history'}>
                           <th>{i + 1}</th>
                           <td>{item.quote.symbol}</td>
                           <td>{item.quote.companyName}</td>
@@ -147,7 +147,7 @@ class Search extends React.Component {
               {/* end table */}
             </div>
           </React.Fragment>}
-        {this.state.view === 'compare' && <CompareList setView={this.setView} stocks={this.state.compare} />}
+        {this.state.view === 'compare' && <CompareList setView={this.setView} stocks={this.state.compare} getPortfolioHoldings={this.props.getPortfolioHoldings} changeView={this.props.changeView} />}
       </div>
     )
   }
