@@ -7,9 +7,13 @@ import Research from './components/Research.jsx';
 import SortBy from './components/SortBy.jsx';
 import PortfolioPChart from './components/PortfolioPChart.jsx'; 
 import SignIn from './components/SignIn.jsx';
+import SignUp from './components/SignUp.jsx';
 import Search from './components/Search.jsx';
 import CompareList from './components/CompareList.jsx';
+import firebase from 'firebase'
+import config from '../../config.js'
 
+firebase.initializeApp(config)
 
 class App extends React.Component {
   constructor(props) {
@@ -19,7 +23,8 @@ class App extends React.Component {
       allStocks: [],
       stocks: [],
       portfolioTotal: 0,
-      sortBy: 'Alphabetical'
+      sortBy: 'Alphabetical',
+      user: false
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
@@ -32,14 +37,61 @@ class App extends React.Component {
     this.changeView = this.changeView.bind(this);
     this.renderView = this.renderView.bind(this);
     this.removeStock = this.removeStock.bind(this);
+    this.signIn = this.signIn.bind(this);
+    this.signUp = this.signUp.bind(this);
+    this.signOut = this.signOut.bind(this)
+    this.setGuest = this.setGuest.bind(this)
   }
   componentDidMount() {
+    // if (this.state.user) {
+    //   this.changeView('home')
+    // }
     // get all stocks for this user
-    this.getStocks(this.state.sortBy);
-    this.getAllStocks();
+    // this.getStocks(this.state.sortBy);
+    // this.getAllStocks();
 
     //will update the stock prices every 10 seconds
-    setInterval(this.updateAllStockPrices, 30000);
+    // setInterval(this.updateAllStockPrices, 100000);
+  }
+
+  signIn(email, pw) {
+    firebase.auth().signInWithEmailAndPassword(email, pw)
+    .then(res => {
+      axios.get('/api/signin', {
+        params: {uid: res.user.uid}
+      })
+      .then(user => {
+        this.setState({ user: user.data, view: 'home' })
+      })
+      .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
+  }
+
+  signUp(username, email, pw) {
+    firebase.auth().createUserWithEmailAndPassword(email, pw)
+    .then(res => {
+      axios.post('/api/signup', {
+        username, username,
+        email: email,
+        uid: res.user.uid
+      })
+      .then(() => this.signIn(email, pw))
+      .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err));
+  }
+
+  signOut() {
+    firebase.auth().signOut()
+    .then(() => {
+      this.setState({ user: null, view: 'signin' })
+      console.log('signed out')})
+    .catch(err => console.log(err));
+  }
+
+  setGuest() {
+    this.setState({ user: true, view: 'home' })
   }
 
   //gets all the stocks for the user stored in the database and puts them in state
@@ -89,7 +141,6 @@ class App extends React.Component {
     const checkedStocks = document.getElementsByClassName('checkedStock');
     for (var i = 0; i < checkedStocks.length; i++) {
       var stock = checkedStocks[i];
-
       if (stock.checked) {
         stockList.push(stock.value);
       }
@@ -161,55 +212,55 @@ class App extends React.Component {
     });
   }
 
-  renderView (){
-    const {view} = this.state;
+  renderView () {
+    const { view } = this.state;
 
-    if(view === 'home') {
-      return ( 
-          <div className="columns">
-            <div className="column border">
-              <AddStock getStocks={this.getStocks} allStocks={this.state.allStocks}/>
-              <SortBy updateSort={this.updateSort} />
-              <ListOfStocks
-                stocksArray={this.state.stocks}
-                removeCheckedBoxes={this.removeCheckedBoxes}
-                calculateTotal={this.calculateTotal}
-                portfolioTotal={this.state.portfolioTotal}
-                getStocks={this.getStocks}
-              />
-            </div>
-            <div className="column is-two-thirds border">
-              <PortfolioPChart stocks={this.state.stocks} />
-            </div>
+    if (view === 'home') {
+      return (
+        <div className="columns">
+          <div className="column border">
+            <AddStock getStocks={this.getStocks} allStocks={this.state.allStocks} />
+            <SortBy updateSort={this.updateSort} />
+            <ListOfStocks
+              stocksArray={this.state.stocks}
+              removeCheckedBoxes={this.removeCheckedBoxes}
+              calculateTotal={this.calculateTotal}
+              portfolioTotal={this.state.portfolioTotal}
+              getStocks={this.getStocks}
+            />
           </div>
+          <div className="column is-two-thirds border">
+            <PortfolioPChart stocks={this.state.stocks} />
+          </div>
+        </div>
       )
     } else if (view === 'research') {
-      return (
-        <Research stocks={this.state.stocks} getStocks={this.getStocks} removeStock={this.removeStock} allStocks={this.state.allStocks}  />      
-    )
-    } else if (view === 'signin'){
-      return <SignIn changeView={this.changeView} />
+      return  <Research stocks={this.state.stocks} getStocks={this.getStocks} removeStock={this.removeStock} allStocks={this.state.allStocks} />
+    } else if (view === 'signin') {
+      return <SignIn setGuest={this.setGuest} signIn={this.signIn} changeView={this.changeView} />
+    } else if (view === 'signup') {
+      return <SignUp signUp={this.signUp} />
     } else if (view === 'search') {
       return <Search changeView={this.changeView} />
     } else if (view === 'compare') {
       return <CompareList changeView={this.changeView} />
     }
-
   }
 
   render() {
+    {console.log(this.state.view)}
     // proceed as usual after initial componentDidMount
     return (
       <div className="container-span">
         <header className="navbar logo">
           <h1>Maverick</h1>
-          {this.state.view !== 'signin' && 
+          {this.state.user !== null && 
           <div className="navbar-end signout">
-            <a onClick={() => this.changeView('signin')}>Sign Out</a>
+            <a onClick={() => this.signOut()}>Sign Out</a>
           </div>
           }
         </header>
-        {this.state.view !== 'signin' &&
+        {this.state.user !== null &&
             <div className="tabs">
               <ul>
                 <li className={this.state.view === 'home' ? 'is-active' : ''}>

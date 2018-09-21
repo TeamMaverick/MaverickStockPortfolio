@@ -179,3 +179,8 @@ div.search {
   display: block;
   margin: 0px auto
 }
+
+.is-link {
+  color: #3273dc;
+  font-weight: bold
+}

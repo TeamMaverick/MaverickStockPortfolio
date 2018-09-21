@@ -1,5 +1,5 @@
 import React from 'react'
-import Axios from 'axios'
+import axios from 'axios'
 import Select from 'react-virtualized-select';
 import CompareList from './CompareList.jsx'
 
@@ -11,8 +11,7 @@ class Search extends React.Component {
       searchInput: '',
       history: [],
       compare: [],
-      checked: 0,
-      fields: []
+      checked: 0
     }
     this.onChange = this.onChange.bind(this)
     this.submitSearch = this.submitSearch.bind(this)
@@ -29,9 +28,8 @@ class Search extends React.Component {
 
   submitSearch(e, query) {
     e.preventDefault()
-    Axios.get('/api/search', {
-      params: { term: query }
-    })
+    axios.get('/api/search', {
+      params: { term: query }})
       .then(res => {
         this.setState({
           history: this.state.history.concat(res.data),
@@ -51,7 +49,7 @@ class Search extends React.Component {
     var totalChecked = 0
     var checkboxes = document.getElementsByClassName('checkbox')
     for (var ele of checkboxes) {
-      if (totalChecked >= 3) {
+      if (totalChecked >= 4) {
       ele.checked = false
     }
       if (ele.checked) {
@@ -100,7 +98,7 @@ class Search extends React.Component {
               </div>
               <div className="column is-half">
                 <h1 className="title">Compare</h1>
-                <h2 className="subtitle">Select <strong>{3 - this.state.checked}</strong> more stocks to compare.</h2>
+                <h2 className="subtitle">Select <strong>{4 - this.state.checked}</strong> more stocks to compare.</h2>
                 <button className="button" name="submit" type="submit" onClick={() => this.submitCompare()} >Compare</button>
                 <div>
                 </div>
@@ -127,7 +125,7 @@ class Search extends React.Component {
                   {this.state.history.length > 0 &&
                     <React.Fragment>
                       {this.state.history.map((item, i) => (
-                        <tr>
+                        <tr key={i}>
                           <th>{i + 1}</th>
                           <td>{item.quote.symbol}</td>
                           <td>{item.quote.companyName}</td>

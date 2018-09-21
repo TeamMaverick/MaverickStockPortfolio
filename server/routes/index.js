@@ -42,4 +42,9 @@ router.get('/portfolio', stockController.history);
 
 router.get('/search', stockController.getTickerInfo)
 
+router.post('/signup', stockController.signUp)
+
+router.get('/signin', stockController.signIn)
+
+
 module.exports = router;
