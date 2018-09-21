@@ -250,6 +250,9 @@ div.search {
   margin: 0px auto
 }
 
+.table {
+  width: 100%;
+}
 .is-link {
   color: #3273dc;
   font-weight: bold

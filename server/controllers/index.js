@@ -69,6 +69,39 @@ module.exports = {
         res.sendStatus(500)
       })
   },
+
+  currentHoldings: (req, res) => {
+    model.getHoldings(req.query.userId)
+      .then((data)=> {
+        // format like the old style
+        var stockArray = [];
+        for (stock in data) {
+          let stockObject = data[stock][Object.keys(data[stock])[0]]
+          stockObject.dataValues.quantity = Object.keys(data[stock]).length
+          stockArray.push(stockObject)
+        }
+        let stockArrayWValues = stockArray.map((stock) => {
+          return alpha
+            .getCurrentPrice(stock.stock_ticker)
+            .then(({ data }) => {
+              stock.dataValues.price = data
+              return stock
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        Promise.all(stockArrayWValues)
+          .then((stocks) => {
+            console.log(stocks)
+            res.send(stocks)
+          })
+      })
+      .catch((err) => {
+        console.log(err)
+        res.sendStatus(500)
+      })
+  },
   
   // Calls function in model to post stock ticker to database
   postStockTicker: (req, res) => {

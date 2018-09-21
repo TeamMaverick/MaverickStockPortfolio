@@ -11,6 +11,9 @@ import SignUp from './components/SignUp.jsx';
 import MessageBox from './components/MessageBox.jsx'
 import Search from './components/Search.jsx';
 import CompareList from './components/CompareList.jsx';
+import BuySell from './components/BuySell.jsx';
+
+import PortfolioChart from './components/PortfolioChart.jsx';
 import firebase from 'firebase'
 import config from '../../config.js'
 
@@ -21,16 +24,21 @@ class App extends React.Component {
     super(props);
     this.state = {
       view : 'signin',
-      // allStocks: [],
       stocks: [],
       portfolioTotal: 0,
       sortBy: 'Alphabetical',
+      portfolio: {},
+      portfolioHistory: {},
+      paneToggle: 'pie',
+      portfolioDataToggle: 'unrealizedGL',
+      modalOpen: false,
+      stockToBuy: {},
+      buyOrSell: '',
+      sellLimit: 0,
       user: null
     };
     this.getStocks = this.getStocks.bind(this);
     this.setStocks = this.setStocks.bind(this);
-    // this.getAllStocks = this.getAllStocks.bind(this);
-    // this.setAllStocks = this.setAllStocks.bind(this);
     this.removeCheckedBoxes = this.removeCheckedBoxes.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
     this.updateSort = this.updateSort.bind(this);
@@ -38,21 +46,26 @@ class App extends React.Component {
     this.changeView = this.changeView.bind(this);
     this.renderView = this.renderView.bind(this);
     this.removeStock = this.removeStock.bind(this);
+    this.getPortfolioHistory = this.getPortfolioHistory.bind(this);
+    this.getPortfolioHoldings = this.getPortfolioHoldings.bind(this);
+    this.changeToggle = this.changeToggle.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
     this.signIn = this.signIn.bind(this);
     this.signUp = this.signUp.bind(this);
     this.signOut = this.signOut.bind(this);
     this.setGuest = this.setGuest.bind(this);
     this.setUser = this.setUser.bind(this);
   }
+  
   componentDidMount() {
-    // if (this.state.user) {
-    //   this.changeView('home')
-    // }
     // get all stocks for this user
     this.getStocks(this.state.sortBy);
-    // this.getAllStocks();
 
     // will update the stock prices every 10 seconds
+    this.getPortfolioHoldings();
+    this.getPortfolioHistory();
+
+    //will update the stock prices every 10 seconds
     setInterval(this.updateAllStockPrices, 100000);
   }
 
@@ -96,6 +109,32 @@ class App extends React.Component {
     this.setState({ user: true, view: 'home' })
   }
 
+  getPortfolioHistory() {
+    axios.get('/api/portfolio', {
+      userId: 1,
+      })
+      .then(({data}) => {
+        this.setState({
+          portfolioHistory: data
+        })
+      })
+  }
+
+  getPortfolioHoldings() {
+    console.log('Update portfolio');
+    axios.get('/api/holdings')
+      .then(({data}) => {
+        console.log('Got Portfolio')
+        this.setState({
+          portfolio: data
+        })
+        this.calculateTotal()
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
   //gets all the stocks for the user stored in the database and puts them in state
   getStocks(sort) {
     sort = sort || this.state.sortBy;
@@ -112,31 +151,33 @@ class App extends React.Component {
       });
   }
 
-  //gets all stocks from ticker
-  // getAllStocks() {
-  //   axios.get(`/api/allStocks/`)
-  //   .then((data) => {
-  //     this.setAllStocks(data);
-  //   })
-  //   .catch(err => console.log(err));
-  // }
+  toggleModal(stock, buyOrSell, limit) {
+    if (stock === null) {
+      this.setState({
+        modalOpen: false
+      })
+    } else {
+      axios.get('/api/search', {
+        params: { term: stock }
+      })
+      .then(({data}) => {
+        this.setState({
+          modalOpen: true,
+          stockToBuy: data,
+          buyOrSell: buyOrSell,
+          sellLimit: limit
+        })
+      })
+      .catch(err => console.log(err))
+    }
+  }
 
   setStocks(stocks) {
     this.setState({
       stocks: stocks
     });
   }
-
-  // setAllStocks(allStocks) {
-  //   let options = [];
-  //   allStocks.data.map(stock => {
-  //     options.push({ value: stock.symbol, label: `${stock.symbol}: ${stock.name.split(' ').slice(0, 3).join(' ')}`})
-  //   })
-  //   this.setState({
-  //     allStocks: options
-  //   })
-  // }
-
+  
   setUser(user) {
     this.setState({
       user: user,
@@ -205,46 +246,115 @@ class App extends React.Component {
 
   //calculates grand total value for list of stocks
   calculateTotal() {
-    const total = this.state.stocks
-      .map((stock) => {
-        return stock.quantity * stock.price;
-      })
-      .reduce((total, subtotal) => {
-        return total + subtotal;
-      }, 0);
-    this.setState({ portfolioTotal: total });
+    if (Object.keys(this.state.portfolio).length > 0) {
+      const total = this.state.portfolio
+        .map((stock) => {
+          return stock.quantity * stock.price
+        })
+        .reduce((total, subtotal) => {
+          return total + subtotal
+        }, 0);
+      this.setState({ portfolioTotal: total })
+    }
   }
 
   changeView(option) {
+    console.log("Change the view to " + option)
     this.setState({
       view: option
     });
   }
 
-  renderView () {
-    const { view } = this.state;
+  changeToggle(option) {
+    this.setState({
+      paneToggle: option
+    })
+  }
 
-    if (view === 'home') {
-      return (
-        <div className="columns">
-          <div className="column border">
-            <AddStock getStocks={this.getStocks} allStocks={this.state.allStocks} />
-            <SortBy updateSort={this.updateSort} />
-            <ListOfStocks
-              stocksArray={this.state.stocks}
-              removeCheckedBoxes={this.removeCheckedBoxes}
-              calculateTotal={this.calculateTotal}
-              portfolioTotal={this.state.portfolioTotal}
-              getStocks={this.getStocks}
-            />
+  changeData(option) {
+    this.setState({
+      portfolioDataToggle: option
+    })
+  }
+
+  renderView (){
+    const {view} = this.state
+    let currentToggle
+
+    if (this.state.paneToggle === 'pie') {
+      currentToggle = 
+      (
+        <div className="column is-three-fifths border">
+          <div className="buttons has-addons">
+            <span className="button" onClick={() => {this.changeToggle('else')}}>Portfolio Returns</span>
+            <span className="button is-danger is-selected">Portfolio Composition</span>
           </div>
-          <div className="column is-two-thirds border">
-            <PortfolioPChart stocks={this.state.stocks} />
+          <PortfolioPChart stocks={this.state.portfolio} />
+        </div>
+      )
+    } else {
+
+      currentToggle = 
+      (
+        <div className="column is-three-fifths border">
+          <div className="buttons has-addons">
+            <span className="button is-danger is-selected">Portfolio Returns</span>
+            <span className="button" onClick={() => {this.changeToggle('pie')}}>Portfolio Composition</span>
+          </div>
+          <div className="buttons has-addons">
+            <span 
+              className={`button is-small ${this.state.portfolioDataToggle === 'realizedGL' ? 'is-selected is-info': null}`}
+              onClick={() => {this.changeData('realizedGL')}}
+            >
+              Realized Gain/Loss
+            </span>
+            <span 
+              className={`button is-small ${this.state.portfolioDataToggle === 'valueOfHoldings' ? 'is-selected is-info': null}`}
+              onClick={() => {this.changeData('valueOfHoldings')}}
+            >
+              Value of Holdings
+            </span>
+            <span 
+              className={`button is-small ${this.state.portfolioDataToggle === 'unrealizedGL' ? 'is-selected is-info': null}`} 
+              onClick={() => {this.changeData('unrealizedGL')}}
+            >
+              Unrealized Gain/Loss
+            </span>
+          </div>
+          <PortfolioChart portfolioHistory={this.state.portfolioHistory} option={this.state.portfolioDataToggle}/>
+        </div>
+      )
+    }
+    
+    if(view === 'home') {
+      return ( 
+        <div>
+          <div className="columns">
+            <div className="column border">
+              {/* <SortBy updateSort={this.updateSort} /> */}
+              <ListOfStocks
+                stocksArray={this.state.portfolio}
+                removeCheckedBoxes={this.removeCheckedBoxes}
+                calculateTotal={this.calculateTotal}
+                portfolioTotal={this.state.portfolioTotal}
+                getStocks={this.getStocks}
+                toggleModal={this.toggleModal}
+              />
+            </div>
+            {currentToggle}
           </div>
         </div>
       )
     } else if (view === 'research') {
-      return  <Research stocks={this.state.stocks} getStocks={this.getStocks} removeStock={this.removeStock} allStocks={this.state.allStocks} />
+      return (
+        <Research 
+          stocks={this.state.stocks} 
+          getStocks={this.getStocks} 
+          removeStock={this.removeStock} 
+          allStocks={this.state.allStocks} 
+          toggleModal={this.toggleModal} 
+        />      
+      )
     } else if (view === 'signin') {
       return <SignIn setGuest={this.setGuest} signIn={this.signIn} changeView={this.changeView} />
     } else if (view === 'signup') {
@@ -252,9 +362,9 @@ class App extends React.Component {
     } else if (view === 'chat') {
       return <MessageBox user={this.state.user}/>
     } else if (view === 'search') {
-      return <Search changeView={this.changeView} />
+      return <Search changeView={this.changeView} getPortfolioHoldings={this.getPortfolioHoldings} />
     } else if (view === 'compare') {
-      return <CompareList changeView={this.changeView} />
+      return <CompareList changeView={this.changeView} getPortfolioHoldings={this.getPortfolioHoldings} />
     }
   }
 
@@ -292,6 +402,7 @@ class App extends React.Component {
         <div className="container">
           {this.renderView()}
         </div>
+        <BuySell getPortfolioHoldings={this.getPortfolioHoldings} modalOpen={this.state.modalOpen} toggleModal={this.toggleModal} stock={this.state.stockToBuy} sellLimit={this.state.sellLimit} buyOrSell={this.state.buyOrSell}></BuySell>
       </div>
     );
   }

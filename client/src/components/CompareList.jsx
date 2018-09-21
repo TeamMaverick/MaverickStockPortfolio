@@ -9,7 +9,7 @@ var CompareList = function(props) {
         {props.stocks &&
           <React.Fragment>
             {props.stocks.map((stock, i) => (
-              <CompareListItem stock={stock} key={i} />
+              <CompareListItem stock={stock} key={i} getPortfolioHoldings={props.getPortfolioHoldings} changeView={props.changeView}/>
             ))}
           </React.Fragment>}
       </div>
