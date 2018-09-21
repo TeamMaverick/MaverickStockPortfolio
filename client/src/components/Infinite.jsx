@@ -21,8 +21,8 @@ class Infinite extends React.Component {
     render() {
         return (
             <div className="scroller">
-                <Marquee loop='true' leading='0' hoverToStop='true' text=
-        {this.state.stocks.map((stock) => <span>|    {stock.symbol}   <span><i className={stock.changePercent > 0 ? "fas fa-arrow-up green" : "fas fa-arrow-down red"} /> </span><span>({stock.changePercent})%     |</span></span>)}
+                <Marquee loop={true} leading={0} hoverToStop={true} text=
+{this.state.stocks.map((stock, i) => <span key={i}>|    {stock.symbol}    <span><i className={stock.changePercent > 0 ? "fas fa-arrow-up green" : "fas fa-arrow-down red"} /> </span><span>({(stock.changePercent * 100).toFixed(2)})%     |</span></span>)}
                 ></Marquee>
             </div>
         )
