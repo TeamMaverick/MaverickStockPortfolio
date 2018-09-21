@@ -42,6 +42,7 @@ class App extends React.Component {
     this.signUp = this.signUp.bind(this);
     this.signOut = this.signOut.bind(this)
     this.setGuest = this.setGuest.bind(this)
+    this.sum = this.sum.bind(this)
   }
   componentDidMount() {
     // get all stocks for this user
@@ -50,6 +51,10 @@ class App extends React.Component {
 
     //will update the stock prices every 10 seconds
     setInterval(this.updateAllStockPrices, 100000);
+  }
+  
+   sum(a, b) {
+    return a + b;
   }
 
   signIn(email, pw) {
