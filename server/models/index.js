@@ -1,6 +1,8 @@
 const Stock = require('./Stock.js');
 const TickerNames = require('./TickerNames');
 const Transaction = require('./Transactions');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 const User = require('./User')
 
 module.exports = {
@@ -72,11 +74,42 @@ module.exports = {
   },
 
   // Pull the portfolio History
-  pullUserTransactions: function(userId) {
+  pullUserTransactions: function(userId = 1) {
     return Transaction.findAll({
       where: {
         user_id: userId
       }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  },
+
+  getHoldings: function(userId = 1) {
+    return Transaction.findAll({
+      where: {
+        user_id: userId,
+        time_sold: null,
+        price_sold: null,
+        price_bought: {
+          [Op.ne]: null
+        },
+        time_bought: {
+          [Op.ne]: null
+        }
+      }
+    })
+    .then((data) => {
+      // Group by the stock
+      var stocks = {};
+      data.forEach((stock) => {
+        if (stocks[stock.stock_ticker]) {
+          stocks[stock.stock_ticker].push(stock)
+        } else {
+          stocks[stock.stock_ticker] = [stock]
+        }
+      })
+      return stocks
     })
     .catch((err) => {
       console.log(err)

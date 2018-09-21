@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 
 class CompareListItem extends React.Component {
   constructor(props) {
@@ -7,6 +8,8 @@ class CompareListItem extends React.Component {
       quantity: 0
     }
     this.changeQuantity = this.changeQuantity.bind(this)
+    this.buyStocks = this.buyStocks.bind(this)
+    this.handleQuantity = this.handleQuantity.bind(this)
   }
 
   handleQuantity(e) {
@@ -21,6 +24,21 @@ class CompareListItem extends React.Component {
         quantity: this.state.quantity + change
       })
     }
+  }
+
+  buyStocks(stock) {
+    axios.post('/api/buy', {
+      userId: 1,
+      stock: stock.quote.symbol,
+      quantity: this.state.quantity
+    })
+      .then((result) => {
+        this.props.getPortfolioHoldings()
+        this.props.changeView('home')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   render() {
@@ -58,7 +76,7 @@ class CompareListItem extends React.Component {
         <a className="card-footer-item" onClick={() => {this.changeQuantity(1)}}>+</a>
         </div>
         <footer className="card-footer">
-          <a className="card-footer-item">Buy</a>
+        <a className="card-footer-item" onClick={() => { this.buyStocks(this.props.stock) }} >Buy</a>
           {/* <a className="card-footer-item">Sell</a> */}
         </footer>
       </div>

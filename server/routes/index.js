@@ -40,7 +40,9 @@ router.post('/sell', stockController.sellStock);
 // Retrieve the portfolio history (should contain multiple series)
 router.get('/portfolio', stockController.history);
 
-router.get('/search', stockController.getTickerInfo)
+router.get('/holdings', stockController.currentHoldings); 
+
+router.get('/search', stockController.getTickerInfo);
 
 router.post('/signup', stockController.signUp)
 
