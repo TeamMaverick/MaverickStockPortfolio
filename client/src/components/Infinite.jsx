@@ -22,7 +22,7 @@ class Infinite extends React.Component {
         return (
             <div className="scroller">
                 <Marquee loop={true} leading={0} hoverToStop={true} text=
-{this.state.stocks.map((stock, i) => <span key={i}>|    {stock.symbol}    <span><i className={stock.changePercent > 0 ? "fas fa-arrow-up green" : "fas fa-arrow-down red"} /> </span><span>({stock.changePercent})%     |</span></span>)}
+{this.state.stocks.map((stock, i) => <span key={i}>|    {stock.symbol}    <span><i className={stock.changePercent > 0 ? "fas fa-arrow-up green" : "fas fa-arrow-down red"} /> </span><span>({(stock.changePercent * 100).toFixed(2)})%     |</span></span>)}
                 ></Marquee>
             </div>
         )
