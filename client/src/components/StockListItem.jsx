@@ -81,8 +81,7 @@ class StockListItem extends React.Component {
               .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
           </td>
           <td>
-            {`${Number.parseFloat(this.props.stock.ytdChange*100)
-              .toFixed(0).replace(/\d(?=(\d{3})+\.)/g, '$&,')}%`}
+            {`${(Number(this.props.stock.ytdChange)*100).toFixed(2)}%`}
           </td>
         </tr>
       </React.Fragment>
