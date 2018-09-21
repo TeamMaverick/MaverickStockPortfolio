@@ -285,7 +285,6 @@ class App extends React.Component {
           <div className="columns border" style={{height: '500px'}} >
             <div className="column">
               <HealthCheck 
-                stocksData={this.state.stocksData} 
                 currentStock={this.state.currentStock} 
                 displayStock={this.displayStock}/>      
             </div>

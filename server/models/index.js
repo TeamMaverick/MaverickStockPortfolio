@@ -1,5 +1,7 @@
 const Stock = require('./Stock.js');
 const TickerNames = require('./TickerNames');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
   // Adds stock ticker to database
@@ -72,13 +74,28 @@ module.exports = {
      })
   },
 
-  //gets a list of all tickers
+  //gets a ticker if it is found
   getAllTickers: function (ticker_name) {
+      return TickerNames.findOne({
+        where: {
+          symbol: ticker_name
+        }
+      })
+    },
+    
+  //gets a list of all tickers that may similarly match input
+  getGroupTickers: function (ticker_name) {
     return TickerNames.findAll(
       {
         limit: 10,
-        where: {symbol: ticker_name}
+        where: { [Op.or]: 
+          [
+            {symbol: { [Op.like]: ticker_name +'%' }},
+            {name: { [Op.like]: ticker_name +'%' }}        
+          ] 
+        }
       }
     );
   }
-};
+
+  }
