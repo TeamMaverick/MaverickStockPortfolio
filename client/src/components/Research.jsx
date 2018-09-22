@@ -25,7 +25,7 @@ class Research extends React.Component {
     } else {
       this.displayStock('MSFT');
     }
-
+    this.getStockInfo();
     setInterval(this.getStockInfo, 10000);
   }
 

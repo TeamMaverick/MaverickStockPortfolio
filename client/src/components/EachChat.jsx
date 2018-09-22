@@ -3,7 +3,7 @@ import React from 'react'
 const EachChat = ({messages}) => {
   return (
     <div id='chat-window'>
-      {messages.map((message) => <p id="output"><strong>{message.handle}: </strong>{message.chat}</p>)}
+      {messages.map((message, idx) => <p id="output" key={idx}><strong>{message.handle}: </strong>{message.chat}</p>)}
     </div>
   )
 }
