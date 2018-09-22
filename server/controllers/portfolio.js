@@ -11,6 +11,7 @@ module.exports = {
         .then(({data}) => {
           // now with the structure, create the object bones to return
           portfolio = calculatePortfolio(data, transactions)
+          console.log(portfolio)
           return calculateValueOfHoldings(portfolio, time)
         })
         .catch((err) => {
@@ -37,7 +38,7 @@ const calculatePortfolio = function(oneStockChartPoints, positions) {
 
   // Loop through each time period on the chart
   oneStockChartPoints.forEach((chartPoint) => {
-    let time = moment(chartPoint.date + ' ' + chartPoint.minute, 'YYYYMMDD H:mm')
+    let time = moment(chartPoint.date + ' ' + chartPoint.minute, 'YYYYMMDD H:mm').add(1, 'days');
     var filteredPositions = []
     var openPositions = {}
     var investedAmount = 0
@@ -53,9 +54,9 @@ const calculatePortfolio = function(oneStockChartPoints, positions) {
           portfolio.stocks[position.stock_ticker] = position.stock_ticker
           // add to current open positions
           if (openPositions[position.stock_ticker]) {  
-            openPositions[position.stock_ticker] += 1
+            openPositions[position.stock_ticker].push(position.price_bought)
           } else {
-            openPositions[position.stock_ticker] = 1
+            openPositions[position.stock_ticker] = [position.price_bought]
           }
           // add to invested amount
           investedAmount += position.price_bought
@@ -101,15 +102,35 @@ const calculateValueOfHoldings = function(portfolio, time) {
         for (t = 0; t < portfolio.time.length; t++) {
           let openPoss = portfolio.openPositions[t]
           let value = 0
+          let unrealizedGLAtTheMoment = 0
           for (stock in openPoss) {
+            let openHoldingsForThisStock = openPoss[stock]
+            let currentValueOfThisStock = stockPriceObject[stock][t]
+            let glOfStock = openHoldingsForThisStock.reduce((acc, stockPricePaid) => {
+              // add the diff to the acc
+              if (currentValueOfThisStock['high'] !== -1) {
+                return acc + (currentValueOfThisStock['high'] - stockPricePaid)
+              } else {
+                return acc
+              }
+            }, 0)
+            unrealizedGLAtTheMoment += glOfStock
             let adj = 0;
             while (stockPriceObject[stock][t + adj] && stockPriceObject[stock][t + adj]['high'] === -1 && (t + adj + 1) < portfolio.time.length) {
               adj++
             }
-            value += stockPriceObject[stock][t + adj] && openPoss[stock] * stockPriceObject[stock][t + adj]['high']
+            if (stockPriceObject[stock][t + adj]) {
+              value += stockPriceObject[stock][t + adj] && openPoss[stock].length * stockPriceObject[stock][t + adj]['high']
+            } else {
+              value += 0;
+            }
           }
           portfolio.valueOfHoldings.push(value)
-          portfolio.unrealizedGL.push(value - portfolio.investedAmount[t])
+          if (unrealizedGLAtTheMoment !== 0) {
+            portfolio.unrealizedGL.push(unrealizedGLAtTheMoment)
+          } else {
+            portfolio.unrealizedGL.push(portfolio.unrealizedGL[portfolio.unrealizedGL.length - 1])
+          }
         }
 
         return portfolio
