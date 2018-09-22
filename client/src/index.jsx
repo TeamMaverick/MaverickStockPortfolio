@@ -283,19 +283,16 @@ class App extends React.Component {
   displayStock(stocks) {
     console.log(stocks);
     if (stocks.length > 0) {
-      console.log("LOGGIN BEFORE AXIOS")
       return axios
         .get('/api/stockInfo', { params: { STOCK: stocks[0].stock_ticker } })
         .then(({data}) => {
-          console.log("HELLOOO")
           this.setState({ currentStock: data });
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      console.log("LOG IN ELSE")
-      this.setState({ currentStock: {} }, () => {console.log("GOODBYE")});
+      this.setState({ currentStock: {} });
     }
     
   }
