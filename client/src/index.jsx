@@ -21,7 +21,7 @@ class App extends React.Component {
       authenticated: false,
       user: {},
       currentStock: {},
-      sortBy: ''
+      sortBy: 'stock_ticker'
     };
     this.getStocks = this.getStocks.bind(this);
     this.getStocksInitial = this.getStocksInitial.bind(this);
