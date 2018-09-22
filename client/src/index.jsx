@@ -195,6 +195,7 @@ class App extends React.Component {
               change: data.quote.change,
               ytdChange: data.quote.ytdChange,
               latestVolume: data.quote.latestVolume
+
               //TODO: ADD
             });
           })
@@ -280,9 +281,14 @@ class App extends React.Component {
   // Download PDF this.state.stocks
   downloadPDF() {
     var doc = new jsPDF('landscape');
-    doc.setFontSize(12);
+    doc.setFontSize(8);
     doc.setFontType("bold");
-    doc.text(20, 20, 'id | stock_ticker | company_name | quantity | price | createdAt | updatedAt');
+    var headText = '';
+    for (var key in this.state.stocks[0]) {
+      headText = headText + ' | ' + key;
+    }
+    doc.text(20, 20, headText);
+    
     doc.setFontType("normal");
     let yLocation = 20;
     for (let i=0; i<this.state.stocks.length; i++) {

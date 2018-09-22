@@ -71,14 +71,14 @@ class StockListItem extends React.Component {
             {`${Number.parseFloat(this.props.stock.price)
               .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
           </td>
+          <td style={{color: this.props.stock.todaysChange >= 0 ? "green" : "red"}}>
+            {`${Number.parseFloat(this.props.stock.todaysChange)
+              .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
+          </td>
           <td>
             {`${Number.parseFloat(
               this.props.stock.holdings)
                 .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
-          </td>
-          <td style={{color: this.props.stock.todaysChange >= 0 ? "green" : "red"}}>
-            {`${Number.parseFloat(this.props.stock.todaysChange)
-              .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
           </td>
           <td style={{color: this.props.stock.portfolioReturn >= 0 ? "green" : "red"}}>
             {`${Number.parseFloat(this.props.stock.portfolioReturn)
