@@ -35,7 +35,7 @@ var ListOfStocks = function({ stocksArray, removeCheckedBoxes, portfolioTotal, g
               </div>
             </th>
           </tr>
-          {stocksArray.length ? stocksArray.map((stock) => {
+          {stocksArray ? stocksArray.map((stock) => {
             return <StockListItem stock={stock} key={stock.stock_ticker} getStocks={getStocks} toggleModal={toggleModal}/>;
           }) : ''}
         </tbody>

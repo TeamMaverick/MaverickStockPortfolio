@@ -19,13 +19,14 @@ class Research extends React.Component {
 
   // call getstockinfo for all stocks passed down in props
   componentDidMount() {
+    this.getStockInfo()
     if(this.props.stocks.length > 0){
       this.displayStock(this.props.stocks[0].stock_ticker);
     } else {
       this.displayStock('MSFT');
     }
 
-    setInterval(this.getStockInfo, 1000);
+    setInterval(this.getStockInfo, 10000);
   }
 
   displayStock(stock) {

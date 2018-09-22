@@ -41,10 +41,13 @@ router.get('/portfolio', stockController.history);
 
 router.get('/holdings', stockController.currentHoldings); 
 
+// Query API for ticker info
 router.get('/search', stockController.getTickerInfo);
 
+// Add user info to database with Firebase generated uid
 router.post('/signup', stockController.signUp)
 
+// Retrieve user from database
 router.get('/signin', stockController.signIn)
 
 

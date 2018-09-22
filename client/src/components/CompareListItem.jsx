@@ -27,8 +27,9 @@ class CompareListItem extends React.Component {
   }
 
   buyStocks(stock) {
+    console.log(this.props.user)
     axios.post('/api/buy', {
-      userId: 1,
+      userId: this.props.user.uid,
       stock: stock.quote.symbol,
       quantity: this.state.quantity
     })
