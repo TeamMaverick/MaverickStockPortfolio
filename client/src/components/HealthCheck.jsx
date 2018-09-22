@@ -16,7 +16,6 @@ class HealthCheck extends React.Component {
             <StockChart currentStock={this.props.currentStock} />
           ): (<img className="spinner" style={{alignContent: 'center'}}/>
             ) }
-        </div>
       </div>
     );
   }
