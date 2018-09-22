@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import Marquee from 'react-marquee'
+import Marquee from './Marquee.jsx'
 
 class Infinite extends React.Component {
     constructor(props) {
