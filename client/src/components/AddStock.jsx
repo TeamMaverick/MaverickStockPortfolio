@@ -47,7 +47,7 @@ class AddStock extends React.Component {
         })
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         this.setState({
           valid : false
         })

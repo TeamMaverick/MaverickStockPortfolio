@@ -3,22 +3,13 @@ import Axios from 'axios';
 // import HealthCheckItem from './HealthCheckItem.jsx';
 import StockChart from './StockChart.jsx';
 
-
-class HealthCheck extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div>
-          {this.props.currentStock.quote ? (
-            <StockChart currentStock={this.props.currentStock} />
-          ): (<img className="spinner" style={{alignContent: 'center'}}/>
-            ) }
-      </div>
-    );
-  }
-}
+var HealthCheck = ({currentStock}) => (
+  <div>
+      {currentStock.quote ? (
+        <StockChart currentStock={currentStock} />
+      ): (<img className="spinner" style={{alignContent: 'center'}}/>
+        ) }
+  </div>
+)
 
 export default HealthCheck;
