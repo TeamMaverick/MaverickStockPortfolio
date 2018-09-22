@@ -57,8 +57,8 @@ class App extends React.Component {
       }
     });
     
-    //will update the stock prices every 10 seconds
-    // setInterval(this.updateAllStockPrices, 6000);
+    //will update the stock prices every 5 seconds
+    // setInterval(this.updateAllStockPrices, 5000);
   }
   
   createUser(email, password, firstname, lastname) {
@@ -123,7 +123,8 @@ class App extends React.Component {
     direction = direction || null;
     axios
       .get('/api/stock', { params: { sort: sort, uid: uid, direction: direction } })
-      .then(({ data }) => { this.setStocks(data); })
+      .then(({ data }) => { 
+        this.setStocks(data); })
       .then(() => {
         this.calculateTotal();
         this.calculateTodaysChange();
@@ -158,13 +159,15 @@ class App extends React.Component {
         return axios
           .get('/api/currentStockPrice', { params: { STOCK: stock_ticker } })
           .then(({ data }) => {
+            console.log("UPDATE ALL STOCK PRICES DATA", data)
             return axios.post('/api/currentStockPrice', {
               ticker: stock_ticker,
               price: data.quote.latestPrice,
               change: data.quote.change
-            });
+            })
+            .catch((err) => console.log('shit'))
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.log('shittter'));
       })
     )
     .then(this.getStocks);
