@@ -4,8 +4,8 @@
   "description": "Maverick Stock Portfolio",
   "main": "index.js",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/TeamGandalf/MaverickStockPortfolio"
+    "type": "git",
+    "url": "https://github.com/TeamGandalf/MaverickStockPortfolio"
   },
   "scripts": {
     "test": "mocha --bail --reporter nyan test/ServerSpec.js",

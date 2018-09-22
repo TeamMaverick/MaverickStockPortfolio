@@ -347,7 +347,7 @@ class App extends React.Component {
               </ul>
             </div>
         }
-        <Infinite/>
+        {this.state.authenticated ? <Infinite/> : <div></div>}
         <div className="container">
           {this.renderView()}
         </div>
