@@ -5,6 +5,8 @@ const model = require('../server/models/index.js');
 const alpha = require('../server/alphaVantage/index.js');
 const TickerNames = require('../server/models/TickerNames');
 const Stock = require('../server/models/Stock');
+const Transaction = require('../server/models/Transactions');
+const User = require('../server/models/User');
 
 db.authenticate()
 .then(() => {
@@ -32,3 +34,6 @@ TickerNames.sync({force: true}).then(() => {
     });
 });
 
+Transaction.sync({force: true});
+
+User.sync({force: true});

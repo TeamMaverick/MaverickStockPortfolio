@@ -16,6 +16,9 @@ router.post('/stock', stockController.postStockTicker);
 // get stock(s)
 router.get('/stock', stockController.getStockTicker);
 
+//get all stocks
+router.get('/allStocks', stockController.getAllStocks);
+
 // deletes stock
 router.delete('/deleteStock', stockController.deleteStock);
 
@@ -26,5 +29,26 @@ router.post('/updateQuantity', stockController.updateStockQuantity);
 //only to be called once through db:setup to populate the database in the first place
 //never called by client
 router.post('/tickersAndNames', stockController.postTickersAndNames);
+
+// Call a buy of the stock
+router.post('/buy', stockController.buyStock);
+
+// Call a sell of the stock
+router.post('/sell', stockController.sellStock);
+
+// Retrieve the portfolio history (should contain multiple series)
+router.get('/portfolio', stockController.history);
+
+router.get('/holdings', stockController.currentHoldings); 
+
+// Query API for ticker info
+router.get('/search', stockController.getTickerInfo);
+
+// Add user info to database with Firebase generated uid
+router.post('/signup', stockController.signUp)
+
+// Retrieve user from database
+router.get('/signin', stockController.signIn)
+
 
 module.exports = router;

@@ -20,7 +20,7 @@ class StockListItem extends React.Component {
 
   // Event handler for changing quantity based on user input
   handleInputChange(evt) {
-    const newQuantity = Number(evt.target.value);
+    const newQuantity = Number(evt.target.value)
     this.callUpdateQuantity(newQuantity);
   }
 
@@ -34,7 +34,7 @@ class StockListItem extends React.Component {
     })
       .then((response) => {
         //update state
-        console.log(response);
+        // console.log(response);
         this.setState({
           quantity: newQuantity
         });
@@ -60,58 +60,39 @@ class StockListItem extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        <div className="level">
-          <div className="level-left">
-            <div className="level-item">
-              <p>
-                <input
-                  className="checkedStock checkbox"
-                  value={this.props.stock.stock_ticker}
-                  type="checkbox"
-                />
-              </p>
-            </div>
-            <div className="level-item">
+
+        <tr>
+          <td>
               <p>
                   {this.props.stock.stock_ticker} <br/>{this.props.stock.company_name}{' '}
               </p>
-            </div>
-          </div>
-          <div className="level-right">
-            <div className="level-item has-text-centered">
-              <p>
-                <input
-                  className="stockInput"
-                  onChange={this.handleInputChange}
-                  value={this.state.quantity}
-                />
-                <a onClick={this.handleAddQuantity}>
-                  <i className="fas fa-plus" />
-                </a>
-                &nbsp;
-                <a onClick={this.handleDeleteQuantity}>
-                  <i className="fas fa-minus" />
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="level">
-          <div className="level-left">
-            <div className="level-item">
-              <p>{`Price : $${Number.parseFloat(this.props.stock.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</p>
-            </div>
-          </div>
-          <div className="level-right">
+          </td>
+          <td>
+
+              <p>{`$${Number.parseFloat(this.props.stock.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</p>
+
+          </td>
+          <td>
             <p>
-              {`Total : $${Number.parseFloat(
+              {this.state.quantity}
+            </p>
+          </td>
+          <td>
+            <p>
+              {`$${Number.parseFloat(
                 this.props.stock.price * this.props.stock.quantity
               ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
             </p>
-          </div>
-        </div>
-      </React.Fragment>
+          </td>
+          <td>
+            <p>
+              <a onClick={() => {this.props.toggleModal(this.props.stock.stock_ticker, 'Sell', this.props.stock.quantity)}}>
+                <i className="fas fa-minus" />
+              </a>
+            </p>
+          </td>
+        </tr>
+
     );
   }
 }

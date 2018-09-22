@@ -1,5 +1,6 @@
 // Boilerplate code for DB
 const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const db = new Sequelize(process.env.database, process.env.dbuser, process.env.dbpassword, {
   host: process.env.host,
