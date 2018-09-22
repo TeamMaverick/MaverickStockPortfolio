@@ -27,7 +27,6 @@ class App extends React.Component {
     };
     this.getStocks = this.getStocks.bind(this);
     this.getStocksInitial = this.getStocksInitial.bind(this);
-    this.getPeersChange = this.getPeersChange.bind(this);
     this.setStocks = this.setStocks.bind(this);
     this.removeStock = this.removeStock.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
@@ -58,8 +57,8 @@ class App extends React.Component {
       }
     });
     
-    //will update the stock prices every 10 seconds
-    // setInterval(this.updateAllStockPrices, 6000);
+    //will update the stock prices every 5 seconds
+    // setInterval(this.updateAllStockPrices, 5000);
   }
   
   createUser(email, password, firstname, lastname) {
@@ -92,33 +91,29 @@ class App extends React.Component {
     firebase.auth().signOut()
   }
   
+  // function only for the component did mount use
+  // same functionality as getStocks()
   getStocksInitial(sort, uid) {
     //gets all the stocks for the user stored in the database and puts them in state
     sort = sort || this.state.sortBy;
     uid = uid || this.state.user.uid;
     axios
-    .get('/api/stock', { params: { sort: sort, uid: uid, direction:true } })
-    .then(({ data }) => {
-      this.setStocks(data);
-    })
-    .then(() => {
-      this.calculateTotal();
-      this.calculateTodaysChange();
-    })
-    .then(() => {
-      if (this.state.stocks.length > 0) this.displayStock(this.state.stocks[0].stock_ticker);
-      else this.setState({currentStock: {}})
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .get('/api/stock', { params: { sort: sort, uid: uid, direction:true } })
+      .then(({ data }) => { this.setStocks(data); })
+      .then(() => {
+        this.calculateTotal();
+        this.calculateTodaysChange();
+      })
+      .then(() => {
+        if (this.state.stocks.length > 0) this.displayStock(this.state.stocks[0].stock_ticker);
+        else this.setState({currentStock: {}})
+      })
+      .catch((err) => { console.log(err); });
   }
 
   // Changes the current sorting method chosen
   changeSort(sort) {
-    this.setState({
-      sortBy: sort
-    });
+    this.setState({ sortBy: sort });
   }
 
   //gets all the stocks for the user stored in the database and puts them in state
@@ -127,38 +122,23 @@ class App extends React.Component {
     uid = uid || this.state.user.uid;
     direction = direction || null;
     axios
-    .get('/api/stock', { params: { sort: sort, uid: uid, direction: direction } })
-    .then(({ data }) => {
-      this.setStocks(data);
-    })
-    .then(() => {
-      this.calculateTotal();
-      this.calculateTodaysChange();
-      this.calculateReturnsChange();
-    })
-    .then(() => {
-      if (this.state.stocks.length > 0) this.displayStock(this.state.stocks[0].stock_ticker);
-      else this.setState({currentStock: {}})
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .get('/api/stock', { params: { sort: sort, uid: uid, direction: direction } })
+      .then(({ data }) => { 
+        this.setStocks(data); })
+      .then(() => {
+        this.calculateTotal();
+        this.calculateTodaysChange();
+        this.calculateReturnsChange();
+      })
+      .then(() => {
+        if (this.state.stocks.length > 0) this.displayStock(this.state.stocks[0].stock_ticker);
+        else this.setState({currentStock: {}})
+      })
+      .catch((err) => { console.log(err); });
   }
   
   setStocks(stocks) {
     this.setState({ stocks });
-  }
-
-  getPeersChange() {
-    axios
-      .get('/api/peers', {params: { peers: this.state.currentStock.peers }})
-      .then((RES) => {
-        console.log("PEERSCHANGE",RES);
-        this.setState({ peersQuotes: RES });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
   
   // Removes selected stocks from the database and will re-render the view
@@ -167,12 +147,8 @@ class App extends React.Component {
     const stockList = [stock.stock_ticker];
     axios
       .delete('/api/deleteStock', { data: {stocks: stockList, uid: this.state.user.uid }})
-      .then(() => {
-        this.getStocks();
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      .then(() => { this.getStocks(); })
+      .catch((err) => { console.log(err); })
   }
 
   //queries the server to get most recent stock prices and then updates the database with the recent stock prices
@@ -183,13 +159,15 @@ class App extends React.Component {
         return axios
           .get('/api/currentStockPrice', { params: { STOCK: stock_ticker } })
           .then(({ data }) => {
+            console.log("UPDATE ALL STOCK PRICES DATA", data)
             return axios.post('/api/currentStockPrice', {
               ticker: stock_ticker,
               price: data.quote.latestPrice,
               change: data.quote.change
-            });
+            })
+            .catch((err) => console.log('shit'))
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.log('shittter'));
       })
     )
     .then(this.getStocks);
@@ -289,18 +267,12 @@ class App extends React.Component {
   displayStock(stock) {
     return axios
       .get('/api/stockInfo', { params: { STOCK: stock } })
-      .then(({data}) => {
-        this.setState({ currentStock: data });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then(({data}) => { this.setState({ currentStock: data }); })
+      .catch((err) => { console.log(err); });
   }
 
   changeView(option) {
-    this.setState({
-      view: option
-    });
+    this.setState({ view: option });
   }
 
   renderView (){
@@ -336,15 +308,15 @@ class App extends React.Component {
             <HealthCheck 
               currentStock={this.state.currentStock} 
               displayStock={this.displayStock}/>      
-          <StockDetails 
-            currentStock={this.state.currentStock}
-          />    
+          <StockDetails currentStock={this.state.currentStock}/>    
         </div>
       )
     } else if (view === 'signin'){
-      return <SignIn changeView={this.changeView} signInUser={this.signInUser} createUser={this.createUser}/>
+      return <SignIn 
+                changeView={this.changeView}
+                signInUser={this.signInUser} 
+                createUser={this.createUser}/>
     } 
-
   }
 
   render() {

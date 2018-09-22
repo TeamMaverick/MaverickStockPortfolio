@@ -5,7 +5,7 @@ const Op = Sequelize.Op;
 
 module.exports = {
   // Adds stock ticker to database
-  saveStock: function(stock, quantity = 1, price = 1, uid, change, ytdChange, latestVolume, boughtPrice, holdings, todaysChange, portfolioReturn) {
+  saveStock: function(stock, quantity = 1, price = 1, uid, change) {
     return TickerNames.findOne({
       where: {
         symbol: stock
@@ -18,24 +18,20 @@ module.exports = {
           quantity : quantity, 
           price : price, 
           uid : uid, 
-          change : change,
-          ytdChange: ytdChange,
-          latestVolume: latestVolume,
-          boughtPrice: boughtPrice,
-          holdings: holdings,
-          todaysChange: todaysChange,
-          portfolioReturn: portfolioReturn
+          change : change
         })
     })
   },
+  
   // Gets stock tickers from database
-  getStocks: function(sort, uid, direction) {
+  getStocks: function(sort, uid, direction=null) {
     if(direction === 'true'){
       return Stock.findAll({where: {uid: uid}, order: [[sort, 'ASC']]})
     } else {
       return Stock.findAll({where: {uid: uid}, order: [[sort, 'DESC']]})        
     }
   },
+
   // Changes quantity to 0
   deleteStock: function(stocklist, uid) {
     return Stock.destroy({where: {
@@ -53,7 +49,6 @@ module.exports = {
   // update stock quantity
   updateStockQuantity: function (stock, quantity) {
     //check if we have stock
-    console.log('updating')
     return Stock.update({
       quantity : quantity
     }, {
@@ -64,19 +59,11 @@ module.exports = {
   },
 
   //updates stock price field in database to reflect latest price
-  updateStockPrice: function(ticker, price, change, ytdChange, latestVolume, quantity, boughtPrice) {
-    var holdings = price*quantity;
-    var todaysChange = price*change;
-    var portfolioReturn = ((price*quantity)-(boughtPrice*quantity)) 
+  updateStockPrice: function(ticker, price, change) {
 
     return Stock.update({
       price : price,
-      change : change,
-      ytdChange : ytdChange,
-      latestVolume : latestVolume,
-      holdings: holdings,
-      todaysChange: todaysChange,
-      portfolioReturn: portfolioReturn
+      change : change
     }, {
       where: {
         stock_ticker : ticker
@@ -118,5 +105,4 @@ module.exports = {
       }
     );
   }
-
-  }
+}

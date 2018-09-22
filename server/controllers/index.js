@@ -1,6 +1,5 @@
 const model = require('../models/index.js');
-const alpha = require('../alphaVantage/index.js');
-const axios = require('axios');
+const apiHelp = require('../apiHelper/index.js');
 
 //Return requests to the client
 module.exports = {
@@ -11,15 +10,9 @@ module.exports = {
       req.body.quantity, 
       req.body.price, 
       req.body.uid, 
-      req.body.change, 
-      req.body.ytdChange, 
-      req.body.latestVolume,
-      req.body.boughtPrice,
-      req.body.holdings,
-      req.body.todaysChange,
-      req.body.portfolioReturn
+      req.body.change
       )
-     .then((data) => {
+     .then(() => {
         res.sendStatus(201);       
      })
      .catch((err) => {
@@ -31,18 +24,14 @@ module.exports = {
   // Calls function in model to get stock tickers and quantity of stock from database
   getStockTicker: function(req, res) {
     model.getStocks(req.query.sort, req.query.uid, req.query.direction)
-      .then((data) => {
-        res.send(data);
-      })
-      .catch((err) => {
-        res.send(err);
-      })
+      .then((data) => { res.send(data); })
+      .catch((err) => { res.send(err); })
   },
 
-  // get stock info from alphaVantage
+  // get stock info from apiHelpVantage
   // input : STOCK = ticker symbol
   getStockInfo: (req, res) => {
-    alpha
+    apiHelp
       .getData(req.query.STOCK)
       .then(({data}) => {
         returnData = {
@@ -53,7 +42,6 @@ module.exports = {
         };
         // get stock info with quote, chart, and news
         // flatten object stucture into array for StockChart
-        let timeSeries = data.chart;
         for (let point of data.chart) {
           // CODE FOR WHEN USING 1d FOR API CALL
           /* 
@@ -64,7 +52,6 @@ module.exports = {
           let minute = point.minute.substring(3,5);
           let date = new Date(year, month-1, day, hour, minute);
           */
-
           let date = new Date(point.date);
           let arrVaules = [date.getTime(), point.open, point.high, 
                               point.low, point.close, point.volume];
@@ -73,7 +60,7 @@ module.exports = {
         return returnData;
       })
       .then((returnData) => {
-        alpha
+        apiHelp
           .getPeersChange(returnData.peers)
           .then(({data}) => {
             returnData.peers = [returnData.peers, data];
@@ -86,43 +73,26 @@ module.exports = {
       });
   },
 
-  // getPeersChange: (req, res) => {
-  //   alpha
-  //     .getPeersChange(req.query.peers)
-  //     .then(({data}) => {
-  //       console.log("GET PEERS CHANGE IN CONTROLLER", data);
-  //       res.send(data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  // },
-
   // deletes stock
   deleteStock: (req, res) => {
     const stocks = req.body.stocks;
     const uid = req.body.uid;
     if (stocks === undefined) {
       res.sendStatus(500);
-    } else
-    {
-    model.deleteStock(stocks, uid)
-     .then(() => {
-        res.sendStatus(201);
-     })
-     .catch((err) => {
-       res.send(err);
-     })
+    } else {
+      model
+        .deleteStock(stocks, uid)
+        .then(() => { res.sendStatus(201); })
+        .catch((err) => { res.send(err); });
     }
   },
 
   //gets current price from IEX
   getCurrentPrice: (req, res) => {
-    alpha
+    apiHelp
       .getCurrentPrice(req.query.STOCK)
-      .then(({ data }) => {
-        res.send(JSON.stringify(data));
-      })
+      .then(({ data }) => { 
+        res.send(JSON.stringify(data)); })
       .catch((err) => {
         console.log(err);
         res.sendStatus(404);
@@ -135,41 +105,28 @@ module.exports = {
     let stock = req.body.param.stock;
     if(stock){
       model.updateStockQuantity(stock, newQuantity)
-        .then((data) => {
+        .then(() => {
           res.sendStatus(201);
         })
         .catch((err) => {
           res.sendStatus(500);
         })
-    } else {
-      res.send('Invalid - requested params missing');
-    } 
+    } else { res.send('Invalid - requested params missing'); } 
   },
 
   //update stock price in the database
   updatePrice: (req, res) => {
-    model.updateStockPrice(
-      req.body.ticker, 
-      req.body.price, 
-      req.body.change, 
-      req.body.ytdChange, 
-      req.body.latestVolume,
-      req.body.quantity,
-      req.body.boughtPrice
-      )
-      .then(()=> {
-        res.sendStatus(201);
-      })
-      .catch(()=> {
-        res.sendStatus(500);
-      })
+    model
+      .updateStockPrice(req.body.ticker, req.body.price, req.body.change)
+      .then(()=> { res.sendStatus(201); })
+      .catch(()=> { res.sendStatus(500); })
   },
 
   //used with db:setup to get a list of ticker symbols and company names from an external api
   //then populates database with ticker symbols and company names
   //only needs to be called once with db:setup  
   postTickersAndNames: (req, res) => {
-    alpha
+    apiHelp
       .getTickersAndNames()
       .then(({ data }) => {
         model.postTickersAndNames(data);
@@ -180,16 +137,17 @@ module.exports = {
         console.log(err);
       });
   },
+
   //handles input ticker search autocomplete
   getAllTickers: (req, res) => {
     model
       .getAllTickers(req.query.stock_ticker)
       .then((data) => {
-        if(data===null) {
+        if(data === null) {
           model.getGroupTickers(req.query.stock_ticker).then( (data) => {
             var newData = []
-            for(let i = 0; i<data.length; i++) {
-              newData.push({id: data[i].id, label: data[i].symbol+': ' + data[i].name});
+            for (let i = 0; i < data.length; i++) {
+              newData.push({id: data[i].id, label: data[i].symbol + ': ' + data[i].name});
             }
             res.send(newData);
           })
@@ -198,7 +156,7 @@ module.exports = {
             console.log(err);
           })
         } else {
-          var newData = [{id: data.id, label: data.symbol+': ' + data.name}]
+          var newData = [{id: data.id, label: data.symbol + ': ' + data.name}]
           res.send(newData);
         }
       })
@@ -207,10 +165,10 @@ module.exports = {
         console.log(err);
       });
   },
+
   getBannerInfo: (req, res) => {
-    alpha.getAllBannerInfo()
+    apiHelp.getAllBannerInfo()
       .then((result) => res.send(result))
       .catch((e) => console.log(e))
-    // res.send(alpha.getAllBannerInfo())
   }
 };
