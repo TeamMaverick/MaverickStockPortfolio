@@ -61,7 +61,7 @@ class App extends React.Component {
     });
     
     //will update the stock prices every 10 seconds
-    setInterval(this.updateAllStockPrices, 60000);
+    // setInterval(this.updateAllStockPrices, 60000);
   }
   
   createUser(email, password, firstname, lastname) {
@@ -322,17 +322,17 @@ class App extends React.Component {
                 sortBy={this.state.sortBy}                
               />
             </div>
-            <div className="column border is-one-third">
+            <div className="column is-one-third">
               <PortfolioPChart stocks={this.state.stocks} />
             </div>
           </div>
-          <div className="columns border" style={{height: '500px'}} >
-            <div className="column">
+          {/* <div className="columns border" style={{height: '500px'}} >
+            <div className="column"> */}
               <HealthCheck 
                 currentStock={this.state.currentStock} 
                 displayStock={this.displayStock}/>      
-            </div>
-          </div>
+            {/* </div> */}
+          {/* </div> */}
           <StockDetails 
             currentStock={this.state.currentStock}
             // peersQuotes={this.state.peersQuotes} 

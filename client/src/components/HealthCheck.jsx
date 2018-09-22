@@ -11,7 +11,7 @@ class HealthCheck extends React.Component {
 
   render() {
     return (
-      <div className="columns">
+      <div>
           {this.props.currentStock.quote ? (
             <StockChart currentStock={this.props.currentStock} />
           ): (<img className="spinner" style={{alignContent: 'center'}}/>
