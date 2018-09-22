@@ -4,7 +4,7 @@
 
   - __Product Owner__: Alan
   - __Scrum Master__: Laura
-  - __Development Team Members__: Alex, Milton
+  - __Development Team Members__: Alex, Milton, Julie, Paul, Justin
 
 ## Table of Contents
 
