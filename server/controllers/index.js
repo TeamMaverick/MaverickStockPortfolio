@@ -30,7 +30,6 @@ module.exports = {
 
   // Calls function in model to get stock tickers and quantity of stock from database
   getStockTicker: function(req, res) {
-    console.log(req.query);
     model.getStocks(req.query.sort, req.query.uid, req.query.direction)
       .then((data) => {
         res.send(data);
@@ -142,9 +141,8 @@ module.exports = {
       req.body.change, 
       req.body.ytdChange, 
       req.body.latestVolume,
-      req.body.holdings,
-      req.body.todaysChange,
-      req.body.portfolioReturn
+      req.body.quantity,
+      req.body.boughtPrice
       )
       .then(()=> {
         res.sendStatus(201);
