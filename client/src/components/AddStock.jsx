@@ -38,7 +38,6 @@ class AddStock extends React.Component {
   }
   // handle input onchange event (update stock state)
   handleInputChange(evt) {
-    console.log(evt.target.value);
     this.setState({
       stock: evt.target.value,
       valid: true
@@ -54,7 +53,6 @@ class AddStock extends React.Component {
   }
 
   render() {
-    console.log(this.state.stock)
     return (
       <div className="field has-addons">
         <div className="control is-expanded">
