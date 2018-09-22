@@ -117,16 +117,17 @@ class App extends React.Component {
   }
 
   //gets all the stocks for the user stored in the database and puts them in state
-  getStocks(sort, uid) {
+  getStocks(sort, uid, direction) {
     sort = sort || this.state.sortBy;
     uid = uid || this.state.user.uid;
     axios
-    .get('/api/stock', { params: { sort: sort, uid: uid } })
+    .get('/api/stock', { params: { sort: sort, uid: uid, direction: direction } })
     .then(({ data }) => {
       this.setStocks(data);
     })
     .then(() => {
       this.calculateTotal();
+      this.calculateTodaysChange();
     })
     .catch((err) => {
       console.log(err);
@@ -351,7 +352,7 @@ class App extends React.Component {
             <div className="tabs">
             </div>
         }
-        <Infinite/>
+        {this.state.authenticated ? <Infinite/> : <div></div>}
         <div className="container">
           {this.renderView()}
         </div>

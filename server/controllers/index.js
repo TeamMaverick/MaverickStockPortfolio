@@ -25,7 +25,8 @@ module.exports = {
 
   // Calls function in model to get stock tickers and quantity of stock from database
   getStockTicker: function(req, res) {
-    model.getStocks(req.query.sort, req.query.uid)
+    console.log(req.query);
+    model.getStocks(req.query.sort, req.query.uid, req.query.direction)
       .then((data) => {
         res.send(data);
       })
@@ -143,7 +144,6 @@ module.exports = {
 
   //update stock price in the database
   updatePrice: (req, res) => {
-    console.log(req.body);
     model.updateStockPrice(
       req.body.ticker, 
       req.body.price, 

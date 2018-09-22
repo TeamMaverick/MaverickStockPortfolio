@@ -12,10 +12,6 @@ class HealthCheck extends React.Component {
   render() {
     return (
       <div className="columns">
-        <div className="column"> 
-          <div className="box has-text-centered">
-            Chosen Stock (%Change Day, %Change Year, Volume)
-          </div>
           {this.props.currentStock.quote ? (
             <StockChart currentStock={this.props.currentStock} />
           ): (<img className="spinner" style={{alignContent: 'center'}}/>
