@@ -113,7 +113,8 @@ class App extends React.Component {
       this.calculateReturnsChange();
     })
     .then(() => {
-      this.displayStock(this.state.stocks[0].stock_ticker)
+      if (this.state.stocks.length > 0) this.displayStock(this.state.stocks[0].stock_ticker);
+      else this.setState({currentStock: {}})
     })
     .catch((err) => {
       console.log(err);
@@ -140,6 +141,10 @@ class App extends React.Component {
       this.calculateTotal();
       this.calculateTodaysChange();
       this.calculateReturnsChange();
+    })
+    .then(() => {
+      if (this.state.stocks.length > 0) this.displayStock(this.state.stocks[0].stock_ticker);
+      else this.setState({currentStock: {}})
     })
     .catch((err) => {
       console.log(err);
@@ -294,11 +299,10 @@ class App extends React.Component {
   //called when a ticker symbol on the stocks list is clicked
   //requests the data for that ticker symbol and deposits it in the state
   displayStock(stock) {
+    console.log(stock);
     return axios
       .get('/api/stockInfo', { params: { STOCK: stock } })
       .then(({data}) => {
-        console.log("DISPLAY STOCK", this.state.peersQuotes)
-        console.log("PEERS OF CURRENT STOCK", this.state.currentStock)
         this.setState({ currentStock: data });
       })
       .catch((err) => {
@@ -339,17 +343,17 @@ class App extends React.Component {
                 sortBy={this.state.sortBy}                
               />
             </div>
-            <div className="column border is-one-third">
+            <div className="column is-one-third">
               <PortfolioPChart stocks={this.state.stocks} />
             </div>
           </div>
-          <div className="columns border" style={{height: '500px'}} >
-            <div className="column">
+          {/* <div className="columns border" style={{height: '500px'}} >
+            <div className="column"> */}
               <HealthCheck 
                 currentStock={this.state.currentStock} 
                 displayStock={this.displayStock}/>      
-            </div>
-          </div>
+            {/* </div> */}
+          {/* </div> */}
           <StockDetails 
             currentStock={this.state.currentStock}
             // peersQuotes={this.state.peersQuotes} 

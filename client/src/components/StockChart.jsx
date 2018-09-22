@@ -36,9 +36,8 @@ var StockChart = ({ currentStock }) => {
           type: 'ytd',
           text: 'YTD'
         }, {
-          type: 'year',
-          count: 1,
-          text: '1y'
+          type: 'all',
+          text: 'All'
         }
       ],
       selected: 0,
