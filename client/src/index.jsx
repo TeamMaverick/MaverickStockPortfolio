@@ -21,9 +21,9 @@ class App extends React.Component {
       authenticated: false,
       user: {},
       currentStock: {},
+      sortBy: 'stock_ticker',
       peersQuotes: {},
       peersUpdated: false,
-      sortBy: ''
     };
     this.getStocks = this.getStocks.bind(this);
     this.getStocksInitial = this.getStocksInitial.bind(this);
@@ -41,6 +41,7 @@ class App extends React.Component {
     this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
     this.downloadCSV = this.downloadCSV.bind(this);
     this.downloadPDF = this.downloadPDF.bind(this);
+    this.changeSort = this.changeSort.bind(this);
     
     //taken from HealthCheck
     this.displayStock = this.displayStock.bind(this);
@@ -100,7 +101,7 @@ class App extends React.Component {
     sort = sort || this.state.sortBy;
     uid = uid || this.state.user.uid;
     axios
-    .get('/api/stock', { params: { sort: sort, uid: uid } })
+    .get('/api/stock', { params: { sort: sort, uid: uid, direction:true } })
     .then(({ data }) => {
       this.setStocks(data);
     })
@@ -113,6 +114,12 @@ class App extends React.Component {
     })
     .catch((err) => {
       console.log(err);
+    });
+  }
+
+  changeSort(sort) {
+    this.setState({
+      sortBy: sort
     });
   }
 
@@ -310,7 +317,9 @@ class App extends React.Component {
                 downloadCSV={this.downloadCSV}
                 downloadPDF={this.downloadPDF}
                 portfolioTotal={this.state.portfolioTotal}
-                todaysChange={this.state.todaysChange}                
+                todaysChange={this.state.todaysChange}
+                changeSort={this.changeSort}
+                sortBy={this.state.sortBy}                
               />
             </div>
             <div className="column border is-one-third">
