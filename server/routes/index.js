@@ -4,6 +4,9 @@ const stockController = require('../controllers/index.js');
 // Get stock info from aplhaVantage
 router.get('/stockInfo', stockController.getStockInfo);
 
+//get Peer Stocks Change info
+// router.get('/peers', stockController.getPeersChange);
+
 //get current stock price from IEX
 router.get('/currentStockPrice', stockController.getCurrentPrice);
 
