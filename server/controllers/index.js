@@ -65,24 +65,33 @@ module.exports = {
                               point.low, point.close, point.volume];
           returnData.data.push(arrVaules);
         }
-        res.send(returnData);
+        return returnData;
+      })
+      .then((returnData) => {
+        alpha
+          .getPeersChange(returnData.peers)
+          .then(({data}) => {
+            returnData.peers = [returnData.peers, data];
+            res.send(returnData);
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => {
         console.log(err);
       });
   },
 
-  getPeersChange: (req, res) => {
-    alpha
-      .getPeersChange(req.query.peers)
-      .then(({data}) => {
-        console.log("GET PEERS CHANGE IN CONTROLLER", data);
-        res.send(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  },
+  // getPeersChange: (req, res) => {
+  //   alpha
+  //     .getPeersChange(req.query.peers)
+  //     .then(({data}) => {
+  //       console.log("GET PEERS CHANGE IN CONTROLLER", data);
+  //       res.send(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  // },
 
   // deletes stock
   deleteStock: (req, res) => {

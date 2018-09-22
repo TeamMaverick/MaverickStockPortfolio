@@ -9,9 +9,9 @@ const Peers = ({ currentStock, peersQuotes }) => {
     <div>
       {/* <h2 className="subtitle">Peer Stocks for ${stock}</h2> */}
       <div className="columns border">
-        {currentStock !== undefined && Object.keys(currentStock).length > 0  ? 
-          (currentStock.peers.map((peer, idx) => 
-            (<Peer key={idx} stock={peer} quote={peersQuotes}/>))) 
+        {currentStock !== undefined && Object.keys(currentStock).length > 0 ? 
+          (currentStock.peers[0].map((peer, idx) => 
+            (<Peer key={idx} stock={peer} quote={currentStock.peers[1][peer].quote}/>))) 
               : (<img className="spinner" style={{alignContent: 'center'}}/>)}
       </div>
     </div>

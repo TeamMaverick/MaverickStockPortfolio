@@ -109,7 +109,6 @@ class App extends React.Component {
       this.calculateTodaysChange();
     })
     .then(() => {
-      // console.log(this.state.stocks)
       this.displayStock(this.state.stocks[0].stock_ticker)
     })
     .catch((err) => {
@@ -274,9 +273,9 @@ class App extends React.Component {
     return axios
       .get('/api/stockInfo', { params: { STOCK: stock } })
       .then(({data}) => {
-        console.log("DISPLAY STOCK", this.state.peers)
-        console.log("PEERS OF CURRENT STOCK", this.state.currentStock.peers)
-        this.setState({ currentStock: data }, () => {this.getPeersChange()});
+        console.log("DISPLAY STOCK", this.state.peersQuotes)
+        console.log("PEERS OF CURRENT STOCK", this.state.currentStock)
+        this.setState({ currentStock: data });
       })
       .catch((err) => {
         console.log(err);
@@ -326,10 +325,7 @@ class App extends React.Component {
           </div>
           <StockDetails 
             currentStock={this.state.currentStock}
-            // stock={this.state.currentStock.quote}
-            // peers={this.state.currentStock.peers} 
-            peersQuotes={this.state.peersQuotes} 
-            // news={this.state.currentStock.news}
+            // peersQuotes={this.state.peersQuotes} 
             />    
         </div>
       )
@@ -353,11 +349,6 @@ class App extends React.Component {
         </header>
         {this.state.view !== 'signin' &&
             <div className="tabs">
-              {/* <ul>
-                <li className={this.state.view === 'home' ? 'is-active' : ''}>
-                  <a onClick={() => this.changeView('home')}>Home</a>
-                </li>
-              </ul> */}
             </div>
         }
         <Infinite/>
