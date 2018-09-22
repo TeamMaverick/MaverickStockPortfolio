@@ -21,7 +21,7 @@ class App extends React.Component {
       authenticated: false,
       user: {},
       currentStock: {},
-      sortBy: 'stock_ticker'
+      sortBy: 'stock_ticker',
       peersQuotes: {},
       peersUpdated: false,
     };
