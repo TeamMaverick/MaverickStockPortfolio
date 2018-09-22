@@ -21,6 +21,8 @@ class AddStock extends React.Component {
     axios
       .get('/api/currentStockPrice', { params: { STOCK: this.state.stock } })
       .then(({ data }) => {
+        var holdings = (this.state.quantity*data.quote.latestPrice).toFixed(2);
+        var todaysChange = (this.state.quantity*data.quote.change*100).toFixed(2);
         return axios.post('/api/stock', {
           stock : this.state.stock,
           quantity : this.state.quantity,
@@ -28,7 +30,11 @@ class AddStock extends React.Component {
           uid : firebase.auth().currentUser.uid,
           change : data.quote.change,
           ytdChange : data.quote.ytdChange,
-          latestVolume : data.quote.latestVolume 
+          latestVolume : data.quote.latestVolume,
+          boughtPrice : data.quote.latestPrice,
+          holdings: holdings,
+          todaysChange: todaysChange,
+          portfolioReturn: 0
         });
       })
       .then(() => {

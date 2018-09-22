@@ -13,7 +13,12 @@ module.exports = {
       req.body.uid, 
       req.body.change, 
       req.body.ytdChange, 
-      req.body.latestVolume)
+      req.body.latestVolume,
+      req.body.boughtPrice,
+      req.body.holdings,
+      req.body.todaysChange,
+      req.body.portfolioReturn
+      )
      .then((data) => {
         res.sendStatus(201);       
      })
@@ -149,7 +154,11 @@ module.exports = {
       req.body.price, 
       req.body.change, 
       req.body.ytdChange, 
-      req.body.latestVolume)
+      req.body.latestVolume,
+      req.body.holdings,
+      req.body.todaysChange,
+      req.body.portfolioReturn
+      )
       .then(()=> {
         res.sendStatus(201);
       })

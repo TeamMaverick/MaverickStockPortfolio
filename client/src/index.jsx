@@ -24,6 +24,7 @@ class App extends React.Component {
       sortBy: 'stock_ticker',
       peersQuotes: {},
       peersUpdated: false,
+      portfolioReturn: 0
     };
     this.getStocks = this.getStocks.bind(this);
     this.getStocksInitial = this.getStocksInitial.bind(this);
@@ -32,7 +33,8 @@ class App extends React.Component {
     this.removeStock = this.removeStock.bind(this);
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
-    this.calculateTodaysChange = this.calculateTodaysChange.bind(this);    
+    this.calculateTodaysChange = this.calculateTodaysChange.bind(this);   
+    this.calculateReturnsChange = this.calculateReturnsChange.bind(this);    
     this.changeView = this.changeView.bind(this);
     this.renderView = this.renderView.bind(this);
     this.createUser = this.createUser.bind(this);
@@ -61,7 +63,7 @@ class App extends React.Component {
     });
     
     //will update the stock prices every 10 seconds
-    setInterval(this.updateAllStockPrices, 60000);
+    // setInterval(this.updateAllStockPrices, 60000);
   }
   
   createUser(email, password, firstname, lastname) {
@@ -108,6 +110,7 @@ class App extends React.Component {
     .then(() => {
       this.calculateTotal();
       this.calculateTodaysChange();
+      this.calculateReturnsChange();
     })
     .then(() => {
       this.displayStock(this.state.stocks[0].stock_ticker)
@@ -127,6 +130,7 @@ class App extends React.Component {
   getStocks(sort, uid, direction) {
     sort = sort || this.state.sortBy;
     uid = uid || this.state.user.uid;
+    direction = direction || null;
     axios
     .get('/api/stock', { params: { sort: sort, uid: uid, direction: direction } })
     .then(({ data }) => {
@@ -135,6 +139,7 @@ class App extends React.Component {
     .then(() => {
       this.calculateTotal();
       this.calculateTodaysChange();
+      this.calculateReturnsChange();
     })
     .catch((err) => {
       console.log(err);
@@ -185,6 +190,7 @@ class App extends React.Component {
               change: data.quote.change,
               ytdChange: data.quote.ytdChange,
               latestVolume: data.quote.latestVolume
+              //TODO: ADD
             });
           })
           .catch((err) => console.log(err));
@@ -212,6 +218,16 @@ class App extends React.Component {
         return today + subtotal;
       }, 0);
     this.setState({ todaysChange: today });
+  }
+
+  calculateReturnsChange() {
+    const returns = this.state.stocks.map((stock) => {
+        return ((stock.quantity*stock.boughtPrice)-(stock.quantity * stock.price));
+      })
+      .reduce((today, subtotal) => {
+        return today + subtotal;
+      }, 0);
+    this.setState({ portfolioReturn: returns });
   }
 
   //Convert into CSV this.state.stocks
@@ -318,6 +334,7 @@ class App extends React.Component {
                 downloadPDF={this.downloadPDF}
                 portfolioTotal={this.state.portfolioTotal}
                 todaysChange={this.state.todaysChange}
+                portfolioReturn={this.state.portfolioReturn}
                 changeSort={this.changeSort}
                 sortBy={this.state.sortBy}                
               />

@@ -22,7 +22,7 @@ class ListOfStocks extends React.Component {
   }
 
   render() {
-    let { stocksArray, removeStock, getStocks, downloadCSV, downloadPDF, displayStock, portfolioTotal, todaysChange, changeSort, sortBy } = this.props;
+    let { stocksArray, removeStock, getStocks, downloadCSV, downloadPDF, displayStock, portfolioTotal, todaysChange, changeSort, sortBy, portfolioReturn} = this.props;
     return (
       <div className="listOfStocks" style={{width: '90%', paddingLeft: '5%', paddingBottom: '5%'}}>
         <table className="table is-hoverable">
@@ -87,11 +87,11 @@ class ListOfStocks extends React.Component {
               </th>
               <th onClick={
                 ()=>{
-                  getStocks('price', null, this.state.dirHol)
+                  getStocks('holdings', null, this.state.dirHol)
                   this.setState({
                     dirHol: !this.state.dirHol
                   })
-                  changeSort('price')
+                  changeSort('holdings')
                 }
               }>
                 <abbr title="Position">Holdings($)
@@ -101,19 +101,32 @@ class ListOfStocks extends React.Component {
               </th>
               <th onClick={
                 ()=>{
-                  getStocks('change', null, this.state.dirTod)
+                  getStocks('todaysChange', null, this.state.dirTod)
                   this.setState({
                     dirTod: !this.state.dirTod
                   })
-                  changeSort('change')
+                  changeSort('todaysChange')
                 }
               }>
                 <abbr title="Position">Today's Change($)
-                {sortBy==='change' && !this.state.dirTod && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
-                {sortBy==='change' && this.state.dirTod && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
+                {sortBy==='todaysChange' && !this.state.dirTod && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
+                {sortBy==='todaysChange' && this.state.dirTod && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
                 </abbr>
               </th>
-              <th><abbr title="Position">Portfolio Return($)</abbr></th>            
+              <th onClick={
+                ()=>{
+                  getStocks('portfolioReturn', null, this.state.dirTod)
+                  this.setState({
+                    dirPor: !this.state.dirPor
+                  })
+                  changeSort('portfolioReturn')
+                }
+              }>
+                <abbr title="Position">Portfolio Return($)
+                {sortBy==='portfolioReturn' && !this.state.dirPor && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
+                {sortBy==='portfolioReturn' && this.state.dirPor && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
+                </abbr>
+              </th>          
             </tr>
           </thead>
           <tfoot>
@@ -135,12 +148,13 @@ class ListOfStocks extends React.Component {
                 ${Number.parseFloat(portfolioTotal)
                   .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
               </th>
-              <th style={{textDecoration: 'underline', color: portfolioTotal > 0 ? "green" : "red"}}>              
+              <th style={{textDecoration: 'underline', color: todaysChange >= 0 ? "green" : "red"}}>              
                 ${Number.parseFloat(todaysChange)
                   .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} 
               </th>
-              <th style={{textDecoration: 'underline', color: portfolioTotal > 0 ? "green" : "red"}}>              
-                $-500
+              <th style={{textDecoration: 'underline', color: portfolioReturn >= 0 ? "green" : "red"}}>              
+                ${Number.parseFloat(portfolioReturn)
+                  .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} 
               </th>  
             </tr> 
           </tfoot>  

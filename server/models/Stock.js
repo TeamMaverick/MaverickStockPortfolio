@@ -9,7 +9,11 @@ const Stock = db.define('stocks', {
   uid : Sequelize.STRING,
   change : Sequelize.FLOAT(9, 2),
   ytdChange : Sequelize.FLOAT(9, 6),
-  latestVolume : Sequelize.INTEGER 
+  latestVolume : Sequelize.INTEGER,
+  boughtPrice: Sequelize.FLOAT(9, 2),
+  holdings: Sequelize.FLOAT(9,2),
+  todaysChange: Sequelize.FLOAT(9,2),
+  portfolioReturn: Sequelize.FLOAT(9,2)
 },
 {
   indexes:[
