@@ -110,7 +110,8 @@ class App extends React.Component {
       this.calculateTodaysChange();
     })
     .then(() => {
-      this.displayStock(this.state.stocks)
+      if (this.state.stocks.length > 0) this.displayStock(this.state.stocks[0].stock_ticker);
+      else this.setState({currentStock: {}})
     })
     .catch((err) => {
       console.log(err);
@@ -137,7 +138,8 @@ class App extends React.Component {
       this.calculateTodaysChange();
     })
     .then(() => {
-      this.displayStock(this.state.stocks)
+      if (this.state.stocks.length > 0) this.displayStock(this.state.stocks[0].stock_ticker);
+      else this.setState({currentStock: {}})
     })
     .catch((err) => {
       console.log(err);
@@ -280,21 +282,16 @@ class App extends React.Component {
 
   //called when a ticker symbol on the stocks list is clicked
   //requests the data for that ticker symbol and deposits it in the state
-  displayStock(stocks) {
-    console.log(stocks);
-    if (stocks.length > 0) {
-      return axios
-        .get('/api/stockInfo', { params: { STOCK: stocks[0].stock_ticker } })
-        .then(({data}) => {
-          this.setState({ currentStock: data });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      this.setState({ currentStock: {} });
-    }
-    
+  displayStock(stock) {
+    console.log(stock);
+    return axios
+      .get('/api/stockInfo', { params: { STOCK: stock } })
+      .then(({data}) => {
+        this.setState({ currentStock: data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   changeView(option) {
