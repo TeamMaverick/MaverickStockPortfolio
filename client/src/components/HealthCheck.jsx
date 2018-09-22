@@ -12,10 +12,7 @@ class HealthCheck extends React.Component {
   render() {
     return (
       <div className="columns">
-        <div className="column"> 
-          <div className="box has-text-centered">
-            Chosen Stock (%Change Day, %Change Year, Volume)
-          </div>
+        <div className="column">
           {this.props.apiWait ? (<div className="apiWait">
             <i className="fas fa-pause"></i> 
             Please wait.. API only can we called few times..</div>) : ''}

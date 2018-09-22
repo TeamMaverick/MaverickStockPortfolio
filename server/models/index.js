@@ -25,9 +25,14 @@ module.exports = {
     })
   },
   // Gets stock tickers from database
-  getStocks: function(sort, uid) {
-    if (sort === 'Alphabetical') {
-      return Stock.findAll({where: {uid: uid}, order: [['stock_ticker', 'ASC']]})
+  getStocks: function(sort, uid, direction) {
+    if (sort === 'stock_ticker') {
+      console.log(direction)
+      if(direction === 'true'){
+        return Stock.findAll({where: {uid: uid}, order: [['stock_ticker', 'ASC']]})
+      } else {
+        return Stock.findAll({where: {uid: uid}, order: [['stock_ticker', 'DESC']]})        
+      }
     } else if (sort === 'Total Price') {
       return Stock.findAll({where: {uid: uid}, order: [['price', 'DESC'],['quantity', 'DESC']]})
     } else {

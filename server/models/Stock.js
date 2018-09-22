@@ -8,7 +8,7 @@ const Stock = db.define('stocks', {
   price : Sequelize.FLOAT(9, 2),
   uid : Sequelize.STRING,
   change : Sequelize.FLOAT(9, 2),
-  ytdChange : Sequelize.FLOAT(9, 2),
+  ytdChange : Sequelize.FLOAT(9, 6),
   latestVolume : Sequelize.INTEGER 
 },
 {

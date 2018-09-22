@@ -7,7 +7,7 @@ var StockChart = ({ currentStock }) => {
   var options = {
     // use data from currentStock
     chart: {
-      height: 350
+      height: 400
     },
     title: {
       text: `${ticker} Stock Price for the Year`
