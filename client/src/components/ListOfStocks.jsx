@@ -15,8 +15,14 @@ class ListOfStocks extends React.Component {
       current: ''
     };
   }
+  componentDidMount() {
+    this.setState({
+      dirTic: false
+    })
+  }
+
   render() {
-    let { stocksArray, removeStock, getStocks, downloadCSV, downloadPDF, displayStock, portfolioTotal, todaysChange } = this.props;
+    let { stocksArray, removeStock, getStocks, downloadCSV, downloadPDF, displayStock, portfolioTotal, todaysChange, changeSort, sortBy } = this.props;
     return (
       <div className="listOfStocks" style={{width: '90%', paddingLeft: '5%', paddingBottom: '5%'}}>
         <table className="table is-hoverable">
@@ -27,21 +33,86 @@ class ListOfStocks extends React.Component {
                 ()=>{
                   getStocks('stock_ticker', null, this.state.dirTic)
                   this.setState({
-                    current: 'ticker',
                     dirTic: !this.state.dirTic
                   })
+                  changeSort('stock_ticker')
                 }
               }>
                 <abbr title="Position">Ticker
-                {this.state.current==='ticker' && !this.state.dirTic && <span><i className="fas fa-arrow-up"></i></span>}
-                {this.state.current==='ticker' && this.state.dirTic && <span><i className="fas fa-arrow-down"></i></span>}
+                {sortBy==='stock_ticker' && !this.state.dirTic && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
+                {sortBy==='stock_ticker' && this.state.dirTic && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
                 </abbr>
               </th>
-              <th><abbr title="Position">Name</abbr></th>
-              <th><abbr title="Position">Quantity</abbr></th>
-              <th><abbr title="Position">Price($)</abbr></th>
-              <th><abbr title="Position">Holdings($)</abbr></th>
-              <th><abbr title="Position">Today's Change($)</abbr></th>
+              <th onClick={
+                ()=>{
+                  getStocks('company_name', null, this.state.dirNam)
+                  this.setState({
+                    dirNam: !this.state.dirNam
+                  })
+                  changeSort('company_name')
+                }
+              }>
+                <abbr title="Position">Name
+                {sortBy==='company_name' && !this.state.dirNam && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
+                {sortBy==='company_name' && this.state.dirNam && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
+                </abbr>
+              </th>
+              <th onClick={
+                ()=>{
+                  getStocks('quantity', null, this.state.dirQua)
+                  this.setState({
+                    dirQua: !this.state.dirQua
+                  })
+                  changeSort('quantity')
+                }
+              }>
+                <abbr title="Position">Quantity
+                {sortBy==='quantity' && !this.state.dirQua && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
+                {sortBy==='quantity' && this.state.dirQua && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
+                </abbr>
+              </th>
+              <th onClick={
+                ()=>{
+                  getStocks('price', null, this.state.dirPri)
+                  this.setState({
+                    dirPri: !this.state.dirPri
+                  })
+                  changeSort('price')
+                }
+              }>
+                <abbr title="Position">Price($)
+                {sortBy==='price' && !this.state.dirPri && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
+                {sortBy==='price' && this.state.dirPri && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
+                </abbr>
+              </th>
+              <th onClick={
+                ()=>{
+                  getStocks('price', null, this.state.dirHol)
+                  this.setState({
+                    dirHol: !this.state.dirHol
+                  })
+                  changeSort('price')
+                }
+              }>
+                <abbr title="Position">Holdings($)
+                {sortBy==='holdings' && !this.state.dirHol && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
+                {sortBy==='holdings' && this.state.dirHol && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
+                </abbr>
+              </th>
+              <th onClick={
+                ()=>{
+                  getStocks('change', null, this.state.dirTod)
+                  this.setState({
+                    dirTod: !this.state.dirTod
+                  })
+                  changeSort('change')
+                }
+              }>
+                <abbr title="Position">Today's Change($)
+                {sortBy==='change' && !this.state.dirTod && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
+                {sortBy==='change' && this.state.dirTod && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
+                </abbr>
+              </th>
               <th><abbr title="Position">Portfolio Return($)</abbr></th>            
             </tr>
           </thead>
