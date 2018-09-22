@@ -37,7 +37,6 @@
     "express": "^4.15.0",
     "highcharts": "^6.1.2",
     "highcharts-react-official": "^1.4.0",
-    "jest": "^23.6.0",
     "moment": "^2.22.2",
     "mysql": "^2.16.0",
     "mysql2": "^1.6.1",
