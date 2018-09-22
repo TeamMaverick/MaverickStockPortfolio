@@ -29,7 +29,7 @@ class BuySell extends React.Component {
     console.log('Stock: ' + this.props.stock)
     console.log('Quant: ' + this.state.quantity)
     axios.post('/api/buy', {
-      userId: 1,
+      userId: this.props.user.uid,
       stock: this.props.stock.quote.symbol,
       quantity: this.state.quantity
     })
@@ -48,7 +48,7 @@ class BuySell extends React.Component {
     console.log('Stock: ' + this.props.stock.quote.symbol)
     console.log('Quant: ' + this.state.quantity)
     axios.post('/api/sell', {
-      userId: 1,
+      userId: this.props.user.uid,
       stock: this.props.stock.quote.symbol,
       quantity: this.state.quantity
     })

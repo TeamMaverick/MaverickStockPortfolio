@@ -26,9 +26,9 @@ class App extends React.Component {
       view : 'signin',
       stocks: [],
       portfolioTotal: 0,
-      sortBy: 'Alphabetical',
-      portfolio: {},
-      portfolioHistory: {},
+      sortBy: 'Alphabetica',
+      portfolio: null,
+      portfolioHistory: null,
       paneToggle: 'pie',
       portfolioDataToggle: 'unrealizedGL',
       modalOpen: false,
@@ -62,11 +62,10 @@ class App extends React.Component {
     this.getStocks(this.state.sortBy);
 
     // will update the stock prices every 10 seconds
-    this.getPortfolioHoldings();
-    this.getPortfolioHistory();
+
 
     //will update the stock prices every 10 seconds
-    setInterval(this.updateAllStockPrices, 100000);
+    // setInterval(this.updateAllStockPrices, 100000);
   }
 
   signIn(email, pw) {
@@ -100,8 +99,7 @@ class App extends React.Component {
   signOut() {
     firebase.auth().signOut()
     .then(() => {
-      this.setState({ user: null, view: 'signin' })
-      console.log('signed out')})
+      this.setState({ user: null, view: 'signin' })})
     .catch(err => console.log(err));
   }
 
@@ -111,18 +109,25 @@ class App extends React.Component {
 
   getPortfolioHistory() {
     axios.get('/api/portfolio', {
-      userId: 1,
+      params: {userId: this.state.user.uid}
       })
       .then(({data}) => {
         this.setState({
           portfolioHistory: data
         })
       })
+      .catch(err => console.log(err))
   }
 
   getPortfolioHoldings() {
+    this.setState({
+      portfolio: []
+    })
+    //temp fix
     console.log('Update portfolio');
-    axios.get('/api/holdings')
+    axios.get('/api/holdings', {
+      params: {userId: this.state.user.uid}
+    })
       .then(({data}) => {
         console.log('Got Portfolio')
         this.setState({
@@ -182,6 +187,9 @@ class App extends React.Component {
     this.setState({
       user: user,
       view: 'home'
+    }, function() {
+      this.getPortfolioHoldings();
+      this.getPortfolioHistory();
     })
   }
   // Removes selected stocks from the database and will re-render the view
@@ -289,7 +297,7 @@ class App extends React.Component {
             <span className="button" onClick={() => {this.changeToggle('else')}}>Portfolio Returns</span>
             <span className="button is-danger is-selected">Portfolio Composition</span>
           </div>
-          <PortfolioPChart stocks={this.state.portfolio} />
+          {this.state.portfolio && <PortfolioPChart stocks={this.state.portfolio} />}
         </div>
       )
     } else {
@@ -321,7 +329,7 @@ class App extends React.Component {
               Unrealized Gain/Loss
             </span>
           </div>
-          <PortfolioChart portfolioHistory={this.state.portfolioHistory} option={this.state.portfolioDataToggle}/>
+      {this.state.portfolioHistory && <PortfolioChart portfolioHistory={this.state.portfolioHistory} option={this.state.portfolioDataToggle}/> }
         </div>
       )
     }
@@ -362,10 +370,8 @@ class App extends React.Component {
     } else if (view === 'chat') {
       return <MessageBox user={this.state.user}/>
     } else if (view === 'search') {
-      return <Search changeView={this.changeView} getPortfolioHoldings={this.getPortfolioHoldings} />
-    } else if (view === 'compare') {
-      return <CompareList changeView={this.changeView} getPortfolioHoldings={this.getPortfolioHoldings} />
-    }
+      return <Search user={this.state.user} changeView={this.changeView} getPortfolioHoldings={this.getPortfolioHoldings} />
+    } 
   }
 
   render() {
@@ -402,7 +408,7 @@ class App extends React.Component {
         <div className="container">
           {this.renderView()}
         </div>
-        <BuySell getPortfolioHoldings={this.getPortfolioHoldings} modalOpen={this.state.modalOpen} toggleModal={this.toggleModal} stock={this.state.stockToBuy} sellLimit={this.state.sellLimit} buyOrSell={this.state.buyOrSell}></BuySell>
+        <BuySell user={this.state.user} getPortfolioHoldings={this.getPortfolioHoldings} modalOpen={this.state.modalOpen} toggleModal={this.toggleModal} stock={this.state.stockToBuy} sellLimit={this.state.sellLimit} buyOrSell={this.state.buyOrSell}></BuySell>
       </div>
     );
   }

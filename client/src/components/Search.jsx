@@ -11,24 +11,18 @@ export default class Search extends React.Component {
       history: [],
       compare: [],
       checked: 0,
-      test: true
     }
     this.onChange = this.onChange.bind(this)
     this.submitSearch = this.submitSearch.bind(this)
     this.submitCompare = this.submitCompare.bind(this)
     this.setView = this.setView.bind(this)
     this.onCheck = this.onCheck.bind(this)
-    this.onTest = this.onTest.bind(this)
   }
 
   onChange(e) {
     this.setState({
       searchInput: e.target.value
     })
-  }
-
-  onTest() {
-    this.setState({ test: !this.state.test})
   }
 
   submitSearch(e, query) {
@@ -85,7 +79,6 @@ export default class Search extends React.Component {
   render() {
     return (
       <div className="container" >
-      {this.state.test && <div>Testing</div>}
         {this.state.view === 'search' &&
           <React.Fragment>
             <div className="columns search">
@@ -153,7 +146,7 @@ export default class Search extends React.Component {
               {/* end table */}
             </div>
           </React.Fragment>}
-        {this.state.view === 'compare' && <CompareList setView={this.setView} stocks={this.state.compare} getPortfolioHoldings={this.props.getPortfolioHoldings} changeView={this.props.changeView} />}
+        {this.state.view === 'compare' && <CompareList user={this.props.user} setView={this.setView} stocks={this.state.compare} getPortfolioHoldings={this.props.getPortfolioHoldings} changeView={this.props.changeView} />}
       </div>
     )
   }
