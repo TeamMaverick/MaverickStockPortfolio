@@ -20,6 +20,7 @@ class AddStock extends React.Component {
       .get("/api/currentStockPrice", { params: { STOCK: this.state.stock } })
       .then(({ data }) => {
         return axios.post("/api/stock", {
+          userId: this.props.user.uid,
           stock: this.state.stock,
           quantity: 1,
           price: data

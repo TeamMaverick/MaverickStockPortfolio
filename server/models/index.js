@@ -7,14 +7,14 @@ const User = require('./User');
 
 module.exports = {
   // Adds stock ticker to database
-  saveStock: function(stock, quantity = 1, price = 1) {
+  saveStock: function(stock, quantity = 1, price = 1, userId) {
     return TickerNames.findOne({
       where: {
         symbol: stock
       }
     })
     .then((data) => {
-      return Stock.create({stock_ticker : stock, company_name: data.name, quantity : quantity, price : price})
+      return Stock.create({stock_ticker : stock, company_name: data.name, quantity : quantity, price : price, userId: userId})
     })
   },
 
@@ -118,13 +118,13 @@ module.exports = {
   },
 
   // Gets stock tickers from database
-  getStocks: function(sort) {
+  getStocks: function(sort, userId) {
     if (sort === 'Alphabetical') {
-      return Stock.findAll({order: [['stock_ticker', 'ASC']]})
-    } else if (sort === 'Total Price') {
-      return Stock.findAll({order: [['price', 'DESC'],['quantity', 'DESC']]})
-    } else {
-      return Stock.findAll({order: [['quantity', 'DESC']]})
+      return Stock.findAll({where: {userId: userId}, order: [['stock_ticker', 'ASC']] })
+    // } else if (sort === 'Total Price') {
+    //   return Stock.findAll({where: {userId: userId,order: [['price', 'DESC'],['quantity', 'DESC']] }})
+    // } else {
+    //   return Stock.findAll({where: {userId: userId,order: [['quantity', 'DESC']] }})
     }
   },
 

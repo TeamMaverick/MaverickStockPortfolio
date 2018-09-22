@@ -26,7 +26,7 @@ class Research extends React.Component {
       this.displayStock('MSFT');
     }
 
-    setInterval(this.getStockInfo, 10000);
+    setInterval(this.getStockInfo, 1000);
   }
 
   displayStock(stock) {
@@ -45,23 +45,27 @@ class Research extends React.Component {
   }
 
   getStockInfo() {
+    console.log('does this work', this.props.stocks)
     //create stock array to pass to api
-    let stockArr = this.props.stocks.map((stock) => {
-      return stock.stock_ticker;
-    });
-    Axios.get(
-      `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stockArr}&types=quote&range=1m&last=5`
-    )
-      .then(({ data }) => {
-        //save stock info to state
-        this.setState({
-          stocksData: data
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+    if (this.props.stocks.length > 0) {
+
+      let stockArr = this.props.stocks.map((stock) => {
+        return stock.stock_ticker;
       });
-  }
+      Axios.get(
+        `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stockArr}&types=quote&range=1m&last=5`
+      )
+        .then(({ data }) => {
+          //save stock info to state
+          this.setState({
+            stocksData: data
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    }
 
   render() {
     return (
@@ -69,7 +73,7 @@ class Research extends React.Component {
         <div className="column check is-two-fifths">
           <div className="HealthCheck">
             <h1 className="healthCheckHeader">Research</h1>
-            <AddStock getStocks={this.props.getStocks} allStocks={this.props.allStocks}/>
+            <AddStock user={this.props.user} getStocks={this.props.getStocks} allStocks={this.props.allStocks}/>
             <div className="columns">
               <div className="column is-2">
                 <p className="heading">Symbol</p>

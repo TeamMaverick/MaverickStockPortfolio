@@ -1,6 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 import CompareList from './CompareList.jsx'
+import Select from 'react-autocomplete';
+
 
 export default class Search extends React.Component {
   constructor(props) {
@@ -9,6 +11,7 @@ export default class Search extends React.Component {
       view: 'search',
       searchInput: '',
       history: [],
+      options: [],
       compare: [],
       checked: 0,
     }
@@ -17,11 +20,26 @@ export default class Search extends React.Component {
     this.submitCompare = this.submitCompare.bind(this)
     this.setView = this.setView.bind(this)
     this.onCheck = this.onCheck.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
   }
 
   onChange(e) {
     this.setState({
       searchInput: e.target.value
+    })
+  }
+
+  handleInputChange(evt) {
+    this.setState({
+      searchInput: evt.target.value
+        });
+
+    axios.get("/api/allStocks", { params: {stock: evt.target.value} })
+    .then(({data}) => {
+      console.log(data);
+      this.setState({
+        options: data
+      })
     })
   }
 
@@ -86,9 +104,29 @@ export default class Search extends React.Component {
                 <h1 className="title">Search</h1>
                 <h2 className="subtitle">Search for any stocks</h2>
                 <form onSubmit={(e) => this.submitSearch(e, this.state.searchInput)}>
+                  <Select
+                    items={this.state.options}
+                    shouldItemRender={(item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) > -1}
+                    getItemValue={(item) => item.label}
+                    renderItem={(item, isHighlighted) =>
+                      <a><div
+                        key={item.id}
+                        style={{
+                          background: isHighlighted ? '#ffffe6' : 'white',
+                          fontSize: isHighlighted ? '16px' : '15px',
+                        }}>
+                        {item.label}
+                      </div>
+                      </a>
+                    }
+                    wrapperStyle={{ position: 'relative', display: 'inline-block' }}
+                    value={this.state.searchInput}
+                    onChange={this.handleInputChange}
+                    onSelect={value => this.setState({ searchInput: (value.substring(0, value.indexOf(':'))) })}
+                    inputProps={{ className: 'input', placeholder: 'Search...' }}
+                  />
                   <div className="field has-addons">
                     <div className="cent">
-                      <input className="input" type="ticker" placeholder="Search for a stock" onChange={(e) => this.onChange(e)} value={this.state.searchInput} />
                     </div>
                   </div>
                 </form>
