@@ -80,10 +80,6 @@ class StockListItem extends React.Component {
               this.props.stock.price * this.props.stock.quantity)
                 .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
           </td>
-          {/* <td style={{color: this.props.stock.portfolioReturn >= 0 ? "green" : "red"}}>
-            {`${Number.parseFloat(this.props.stock.portfolioReturn)
-              .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
-          </td> */}
         </tr>
       </React.Fragment>
     );

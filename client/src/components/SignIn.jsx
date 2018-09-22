@@ -16,12 +16,9 @@ class SignIn extends React.Component {
     this.toggleView = this.toggleView.bind(this);
   }
 
-  
-
   handleSignInSubmit(event) {
     event.preventDefault();
     this.props.signInUser(this.state.email, this.state.password)
-    // this.props.changeView('home');
   }
 
   handleSignUpSubmit(e) {
@@ -160,7 +157,6 @@ class SignIn extends React.Component {
           </div>
         </div>
       </section>
-
     )
   }
 }
