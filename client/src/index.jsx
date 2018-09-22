@@ -110,7 +110,7 @@ class App extends React.Component {
       this.calculateTodaysChange();
     })
     .then(() => {
-      this.displayStock(this.state.stocks[0].stock_ticker)
+      this.displayStock(this.state.stocks)
     })
     .catch((err) => {
       console.log(err);
@@ -135,6 +135,9 @@ class App extends React.Component {
     .then(() => {
       this.calculateTotal();
       this.calculateTodaysChange();
+    })
+    .then(() => {
+      this.displayStock(this.state.stocks)
     })
     .catch((err) => {
       console.log(err);
@@ -277,17 +280,24 @@ class App extends React.Component {
 
   //called when a ticker symbol on the stocks list is clicked
   //requests the data for that ticker symbol and deposits it in the state
-  displayStock(stock) {
-    return axios
-      .get('/api/stockInfo', { params: { STOCK: stock } })
-      .then(({data}) => {
-        console.log("DISPLAY STOCK", this.state.peersQuotes)
-        console.log("PEERS OF CURRENT STOCK", this.state.currentStock)
-        this.setState({ currentStock: data });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  displayStock(stocks) {
+    console.log(stocks);
+    if (stocks.length > 0) {
+      console.log("LOGGIN BEFORE AXIOS")
+      return axios
+        .get('/api/stockInfo', { params: { STOCK: stocks[0].stock_ticker } })
+        .then(({data}) => {
+          console.log("HELLOOO")
+          this.setState({ currentStock: data });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log("LOG IN ELSE")
+      this.setState({ currentStock: {} }, () => {console.log("GOODBYE")});
+    }
+    
   }
 
   changeView(option) {
