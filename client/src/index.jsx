@@ -23,8 +23,7 @@ class App extends React.Component {
       currentStock: {},
       sortBy: 'stock_ticker',
       peersQuotes: {},
-      peersUpdated: false,
-      portfolioReturn: 0
+      peersUpdated: false
     };
     this.getStocks = this.getStocks.bind(this);
     this.getStocksInitial = this.getStocksInitial.bind(this);
@@ -34,7 +33,6 @@ class App extends React.Component {
     this.updateAllStockPrices = this.updateAllStockPrices.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
     this.calculateTodaysChange = this.calculateTodaysChange.bind(this);   
-    this.calculateReturnsChange = this.calculateReturnsChange.bind(this);    
     this.changeView = this.changeView.bind(this);
     this.renderView = this.renderView.bind(this);
     this.createUser = this.createUser.bind(this);
@@ -43,9 +41,7 @@ class App extends React.Component {
     this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
     this.downloadCSV = this.downloadCSV.bind(this);
     this.downloadPDF = this.downloadPDF.bind(this);
-    this.changeSort = this.changeSort.bind(this);
-    
-    //taken from HealthCheck
+    this.changeSort = this.changeSort.bind(this);    
     this.displayStock = this.displayStock.bind(this);
   }
   componentDidMount() {
@@ -77,7 +73,6 @@ class App extends React.Component {
       .catch((err) => console.error(err))
     })
     .catch(function(error) {
-      // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
       console.error('error code:',errorCode, 'with message: ', errorMessage)
@@ -86,7 +81,6 @@ class App extends React.Component {
   
   signInUser(email, password) {
     firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-      // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
       console.error('error code:',errorCode, 'with message: ', errorMessage)
@@ -110,7 +104,6 @@ class App extends React.Component {
     .then(() => {
       this.calculateTotal();
       this.calculateTodaysChange();
-      this.calculateReturnsChange();
     })
     .then(() => {
       if (this.state.stocks.length > 0) this.displayStock(this.state.stocks[0].stock_ticker);
@@ -121,6 +114,7 @@ class App extends React.Component {
     });
   }
 
+  // Changes the current sorting method chosen
   changeSort(sort) {
     this.setState({
       sortBy: sort
@@ -185,18 +179,14 @@ class App extends React.Component {
   //once database is updated, grabs all of the prices and stock tickers and rerenders the screen
   updateAllStockPrices() {
     Promise.all(
-      this.state.stocks.map(({ stock_ticker, quantity, boughtPrice }) => {
+      this.state.stocks.map(({ stock_ticker}) => {
         return axios
           .get('/api/currentStockPrice', { params: { STOCK: stock_ticker } })
           .then(({ data }) => {
             return axios.post('/api/currentStockPrice', {
               ticker: stock_ticker,
               price: data.quote.latestPrice,
-              change: data.quote.change,
-              ytdChange: data.quote.ytdChange,
-              latestVolume: data.quote.latestVolume,
-              quantity: quantity
-              //TODO: ADD
+              change: data.quote.change
             });
           })
           .catch((err) => console.log(err));
@@ -205,7 +195,7 @@ class App extends React.Component {
     .then(this.getStocks);
   }
 
-  //calculates grand total value for list of stocks
+  //calculates grand total value of holdings for list of stocks
   calculateTotal() {
     const total = this.state.stocks.map((stock) => {
         return stock.quantity * stock.price;
@@ -216,6 +206,7 @@ class App extends React.Component {
     this.setState({ portfolioTotal: total });
   }
 
+  //calculates grand total value of daily changes for list of stocks
   calculateTodaysChange() {
     const today = this.state.stocks.map((stock) => {
         return stock.quantity * stock.change;
@@ -226,17 +217,7 @@ class App extends React.Component {
     this.setState({ todaysChange: today });
   }
 
-  calculateReturnsChange() {
-    const returns = this.state.stocks.map((stock) => {
-        return ((stock.quantity*stock.boughtPrice)-(stock.quantity * stock.price));
-      })
-      .reduce((today, subtotal) => {
-        return today + subtotal;
-      }, 0);
-    this.setState({ portfolioReturn: returns });
-  }
-
-  //Convert into CSV this.state.stocks
+  //Convert portfolio into CSV
   convertArrayOfObjectsToCSV(args) {
     var result, ctr, keys, columnDelimiter, lineDelimiter, data;
     data = args.data || null;
@@ -261,7 +242,8 @@ class App extends React.Component {
     });
     return result;
   }
-  // Download CSV this.state.stocks
+
+  // Functionality to actually download the CSV
   downloadCSV(args) {
     var data, filename, link;
     var csv = this.convertArrayOfObjectsToCSV({
@@ -278,7 +260,7 @@ class App extends React.Component {
     link.setAttribute('download', filename);
     link.click();
   }
-  // Download PDF this.state.stocks
+  // Download PDF of portfolio
   downloadPDF() {
     var doc = new jsPDF('landscape');
     doc.setFontSize(8);
@@ -299,7 +281,7 @@ class App extends React.Component {
       doc.text(20, yLocation+=10, text);
     }
     // Output as Data URI
-    doc.save('Test.pdf');
+    doc.save('Portfolio.pdf');
   }
 
   //called when a ticker symbol on the stocks list is clicked
@@ -343,7 +325,6 @@ class App extends React.Component {
                 downloadPDF={this.downloadPDF}
                 portfolioTotal={this.state.portfolioTotal}
                 todaysChange={this.state.todaysChange}
-                portfolioReturn={this.state.portfolioReturn}
                 changeSort={this.changeSort}
                 sortBy={this.state.sortBy}                
               />
@@ -352,17 +333,12 @@ class App extends React.Component {
               <PortfolioPChart stocks={this.state.stocks} />
             </div>
           </div>
-          {/* <div className="columns border" style={{height: '500px'}} >
-            <div className="column"> */}
-              <HealthCheck 
-                currentStock={this.state.currentStock} 
-                displayStock={this.displayStock}/>      
-            {/* </div> */}
-          {/* </div> */}
+            <HealthCheck 
+              currentStock={this.state.currentStock} 
+              displayStock={this.displayStock}/>      
           <StockDetails 
             currentStock={this.state.currentStock}
-            // peersQuotes={this.state.peersQuotes} 
-            />    
+          />    
         </div>
       )
     } else if (view === 'signin'){
@@ -383,10 +359,6 @@ class App extends React.Component {
           </div>
           }
         </header>
-        {this.state.view !== 'signin' &&
-            <div className="tabs">
-            </div>
-        }
         {this.state.authenticated ? <Infinite/> : <div></div>}
         <div className="container">
           {this.renderView()}

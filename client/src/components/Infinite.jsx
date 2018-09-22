@@ -26,17 +26,19 @@ class Infinite extends React.Component {
                 <span key={i}>
                   |    {stock.symbol}    
                   <span>
-                      <i className={
-                        stock.changePercent > 0 
-                          ? "fas fa-arrow-up green" 
-                                : "fas fa-arrow-down red"} /> 
-                        </span>
-                                <span>
-                                    ({(stock.changePercent * 100).toFixed(2)})%     |
-                                </span>
-                            </span>)}
-                ></Marquee>
-            </div>
+                  <i className={
+                    stock.changePercent > 0 
+                    ? "fas fa-arrow-up green" 
+                    : "fas fa-arrow-down red"} /> 
+                  </span>
+                  <span>
+                    ({(stock.changePercent * 100).toFixed(2)})%     |
+                  </span>
+                </span
+              >)}
+            >
+            </Marquee>
+          </div>
         )
     }
 }

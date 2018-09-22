@@ -12,7 +12,6 @@ class ListOfStocks extends React.Component {
       dirPri: 'true',
       dirHol: 'true',
       dirTod: 'true',
-      dirPor: 'true',
       current: ''
     };
   }
