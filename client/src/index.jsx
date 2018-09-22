@@ -110,7 +110,8 @@ class App extends React.Component {
       this.calculateTodaysChange();
     })
     .then(() => {
-      this.displayStock(this.state.stocks[0].stock_ticker)
+      if (this.state.stocks.length > 0) this.displayStock(this.state.stocks[0].stock_ticker);
+      else this.setState({currentStock: {}})
     })
     .catch((err) => {
       console.log(err);
@@ -135,6 +136,10 @@ class App extends React.Component {
     .then(() => {
       this.calculateTotal();
       this.calculateTodaysChange();
+    })
+    .then(() => {
+      if (this.state.stocks.length > 0) this.displayStock(this.state.stocks[0].stock_ticker);
+      else this.setState({currentStock: {}})
     })
     .catch((err) => {
       console.log(err);
@@ -278,11 +283,10 @@ class App extends React.Component {
   //called when a ticker symbol on the stocks list is clicked
   //requests the data for that ticker symbol and deposits it in the state
   displayStock(stock) {
+    console.log(stock);
     return axios
       .get('/api/stockInfo', { params: { STOCK: stock } })
       .then(({data}) => {
-        console.log("DISPLAY STOCK", this.state.peersQuotes)
-        console.log("PEERS OF CURRENT STOCK", this.state.currentStock)
         this.setState({ currentStock: data });
       })
       .catch((err) => {

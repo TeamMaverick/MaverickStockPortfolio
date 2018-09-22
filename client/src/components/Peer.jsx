@@ -3,7 +3,7 @@ import React from 'react';
 const Peer = ({ stock, quote }) => {
   return (
   <div className="column box"
-      style={{height: "200px", marginLeft:"3px", marginRight:"3px",
+      style={{height: "250px", marginLeft:"3px", marginRight:"3px",
               padding: "20px 30px 30px 30px"}}>
     <h2 className="subtitle">
       <b>{stock}</b>
