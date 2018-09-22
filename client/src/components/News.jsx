@@ -3,7 +3,8 @@ import Article from './Article.jsx';
 
 var News = ({currentStock}) => (
   <div style={{marginBottom: "80px", float: "center", width:"100%"}}>
-    <h2 className="subtitle">News Articles</h2>
+    {currentStock !== undefined && Object.keys(currentStock).length > 0 ? 
+        (<h2 className="subtitle">News Articles for {currentStock.quote.symbol}</h2>): (<div></div>)}
       {Object.keys(currentStock).length > 0 ? 
         (currentStock.news.map((article, idx) => 
           (<Article key={idx} article={article}/>))) 
