@@ -113,7 +113,7 @@ class ListOfStocks extends React.Component {
                 {sortBy==='holdings' && this.state.dirHol && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
                 </abbr>
               </th>
-              <th onClick={
+              {/* <th onClick={
                 ()=>{
                   getStocks('portfolioReturn', null, this.state.dirTod)
                   this.setState({
@@ -126,7 +126,7 @@ class ListOfStocks extends React.Component {
                 {sortBy==='portfolioReturn' && !this.state.dirPor && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
                 {sortBy==='portfolioReturn' && this.state.dirPor && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
                 </abbr>
-              </th>          
+              </th>           */}
             </tr>
           </thead>
           <tfoot>
@@ -152,10 +152,10 @@ class ListOfStocks extends React.Component {
                 ${Number.parseFloat(portfolioTotal)
                   .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
               </th>
-              <th style={{textDecoration: 'underline', color: portfolioReturn >= 0 ? "green" : "red"}}>              
+              {/* <th style={{textDecoration: 'underline', color: portfolioReturn >= 0 ? "green" : "red"}}>              
                 ${Number.parseFloat(portfolioReturn)
                   .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} 
-              </th>  
+              </th>   */}
             </tr> 
           </tfoot>  
           <tbody>

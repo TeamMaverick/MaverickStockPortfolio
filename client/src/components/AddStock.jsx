@@ -42,8 +42,9 @@ class AddStock extends React.Component {
         this.setState({
           stock: '',
           quantity: ''
+        }, () => {
+          this.props.getStocks();
         })
-        this.props.getStocks();
       })
       .catch((err) => {
         console.log(err);
