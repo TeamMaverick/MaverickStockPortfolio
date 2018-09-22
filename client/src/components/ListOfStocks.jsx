@@ -87,20 +87,6 @@ class ListOfStocks extends React.Component {
               </th>
               <th onClick={
                 ()=>{
-                  getStocks('holdings', null, this.state.dirHol)
-                  this.setState({
-                    dirHol: !this.state.dirHol
-                  })
-                  changeSort('holdings')
-                }
-              }>
-                <abbr title="Position">Holdings($)
-                {sortBy==='holdings' && !this.state.dirHol && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
-                {sortBy==='holdings' && this.state.dirHol && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
-                </abbr>
-              </th>
-              <th onClick={
-                ()=>{
                   getStocks('todaysChange', null, this.state.dirTod)
                   this.setState({
                     dirTod: !this.state.dirTod
@@ -115,6 +101,20 @@ class ListOfStocks extends React.Component {
               </th>
               <th onClick={
                 ()=>{
+                  getStocks('holdings', null, this.state.dirHol)
+                  this.setState({
+                    dirHol: !this.state.dirHol
+                  })
+                  changeSort('holdings')
+                }
+              }>
+                <abbr title="Position">Holdings($)
+                {sortBy==='holdings' && !this.state.dirHol && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
+                {sortBy==='holdings' && this.state.dirHol && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
+                </abbr>
+              </th>
+              {/* <th onClick={
+                ()=>{
                   getStocks('portfolioReturn', null, this.state.dirTod)
                   this.setState({
                     dirPor: !this.state.dirPor
@@ -126,7 +126,7 @@ class ListOfStocks extends React.Component {
                 {sortBy==='portfolioReturn' && !this.state.dirPor && <span><i className="fas fa-angle-up" style={{marginLeft:'5px'}}></i></span>}
                 {sortBy==='portfolioReturn' && this.state.dirPor && <span><i className="fas fa-angle-down" style={{marginLeft:'5px'}}></i></span>}
                 </abbr>
-              </th>          
+              </th>           */}
             </tr>
           </thead>
           <tfoot>
@@ -144,18 +144,18 @@ class ListOfStocks extends React.Component {
               <th style={{textDecoration: 'underline'}}>
                 TOTAL
               </th>
-              <th style={{textDecoration: 'underline'}}>              
-                ${Number.parseFloat(portfolioTotal)
-                  .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
-              </th>
               <th style={{textDecoration: 'underline', color: todaysChange >= 0 ? "green" : "red"}}>              
                 ${Number.parseFloat(todaysChange)
                   .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} 
               </th>
-              <th style={{textDecoration: 'underline', color: portfolioReturn >= 0 ? "green" : "red"}}>              
+              <th style={{textDecoration: 'underline'}}>              
+                ${Number.parseFloat(portfolioTotal)
+                  .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+              </th>
+              {/* <th style={{textDecoration: 'underline', color: portfolioReturn >= 0 ? "green" : "red"}}>              
                 ${Number.parseFloat(portfolioReturn)
                   .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} 
-              </th>  
+              </th>   */}
             </tr> 
           </tfoot>  
           <tbody>

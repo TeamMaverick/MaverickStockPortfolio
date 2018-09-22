@@ -63,7 +63,7 @@ class App extends React.Component {
     });
     
     //will update the stock prices every 10 seconds
-    // setInterval(this.updateAllStockPrices, 60000);
+    // setInterval(this.updateAllStockPrices, 6000);
   }
   
   createUser(email, password, firstname, lastname) {
@@ -185,7 +185,7 @@ class App extends React.Component {
   //once database is updated, grabs all of the prices and stock tickers and rerenders the screen
   updateAllStockPrices() {
     Promise.all(
-      this.state.stocks.map(({ stock_ticker }) => {
+      this.state.stocks.map(({ stock_ticker, quantity, boughtPrice }) => {
         return axios
           .get('/api/currentStockPrice', { params: { STOCK: stock_ticker } })
           .then(({ data }) => {
@@ -194,7 +194,8 @@ class App extends React.Component {
               price: data.quote.latestPrice,
               change: data.quote.change,
               ytdChange: data.quote.ytdChange,
-              latestVolume: data.quote.latestVolume
+              latestVolume: data.quote.latestVolume,
+              quantity: quantity
               //TODO: ADD
             });
           })
@@ -280,9 +281,14 @@ class App extends React.Component {
   // Download PDF this.state.stocks
   downloadPDF() {
     var doc = new jsPDF('landscape');
-    doc.setFontSize(12);
+    doc.setFontSize(8);
     doc.setFontType("bold");
-    doc.text(20, 20, 'id | stock_ticker | company_name | quantity | price | createdAt | updatedAt');
+    var headText = '';
+    for (var key in this.state.stocks[0]) {
+      headText = headText + ' | ' + key;
+    }
+    doc.text(20, 20, headText);
+    
     doc.setFontType("normal");
     let yLocation = 20;
     for (let i=0; i<this.state.stocks.length; i++) {
@@ -299,7 +305,6 @@ class App extends React.Component {
   //called when a ticker symbol on the stocks list is clicked
   //requests the data for that ticker symbol and deposits it in the state
   displayStock(stock) {
-    console.log(stock);
     return axios
       .get('/api/stockInfo', { params: { STOCK: stock } })
       .then(({data}) => {
