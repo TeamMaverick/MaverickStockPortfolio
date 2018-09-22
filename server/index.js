@@ -14,6 +14,7 @@ io.on('connection', function(socket) {
   })
 
   socket.on('chat', (data) => {
+    console.log('emitted data!', data)
     io.sockets.emit('chat', data)
   })
 
@@ -22,3 +23,4 @@ io.on('connection', function(socket) {
   })
 })
 
+module.exports = io;
