@@ -54,7 +54,6 @@ module.exports = {
         };
         // get stock info with quote, chart, and news
         // flatten object stucture into array for StockChart
-        let timeSeries = data.chart;
         for (let point of data.chart) {
           // CODE FOR WHEN USING 1d FOR API CALL
           /* 
@@ -86,18 +85,6 @@ module.exports = {
         console.log(err);
       });
   },
-
-  // getPeersChange: (req, res) => {
-  //   alpha
-  //     .getPeersChange(req.query.peers)
-  //     .then(({data}) => {
-  //       console.log("GET PEERS CHANGE IN CONTROLLER", data);
-  //       res.send(data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  // },
 
   // deletes stock
   deleteStock: (req, res) => {
