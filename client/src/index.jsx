@@ -61,7 +61,7 @@ class App extends React.Component {
     });
     
     //will update the stock prices every 10 seconds
-    setInterval(this.updateAllStockPrices, 60000);
+    // setInterval(this.updateAllStockPrices, 60000);
   }
   
   createUser(email, password, firstname, lastname) {

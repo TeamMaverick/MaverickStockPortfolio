@@ -8,7 +8,7 @@ const Peers = ({ currentStock }) => {
   return (
     <div>
       {currentStock !== undefined && Object.keys(currentStock).length > 0 ? 
-        (<h2 className="subtitle">Peer Stocks for {currentStock.quote.symbol}</h2>): (<div></div>)}
+        (<h2 className="subtitle">Peer Stocks for {currentStock.quote.companyName}</h2>): (<div></div>)}
       
       <div className="columns">
         {currentStock !== undefined && Object.keys(currentStock).length > 0 ? 
