@@ -1,23 +1,24 @@
 # MaverickStockPortfolio
 
+http://maverickstockportfolio.herokuapp.com/
+
 ## Team
 
-  - __Product Owner__: Alan
-  - __Scrum Master__: Laura
-  - __Development Team Members__: Alex, Milton
+- **Product Owner**: Alan
+- **Scrum Master**: Laura
+- **Development Team Members**: Alex, Milton
 
 ## Table of Contents
 
 1. [Usage](#usage)
 1. [Requirements](#requirements)
 1. [Development](#development)
-    1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#roadmap)
+   1. [Installing Dependencies](#installing-dependencies)
+   1. [Tasks](#roadmap)
 1. [Team](#team)
 1. [Contributing](#contributing)
 1. [Style Guide](#style-guide)
 1. [Press Release](#press-release)
-
 
 ## Usage
 
@@ -27,7 +28,7 @@
 
 - Node 0.10.x
 - Sequelize
-- MySQL 
+- MySQL
 - Bulma
 
 ## Development
@@ -44,7 +45,6 @@ npm run react-dev
 npm run server-dev
 
 npm run test (will run tests)
-
 ```
 
 ### Hosting AWS Database
@@ -58,7 +58,6 @@ npm run test (will run tests)
 ### Roadmap
 
 View the project roadmap [here](https://trello.com/b/wWSvfUdm)
-
 
 ## Contributing
 
