@@ -1,8 +1,6 @@
 # Maverick
 
-Maverick is a stock portfolio management dashboard. Grey Financial has developed the legacy code to strengthen its UX by adding new features and utilizing new external APIs.
-
-[Deployment](http://maverickstockportfolio.herokuapp.com/)
+[Maverick](http://maverickstockportfolio.herokuapp.com/) is a stock portfolio management dashboard. Grey Financial has developed the legacy code to strengthen its UX by adding new features and utilizing new external APIs.
 
 _This project is forked from [TeamMaverick's Original Project](https://github.com/TeamMaverick/MaverickStockPortfolio/)_
 
