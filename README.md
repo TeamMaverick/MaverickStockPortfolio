@@ -6,7 +6,7 @@ _This project is forked from [TeamMaverick's Original Project](https://github.co
 
 ## Table of Contents
 
-1. [Team](#team)
+1. [Team](#legacy-team)
 1. [Features](#features)
 1. [Screenshots](#screenshots)
 1. [Built With](#built-with)
@@ -53,16 +53,16 @@ _This project is forked from [TeamMaverick's Original Project](https://github.co
 
 1. Must include .env file in root directory. (example below)
 
-```
-PORT=example
-API=https://www.alphavantage.co/query
-API_KEY=example
-API_ticker=https://api.iextrading.com/1.0
-host=example.rds.amazonaws.com
-dbuser=example
-dbpassword=example
-database=example
-```
+   ```
+   PORT=example
+   API=https://www.alphavantage.co/query
+   API_KEY=example
+   API_ticker=https://api.iextrading.com/1.0
+   host=example.rds.amazonaws.com
+   dbuser=example
+   dbpassword=example
+   database=example
+   ```
 
 1. Run _npm run db:setup_ to seed the database.
 1. Run _npm run test_ to run tests.
