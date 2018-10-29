@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TeamGandalf/MaverickStockPortfolio"
+    "url": "https://github.com/GreyFinancial/MaverickStockPortfolio"
   },
   "scripts": {
     "test": "mocha --bail --reporter nyan test/ServerSpec.js",

@@ -1,72 +1,76 @@
-# MaverickStockPortfolio
+# Maverick
 
-http://maverickstockportfolio.herokuapp.com/
+[Maverick](https://maverickstockportfolio.herokuapp.com/) is a stock portfolio management dashboard. Grey Financial has developed the legacy code to strengthen its UX by adding new features and utilizing new external APIs.
 
-## Team
-
-- **Product Owner**: Alan
-- **Scrum Master**: Laura
-- **Development Team Members**: Alex, Milton
+_This project is forked from [TeamMaverick's Original Project](https://github.com/TeamMaverick/MaverickStockPortfolio/)_
 
 ## Table of Contents
 
-1. [Usage](#usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
-   1. [Installing Dependencies](#installing-dependencies)
-   1. [Tasks](#roadmap)
-1. [Team](#team)
-1. [Contributing](#contributing)
-1. [Style Guide](#style-guide)
-1. [Press Release](#press-release)
+1. [Team](#legacy-team)
+1. [Features](#features)
+1. [Screenshots](#screenshots)
+1. [Built With](#built-with)
+1. [Git Workflow](#git-workflow)
+1. [Styling](#styling)
+1. [License](#license)
 
-## Usage
+## Legacy Team
 
-> Some usage instructions
+**Members**: Julie Jung, Paul Chung, Justin Chung
 
-## Requirements
+## Features
 
-- Node 0.10.x
-- Sequelize
-- MySQL
-- Bulma
+- User stock portfolio with data from Alpha Vantage
+- Autocomplete searching of stocks by either name or ticker
+- Dynamically rendered portfolio chart
+- Realtime stock performance visualization
+- Peer stock comparison and relevant news articles
+- Infinite scroll showing best and worst daily performers
+- Signup and login using Firebase
+
+## Screenshots
+
+![User Portfolio](client/dist/Portfolio.png)
+
+![Stock Snapshot and Peer Comparison](client/dist/SpecificStock.png)
+
+## Built With
+
+- [React](https://reactjs.org/)
+- [Express](https://expressjs.com/)
+- [MySQL](https://www.mysql.com/)
+- [Sequelize](http://docs.sequelizejs.com/)
+- [Firebase](http://firebase.google.com/)
+- [Axios](https://github.com/axios/axios)
+- [Bulma](https://bulma.io/)
+- [High Charts](https://www.highcharts.com/)
+
+## Git Workflow
+
+[GreyFinancial Workflow](WORKFLOW.md)
 
 ## Development
 
-### Installing Dependencies
+1. Must include .env file in root directory. (example below)
 
-From within the root directory:
+   ```
+   PORT=example
+   API=https://www.alphavantage.co/query
+   API_KEY=example
+   API_ticker=https://api.iextrading.com/1.0
+   host=example.rds.amazonaws.com
+   dbuser=example
+   dbpassword=example
+   database=example
+   ```
 
-```
-npm install
-rename env.sample.config to .env. =>  , host (mysql host name), dbuser (mysql user name), and dbpassword (mysql password)
-npm run db:setup (seed DB)
-npm run react-dev
-npm run server-dev
+1. Run _npm run db:setup_ to seed the database.
+1. Run _npm run test_ to run tests.
 
-npm run test (will run tests)
-```
+## Styling
 
-### Hosting AWS Database
+Maverick uses the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript/).
 
-```
-1. Navigate to Amazon Relational Database Service (RDS) page, an offering of AWS
-2. Get started and create AWS account to set up an Amazon RDS instance
-3. MySQL and ensure that you choose the free DB instance service offering
-```
+## License
 
-### Roadmap
-
-View the project roadmap [here](https://trello.com/b/wWSvfUdm)
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
-
-## Style Guide
-
-See [STYLE-GUIDE.md](STYLE-GUIDE.md) for style guidelines.
-
-## Press Release
-
-See [PRESS-RELEASE.md](PRESS-RELEASE.md) for style guidelines.
+Maverick uses the [MIT License](LICENSE.md).
