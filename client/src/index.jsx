@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
-
 import AddStock from "./components/AddStock.jsx";
 import ListOfStocks from "./components/ListOfStocks.jsx";
 import HealthCheck from "./components/HealthCheck.jsx";
@@ -57,8 +56,8 @@ class App extends React.Component {
       }
     });
 
-    //will update the stock prices every 5 seconds
-    // setInterval(this.updateAllStockPrices, 5000);
+    // will update the stock prices every 5 seconds
+    setInterval(this.updateAllStockPrices, 5000);
   }
 
   createUser(email, password, firstname, lastname) {
@@ -141,7 +140,6 @@ class App extends React.Component {
       .then(() => {
         this.calculateTotal();
         this.calculateTodaysChange();
-        this.calculateReturnsChange();
       })
       .then(() => {
         if (this.state.stocks.length > 0)
@@ -191,7 +189,9 @@ class App extends React.Component {
           })
           .catch(err => console.error(err));
       })
-    ).then(this.getStocks);
+    ).then(() => {
+      this.getStocks;
+    });
   }
 
   //calculates grand total value of holdings for list of stocks
