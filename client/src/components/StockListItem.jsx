@@ -8,8 +8,6 @@ class StockListItem extends React.Component {
       quantity: 0
     };
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleAddQuantity = this.handleAddQuantity.bind(this);
-    this.handleDeleteQuantity = this.handleDeleteQuantity.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +32,6 @@ class StockListItem extends React.Component {
     })
       .then((response) => {
         //update state
-        console.log(response);
         this.setState({
           quantity: newQuantity
         });
@@ -44,73 +41,46 @@ class StockListItem extends React.Component {
         console.log(err);
       });
   }
-  // Event handler for incereasing quantity
-  handleAddQuantity(evt) {
-    evt.preventDefault();
-    const newQuantity = ++this.state.quantity;
-    this.callUpdateQuantity(newQuantity);
-  }
-
-  // Event Handler for decreasing quantity
-  handleDeleteQuantity(evt) {
-    evt.preventDefault();
-    const newQuantity = this.state.quantity > 0 ? --this.state.quantity : 0;
-    this.callUpdateQuantity(newQuantity);
-  }
 
   render() {
     return (
       <React.Fragment>
-        <div className="level">
-          <div className="level-left">
-            <div className="level-item">
-              <p>
-                <input
-                  className="checkedStock checkbox"
-                  value={this.props.stock.stock_ticker}
-                  type="checkbox"
-                />
-              </p>
-            </div>
-            <div className="level-item">
-              <p>
-                  {this.props.stock.stock_ticker} <br/>{this.props.stock.company_name}{' '}
-              </p>
-            </div>
-          </div>
-          <div className="level-right">
-            <div className="level-item has-text-centered">
-              <p>
-                <input
-                  className="stockInput"
-                  onChange={this.handleInputChange}
-                  value={this.state.quantity}
-                />
-                <a onClick={this.handleAddQuantity}>
-                  <i className="fas fa-plus" />
-                </a>
-                &nbsp;
-                <a onClick={this.handleDeleteQuantity}>
-                  <i className="fas fa-minus" />
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="level">
-          <div className="level-left">
-            <div className="level-item">
-              <p>{`Price : $${Number.parseFloat(this.props.stock.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</p>
-            </div>
-          </div>
-          <div className="level-right">
-            <p>
-              {`Total : $${Number.parseFloat(
-                this.props.stock.price * this.props.stock.quantity
-              ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
-            </p>
-          </div>
-        </div>
+        <tr className="container" role="alert" 
+          onClick={() => {
+            this.props.displayStock(this.props.stock.stock_ticker)
+          }}>
+          <td>              
+            <span className="exporter icon has-text-danger" 
+              onClick={(evt) => {
+                this.props.removeStock(evt, this.props.stock)}}>
+              <i className="fas fa-trash"></i>
+            </span>
+          </td>
+          <td>{this.props.stock.stock_ticker.toUpperCase()}</td>
+          <td>{this.props.stock.company_name}</td>
+          <td>                
+            <input
+              onClick={(e) => e.stopPropagation()}
+              className="stockInput"
+              onChange={this.handleInputChange}
+              type="number"
+              value={this.state.quantity}
+            />
+          </td>
+          <td>
+            {`${Number.parseFloat(this.props.stock.price)
+              .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
+          </td>
+          <td style={{color: this.props.stock.price * this.props.stock.change >= 0 ? "green" : "red"}}>
+            {`${Number.parseFloat(this.props.stock.quantity * this.props.stock.change)
+              .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
+          </td>
+          <td>
+            {`${Number.parseFloat(
+              this.props.stock.price * this.props.stock.quantity)
+                .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}{' '}
+          </td>
+        </tr>
       </React.Fragment>
     );
   }
